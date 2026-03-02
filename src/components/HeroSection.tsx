@@ -1,5 +1,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Search, Briefcase } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   const { t } = useLanguage();
@@ -22,25 +23,24 @@ const HeroSection = () => {
             {t("hero.subheadline")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-            <a
-              href="#find-job"
+            <Link
+              to="/jobs"
               className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-3.5 rounded-full font-heading font-bold text-base hover:bg-orange-hover transition-all duration-200 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
             >
               <Search className="w-5 h-5" />
               {t("hero.findJob")}
-            </a>
-            <a
-              href="#post-job"
+            </Link>
+            <Link
+              to="/auth"
               className="inline-flex items-center gap-2 bg-primary-foreground/10 border-2 border-primary-foreground/30 text-primary-foreground px-8 py-3.5 rounded-full font-heading font-bold text-base hover:bg-primary-foreground/20 hover:border-primary-foreground/50 transition-all duration-200 backdrop-blur-sm"
             >
               <Briefcase className="w-5 h-5" />
               {t("hero.postJob")}
-            </a>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Bottom wave */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
           <path d="M0 80L48 74.7C96 69.3 192 58.7 288 53.3C384 48 480 48 576 53.3C672 58.7 768 69.3 864 69.3C960 69.3 1056 58.7 1152 53.3C1248 48 1344 48 1392 48L1440 48V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0Z" fill="hsl(0, 0%, 100%)" />
