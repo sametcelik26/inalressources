@@ -19,7 +19,7 @@ const NavBar = () => {
     { label: t("nav.home"), to: "/" },
     { label: t("nav.jobs"), to: "/jobs" },
     { label: t("nav.about"), to: "/#about" },
-    { label: t("nav.contact"), to: "/#contact" },
+    { label: t("nav.contact"), to: "/contact" },
   ];
 
   const authNav = user
