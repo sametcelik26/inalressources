@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      candidate_applications: {
+        Row: {
+          availability: string | null
+          comments: string | null
+          created_at: string
+          cv_url: string | null
+          email: string
+          full_name: string
+          id: string
+          industry: string | null
+          legal_right_to_work: boolean | null
+          license_class: string | null
+          phone: string
+          preferred_contact: string | null
+          work_location: string | null
+        }
+        Insert: {
+          availability?: string | null
+          comments?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email: string
+          full_name: string
+          id?: string
+          industry?: string | null
+          legal_right_to_work?: boolean | null
+          license_class?: string | null
+          phone: string
+          preferred_contact?: string | null
+          work_location?: string | null
+        }
+        Update: {
+          availability?: string | null
+          comments?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          industry?: string | null
+          legal_right_to_work?: boolean | null
+          license_class?: string | null
+          phone?: string
+          preferred_contact?: string | null
+          work_location?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -41,6 +89,51 @@ export type Database = {
           name?: string
           phone?: string | null
           subject?: string
+        }
+        Relationships: []
+      }
+      employer_requests: {
+        Row: {
+          comments: string | null
+          company_address: string | null
+          company_name: string
+          contact_person: string
+          created_at: string
+          email: string
+          employees_needed: number | null
+          id: string
+          industry: string | null
+          job_title: string | null
+          phone: string | null
+          preferred_contact: string | null
+        }
+        Insert: {
+          comments?: string | null
+          company_address?: string | null
+          company_name: string
+          contact_person: string
+          created_at?: string
+          email: string
+          employees_needed?: number | null
+          id?: string
+          industry?: string | null
+          job_title?: string | null
+          phone?: string | null
+          preferred_contact?: string | null
+        }
+        Update: {
+          comments?: string | null
+          company_address?: string | null
+          company_name?: string
+          contact_person?: string
+          created_at?: string
+          email?: string
+          employees_needed?: number | null
+          id?: string
+          industry?: string | null
+          job_title?: string | null
+          phone?: string | null
+          preferred_contact?: string | null
         }
         Relationships: []
       }
