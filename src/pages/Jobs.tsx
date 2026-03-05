@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Clock, DollarSign, Briefcase, Heart, Filter } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Search, MapPin, Clock, DollarSign, Briefcase, Filter } from "lucide-react";
 import Layout from "@/components/Layout";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -31,10 +29,7 @@ const experienceLabels: Record<string, { en: string; fr: string }> = {
 
 const Jobs = () => {
   const { t, language } = useLanguage();
-  const { user, role } = useAuth();
-  const { toast } = useToast();
   const [jobs, setJobs] = useState<JobPosting[]>([]);
-  const [savedJobIds, setSavedJobIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
@@ -44,8 +39,7 @@ const Jobs = () => {
 
   useEffect(() => {
     fetchJobs();
-    if (user) fetchSavedJobs();
-  }, [user]);
+  }, []);
 
   const fetchJobs = async () => {
     const { data } = await supabase
@@ -55,24 +49,6 @@ const Jobs = () => {
       .order("created_at", { ascending: false });
     setJobs(data || []);
     setLoading(false);
-  };
-
-  const fetchSavedJobs = async () => {
-    if (!user) return;
-    const { data } = await supabase.from("saved_jobs").select("job_id").eq("user_id", user.id);
-    setSavedJobIds(new Set(data?.map((s) => s.job_id) || []));
-  };
-
-  const toggleSave = async (jobId: string) => {
-    if (!user) return;
-    if (savedJobIds.has(jobId)) {
-      await supabase.from("saved_jobs").delete().eq("user_id", user.id).eq("job_id", jobId);
-      setSavedJobIds((prev) => { const n = new Set(prev); n.delete(jobId); return n; });
-    } else {
-      await supabase.from("saved_jobs").insert({ user_id: user.id, job_id: jobId });
-      setSavedJobIds((prev) => new Set(prev).add(jobId));
-      toast({ title: t("jobs.saved") });
-    }
   };
 
   const filtered = jobs.filter((j) => {
@@ -140,33 +116,23 @@ const Jobs = () => {
           <div className="grid gap-4">
             {filtered.map((job) => (
               <Link key={job.id} to={`/jobs/${job.id}`} className="block bg-card border border-border rounded-xl p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-heading font-bold text-foreground mb-1">{job.title}</h3>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-3">
-                      <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{job.location}</span>
-                      <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" />{jobTypeLabels[job.job_type]?.[language]}</span>
-                      {job.experience_level && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{experienceLabels[job.experience_level]?.[language]}</span>}
-                      {(job.salary_min || job.salary_max) && (
-                        <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" />{job.salary_min && `$${job.salary_min.toLocaleString()}`}{job.salary_min && job.salary_max && " - "}{job.salary_max && `$${job.salary_max.toLocaleString()}`}</span>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{job.description}</p>
-                    {job.skills && job.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-3">
-                        {job.skills.slice(0, 5).map((s) => (
-                          <span key={s} className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">{s}</span>
-                        ))}
-                      </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-heading font-bold text-foreground mb-1">{job.title}</h3>
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-3">
+                    <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{job.location}</span>
+                    <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" />{jobTypeLabels[job.job_type]?.[language]}</span>
+                    {job.experience_level && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{experienceLabels[job.experience_level]?.[language]}</span>}
+                    {(job.salary_min || job.salary_max) && (
+                      <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" />{job.salary_min && `$${job.salary_min.toLocaleString()}`}{job.salary_min && job.salary_max && " - "}{job.salary_max && `$${job.salary_max.toLocaleString()}`}</span>
                     )}
                   </div>
-                  {user && role === "job_seeker" && (
-                    <button
-                      onClick={(e) => { e.preventDefault(); toggleSave(job.id); }}
-                      className={`p-2 rounded-full transition-colors ${savedJobIds.has(job.id) ? "text-accent" : "text-muted-foreground hover:text-accent"}`}
-                    >
-                      <Heart className={`w-5 h-5 ${savedJobIds.has(job.id) ? "fill-current" : ""}`} />
-                    </button>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{job.description}</p>
+                  {job.skills && job.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {job.skills.slice(0, 5).map((s) => (
+                        <span key={s} className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">{s}</span>
+                      ))}
+                    </div>
                   )}
                 </div>
               </Link>
