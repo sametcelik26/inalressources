@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import Contact from "./pages/Contact";
+import EmployerForm from "./pages/EmployerForm";
+import CandidateForm from "./pages/CandidateForm";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
