@@ -145,6 +145,47 @@ export type Database = {
         }
         Relationships: []
       }
+      job_submissions: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          job_id: string
+          phone: string | null
+          resume_url: string | null
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          job_id: string
+          phone?: string | null
+          resume_url?: string | null
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          job_id?: string
+          phone?: string | null
+          resume_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_submissions_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_postings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
