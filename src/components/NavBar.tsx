@@ -9,8 +9,9 @@ const NavBar = () => {
 
   const navItems = [
     { label: t("nav.home"), to: "/" },
+    { label: t("nav.employers"), to: "/employers" },
+    { label: t("nav.candidates"), to: "/candidates" },
     { label: t("nav.jobs"), to: "/jobs" },
-    { label: t("nav.about"), to: "/#about" },
     { label: t("nav.contact"), to: "/contact" },
   ];
 
