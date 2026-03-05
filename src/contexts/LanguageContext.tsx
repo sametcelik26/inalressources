@@ -26,10 +26,10 @@ const translations: Translations = {
   "topbar.hrServices": { en: "HR Services 24/7", fr: "Services RH 24/7" },
 
   // Hero
-  "hero.headline": { en: "Your Trusted Recruitment Partner in Canada", fr: "Votre partenaire de recrutement de confiance au Canada" },
-  "hero.subheadline": { en: "Connecting top talent with leading employers across Quebec and beyond. Professional staffing solutions tailored to your needs.", fr: "Connecter les meilleurs talents aux employeurs de premier plan au Québec et au-delà. Des solutions de dotation professionnelles adaptées à vos besoins." },
-  "hero.findJob": { en: "Find a Job", fr: "Trouver un emploi" },
-  "hero.postJob": { en: "Post a Job", fr: "Publier un emploi" },
+  "hero.headline": { en: "Connecting Employers With The Right Talent", fr: "Connecter les employeurs avec les bons talents" },
+  "hero.subheadline": { en: "Professional staffing solutions tailored to your needs across Quebec and beyond. Whether you're hiring or looking for your next opportunity, we're here to help.", fr: "Des solutions de dotation professionnelles adaptées à vos besoins au Québec et au-delà. Que vous recrutiez ou cherchiez votre prochaine opportunité, nous sommes là pour vous aider." },
+  "hero.forEmployers": { en: "For Employers", fr: "Pour les employeurs" },
+  "hero.forCandidates": { en: "For Candidates", fr: "Pour les candidats" },
 
   // Auth
   "auth.login": { en: "Login", fr: "Connexion" },
