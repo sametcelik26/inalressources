@@ -1,5 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Search, Briefcase } from "lucide-react";
+import { Search, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
@@ -31,11 +31,11 @@ const HeroSection = () => {
               {t("hero.findJob")}
             </Link>
             <Link
-              to="/auth"
+              to="/contact"
               className="inline-flex items-center gap-2 bg-primary-foreground/10 border-2 border-primary-foreground/30 text-primary-foreground px-8 py-3.5 rounded-full font-heading font-bold text-base hover:bg-primary-foreground/20 hover:border-primary-foreground/50 transition-all duration-200 backdrop-blur-sm"
             >
-              <Briefcase className="w-5 h-5" />
-              {t("hero.postJob")}
+              <Mail className="w-5 h-5" />
+              {t("nav.contact")}
             </Link>
           </div>
         </div>

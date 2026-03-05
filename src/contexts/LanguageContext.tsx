@@ -78,6 +78,8 @@ const translations: Translations = {
   "jobs.cancel": { en: "Cancel", fr: "Annuler" },
   "jobs.loginToApply": { en: "Login to Apply", fr: "Connectez-vous pour postuler" },
   "jobs.applicationSent": { en: "Application submitted!", fr: "Candidature soumise!" },
+  "jobs.applicationConfirm": { en: "Thank you for your application. We will contact you soon.", fr: "Merci pour votre candidature. Nous vous contacterons bientôt." },
+  "jobs.applyAgain": { en: "Submit Another Application", fr: "Soumettre une autre candidature" },
 
   // Dashboard
   "dashboard.seekerTitle": { en: "My Dashboard", fr: "Mon tableau de bord" },
