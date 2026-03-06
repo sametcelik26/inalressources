@@ -48,7 +48,7 @@ Verdun (Québec) H4G 1C2</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/65">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
-                <span>(514 )7​62-0409</span>
+                <span>(514 ) 7​62-0409</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/65">
                 <Mail className="w-4 h-4 text-accent shrink-0" />
@@ -85,8 +85,8 @@ Verdun (Québec) H4G 1C2</span>
             © {new Date().getFullYear()} Inal Resources. {t("footer.rights")}
           </p>
           <a href="https://www.inalressources.info/" target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body">
+          rel="noopener noreferrer"
+          className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body">
             
             www.inalressources.info
           </a>
