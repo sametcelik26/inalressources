@@ -3,11 +3,11 @@ import logoTopbar from "@/assets/logo-topbar.avif";
 
 const TopBar = () => {
   return (
-    <div className="w-full bg-navy border-b border-border">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 gap-3">
+    <div className="w-full bg-[hsl(var(--topbar-bg))] border-b border-[hsl(var(--topbar-border))]">
+      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 gap-3">
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <img src={logoTopbar} alt="Inal Resources" className="h-10 w-auto" />
+          <img src={logoTopbar} alt="Inal Resources" className="h-14 w-auto" />
         </div>
 
         {/* Info blocks */}
