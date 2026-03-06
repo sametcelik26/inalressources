@@ -1,19 +1,13 @@
 import { Shield, MapPin, Headphones, Phone } from "lucide-react";
+import logoTopbar from "@/assets/logo-topbar.avif";
 
 const TopBar = () => {
   return (
-    <div className="w-full bg-background border-b border-border">
+    <div className="w-full bg-navy border-b border-border">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-3 px-4 gap-3">
         {/* Logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-navy flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-lg">IR</span>
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[11px] text-muted-foreground font-body tracking-wide uppercase">Recruitment Agency</span>
-            </div>
-          </div>
+          <img src={logoTopbar} alt="Inal Resources" className="h-10 w-auto" />
         </div>
 
         {/* Info blocks */}
