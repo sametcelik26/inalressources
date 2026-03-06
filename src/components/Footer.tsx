@@ -26,13 +26,13 @@ const Footer = () => {
           <div>
             <h4 className="font-heading font-bold text-base mb-4 text-accent">{t("footer.quickLinks")}</h4>
             <ul className="space-y-2.5">
-              {["nav.home", "nav.jobSeekers", "nav.employers", "nav.about", "nav.contact"].map((key) => (
-                <li key={key}>
+              {["nav.home", "nav.jobSeekers", "nav.employers", "nav.about", "nav.contact"].map((key) =>
+              <li key={key}>
                   <a href="#" className="text-sm text-primary-foreground/65 hover:text-accent transition-colors font-body">
                     {t(key)}
                   </a>
                 </li>
-              ))}
+              )}
             </ul>
           </div>
 
@@ -46,7 +46,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/65">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
-                <span>514-XXX-XXXX</span>
+                <span>(514 )7​62-0409</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/65">
                 <Mail className="w-4 h-4 text-accent shrink-0" />
@@ -86,14 +86,14 @@ const Footer = () => {
             href="https://www.inalressources.info/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body"
-          >
+            className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body">
+            
             www.inalressources.info
           </a>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;
