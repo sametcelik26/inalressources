@@ -180,7 +180,7 @@ const translations: Translations = {
   "contact.hoursLabel": { en: "Business Hours", fr: "Heures d'ouverture" },
 
   // Nav extras
-  "nav.candidates": { en: "For Candidates", fr: "Pour les candidats" },
+  "nav.candidates": { en: "Candidates", fr: "Candidats" },
 
   // Employer form
   "employer.formTitle": { en: "Employer Request Form", fr: "Formulaire de demande employeur" },
