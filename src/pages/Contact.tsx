@@ -191,7 +191,7 @@ Verdun (Québec) H4G 1C2</p>
                   <Phone className="w-5 h-5 text-accent mt-0.5 shrink-0" />
                   <div>
                     <p className="font-heading font-semibold text-sm text-foreground">{t("contact.phoneLabel")}</p>
-                    <p className="text-sm text-muted-foreground">+1 (514) 7​62 0409</p>
+                    <p className="text-sm text-muted-foreground">+1 (514) 7​62-0409</p>
                   </div>
                 </div>
 
