@@ -247,7 +247,7 @@ const translations: Translations = {
   "candidate.uploadError": { en: "Failed to upload file. Please try again.", fr: "Échec du téléchargement. Veuillez réessayer." },
 
   // Footer
-  "footer.about": { en: "Inal Resources is a licensed recruitment agency based in Laval, Quebec, specializing in connecting qualified professionals with top employers across Canada.", fr: "Inal Resources est une agence de recrutement agréée basée à Laval, Québec, spécialisée dans la mise en relation de professionnels qualifiés avec les meilleurs employeurs au Canada." },
+  "footer.about": { en: "Inal Resources is a licensed recruitment agency based in Verdun, Quebec, specializing in connecting qualified professionals with top employers across Canada.", fr: "Inal Resources est une agence de recrutement agréée basée à Verdun, Québec, spécialisée dans la mise en relation de professionnels qualifiés avec les meilleurs employeurs au Canada." },
   "footer.quickLinks": { en: "Quick Links", fr: "Liens rapides" },
   "footer.contactUs": { en: "Contact Us", fr: "Contactez-nous" },
   "footer.hours": { en: "Business Hours", fr: "Heures d'ouverture" },
