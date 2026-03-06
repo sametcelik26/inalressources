@@ -37,7 +37,7 @@ const TopBar = () => {
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-xs text-muted-foreground">Address</span>
-              <span className="font-heading font-semibold text-foreground text-sm">Laval, QC</span>
+              <span className="font-heading font-semibold text-foreground text-sm">Verdun, QC</span>
             </div>
           </div>
 
