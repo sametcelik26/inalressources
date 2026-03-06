@@ -191,7 +191,7 @@ Verdun (Québec) H4G 1C2</p>
                   <Phone className="w-5 h-5 text-accent mt-0.5 shrink-0" />
                   <div>
                     <p className="font-heading font-semibold text-sm text-foreground">{t("contact.phoneLabel")}</p>
-                    <p className="text-sm text-muted-foreground">+1 (438) 000-0000</p>
+                    <p className="text-sm text-muted-foreground">+1 (514) 7​62 0409</p>
                   </div>
                 </div>
 
@@ -216,12 +216,12 @@ Verdun (Québec) H4G 1C2</p>
               {/* Google Maps */}
               <div className="rounded-xl overflow-hidden shadow-lg border border-border">
                 <iframe title="Inal Resources - Laval, QC" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89217.47362070877!2d-73.78844685!3d45.5844906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc923a4f2db3d61%3A0x5040cadae4d7580!2sLaval%2C%20QC!5e0!3m2!1sen!2sca!4v1700000000000"
-                  width="100%"
-                  height="280"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade" />
+                width="100%"
+                height="280"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade" />
                 
               </div>
             </div>
