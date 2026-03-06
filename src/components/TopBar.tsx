@@ -11,7 +11,6 @@ const TopBar = () => {
               <span className="text-primary-foreground font-heading font-bold text-lg">IR</span>
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-heading font-bold text-navy text-lg tracking-tight">Inal Resources</span>
               <span className="text-[11px] text-muted-foreground font-body tracking-wide uppercase">Recruitment Agency</span>
             </div>
           </div>
