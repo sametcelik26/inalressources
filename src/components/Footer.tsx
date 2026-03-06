@@ -1,5 +1,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import logo from "@/assets/logo.avif";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -11,10 +12,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                <span className="font-heading font-bold text-accent-foreground text-lg">IR</span>
-              </div>
+            <div className="flex items-center gap-3 mb-4">
+              <img src={logo} alt="Inal Resources" className="h-10 w-auto" />
               <span className="font-heading font-bold text-xl">Inal Resources</span>
             </div>
             <p className="text-sm text-primary-foreground/65 leading-relaxed font-body">
