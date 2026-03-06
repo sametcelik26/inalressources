@@ -36,7 +36,10 @@ const TopBar = () => {
               <MapPin className="w-4 h-4 text-navy" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-xs text-muted-foreground">Address</span>
+              <span className="text-xs text-muted-foreground">3901, Avenue Bannantyne, Bureaux 204 et 210
+
+
+</span>
               <span className="font-heading font-semibold text-foreground text-sm">Verdun, QC</span>
             </div>
           </div>
@@ -53,9 +56,7 @@ const TopBar = () => {
           </div>
 
           {/* Phone button */}
-          <a
-            href="tel:514-XXX-XXXX"
-            className="flex items-center gap-2 bg-accent text-accent-foreground px-5 py-2.5 rounded-full font-heading font-semibold text-sm hover:bg-orange-hover transition-colors shadow-md hover:shadow-lg">
+          <a href="tel:514-XXX-XXXX" className="flex items-center gap-2 bg-accent text-accent-foreground px-5 py-2.5 rounded-full font-heading font-semibold text-sm hover:bg-orange-hover transition-colors shadow-md hover:shadow-lg">
             
             <Phone className="w-4 h-4" />
             514-XXX-XXXX
@@ -63,7 +64,6 @@ const TopBar = () => {
         </div>
       </div>
     </div>);
-
 };
 
 export default TopBar;
