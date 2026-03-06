@@ -42,7 +42,9 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-primary-foreground/65">
                 <MapPin className="w-4 h-4 mt-0.5 text-accent shrink-0" />
-                <span>Laval, QC, Canada</span>
+                <span>3901, Avenue Bannantyne, Bureaux 204 et 210
+
+Verdun (Québec) H4G 1C2</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/65">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
@@ -82,9 +84,7 @@ const Footer = () => {
           <p className="text-xs text-primary-foreground/50 font-body">
             © {new Date().getFullYear()} Inal Resources. {t("footer.rights")}
           </p>
-          <a
-            href="https://www.inalressources.info/"
-            target="_blank"
+          <a href="https://www.inalressources.info/" target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body">
             
