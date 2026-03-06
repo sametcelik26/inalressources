@@ -26,7 +26,7 @@ const TopBar = () => {
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-xs text-muted-foreground">License</span>
-              <span className="font-heading font-semibold text-foreground text-sm">AP-XXXXX</span>
+              <span className="font-heading font-semibold text-foreground text-sm">AP-2000138</span>
             </div>
           </div>
 
@@ -55,15 +55,15 @@ const TopBar = () => {
           {/* Phone button */}
           <a
             href="tel:514-XXX-XXXX"
-            className="flex items-center gap-2 bg-accent text-accent-foreground px-5 py-2.5 rounded-full font-heading font-semibold text-sm hover:bg-orange-hover transition-colors shadow-md hover:shadow-lg"
-          >
+            className="flex items-center gap-2 bg-accent text-accent-foreground px-5 py-2.5 rounded-full font-heading font-semibold text-sm hover:bg-orange-hover transition-colors shadow-md hover:shadow-lg">
+            
             <Phone className="w-4 h-4" />
             514-XXX-XXXX
           </a>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default TopBar;
