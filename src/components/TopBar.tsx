@@ -4,10 +4,10 @@ import logoTopbar from "@/assets/logo-topbar.avif";
 const TopBar = () => {
   return (
     <div className="w-full bg-[hsl(var(--topbar-bg))] border-b border-[hsl(var(--topbar-border))]">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-4 px-4 gap-3">
+      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-5 px-4 gap-4">
         {/* Logo */}
-        <div className="flex items-center gap-2 shrink-0">
-          <img src={logoTopbar} alt="Inal Resources" className="h-14 w-auto" />
+        <div className="flex items-center shrink-0">
+          <img src={logoTopbar} alt="Inal Resources" className="h-20 w-auto object-contain drop-shadow-lg" />
         </div>
 
         {/* Info blocks */}
