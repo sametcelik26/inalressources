@@ -99,13 +99,20 @@ export type Database = {
           company_name: string
           contact_person: string
           created_at: string
+          department: string | null
           email: string
           employees_needed: number | null
           id: string
           industry: string | null
+          job_description: string | null
           job_title: string | null
           phone: string | null
           preferred_contact: string | null
+          required_skills: string | null
+          salary_range: string | null
+          start_date: string | null
+          urgency: string | null
+          work_schedule: string | null
         }
         Insert: {
           comments?: string | null
@@ -113,13 +120,20 @@ export type Database = {
           company_name: string
           contact_person: string
           created_at?: string
+          department?: string | null
           email: string
           employees_needed?: number | null
           id?: string
           industry?: string | null
+          job_description?: string | null
           job_title?: string | null
           phone?: string | null
           preferred_contact?: string | null
+          required_skills?: string | null
+          salary_range?: string | null
+          start_date?: string | null
+          urgency?: string | null
+          work_schedule?: string | null
         }
         Update: {
           comments?: string | null
@@ -127,13 +141,20 @@ export type Database = {
           company_name?: string
           contact_person?: string
           created_at?: string
+          department?: string | null
           email?: string
           employees_needed?: number | null
           id?: string
           industry?: string | null
+          job_description?: string | null
           job_title?: string | null
           phone?: string | null
           preferred_contact?: string | null
+          required_skills?: string | null
+          salary_range?: string | null
+          start_date?: string | null
+          urgency?: string | null
+          work_schedule?: string | null
         }
         Relationships: []
       }

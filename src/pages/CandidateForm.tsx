@@ -14,6 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 
 const CandidateForm = () => {
@@ -24,15 +25,14 @@ const CandidateForm = () => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Zod schema with localized error messages via t()
   const candidateSchema = z.object({
     full_name: z.string().trim().max(200).optional().or(z.literal("")),
     phone: z.string().trim().min(1, t("common.required")).max(30),
     email: z.string().trim().email(t("common.invalidEmail")).max(255),
-    availability: z.string().optional().or(z.literal("")),
+    availability: z.array(z.string()).min(1, t("common.required")),
     license_class: z.string().min(1, t("common.required")),
-    industry: z.string().min(1, t("common.required")),
-    work_location: z.string().min(1, t("common.required")),
+    industries: z.array(z.string()).min(1, t("common.required")),
+    work_locations: z.array(z.string()).min(1, t("common.required")),
     legal_right_to_work: z.string().optional(),
     preferred_contact: z.string().min(1, t("common.required")),
     comments: z.string().trim().max(2000).optional().or(z.literal("")),
@@ -43,11 +43,20 @@ const CandidateForm = () => {
   const form = useForm<CandidateFormValues>({
     resolver: zodResolver(candidateSchema),
     defaultValues: {
-      full_name: "", phone: "", email: "", availability: "",
-      license_class: "", industry: "", work_location: "",
+      full_name: "", phone: "", email: "",
+      availability: [],
+      license_class: "",
+      industries: [],
+      work_locations: [],
       legal_right_to_work: "no", preferred_contact: "either", comments: "",
     },
   });
+
+  const availabilityOptions = [
+    { value: "full_time", label: t("candidate.fullTime") },
+    { value: "part_time", label: t("candidate.partTime") },
+    { value: "temporary", label: t("candidate.temporary") },
+  ];
 
   const onSubmit = async (data: CandidateFormValues) => {
     setLoading(true);
@@ -69,10 +78,10 @@ const CandidateForm = () => {
       full_name: data.full_name || "N/A",
       phone: data.phone,
       email: data.email,
-      availability: data.availability || null,
+      availability: data.availability.join(", "),
       license_class: data.license_class,
-      industry: data.industry,
-      work_location: data.work_location,
+      industry: data.industries.join(", "),
+      work_location: data.work_locations.join(", "),
       legal_right_to_work: data.legal_right_to_work === "yes",
       cv_url,
       preferred_contact: data.preferred_contact,
@@ -145,17 +154,33 @@ const CandidateForm = () => {
                   )} />
                 </div>
 
-                <FormField control={form.control} name="availability" render={({ field }) => (
+                {/* Availability - Multi-select checkboxes */}
+                <FormField control={form.control} name="availability" render={() => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><Clock className="w-4 h-4 text-accent" />{t("candidate.availability")}</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl><SelectTrigger><SelectValue placeholder={t("candidate.availabilityPh")} /></SelectTrigger></FormControl>
-                      <SelectContent>
-                        <SelectItem value="full_time">{t("candidate.fullTime")}</SelectItem>
-                        <SelectItem value="part_time">{t("candidate.partTime")}</SelectItem>
-                        <SelectItem value="temporary">{t("candidate.temporary")}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormLabel className="flex items-center gap-2"><Clock className="w-4 h-4 text-accent" />{t("candidate.availability")} *</FormLabel>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                      {availabilityOptions.map((option) => (
+                        <FormField
+                          key={option.value}
+                          control={form.control}
+                          name="availability"
+                          render={({ field }) => (
+                            <div className="flex items-center gap-2 rounded-lg border border-border p-3 hover:border-accent transition-colors">
+                              <Checkbox
+                                checked={field.value?.includes(option.value)}
+                                onCheckedChange={(checked) => {
+                                  const updated = checked
+                                    ? [...(field.value || []), option.value]
+                                    : (field.value || []).filter((v: string) => v !== option.value);
+                                  field.onChange(updated);
+                                }}
+                              />
+                              <Label className="cursor-pointer text-sm">{option.label}</Label>
+                            </div>
+                          )}
+                        />
+                      ))}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -171,24 +196,64 @@ const CandidateForm = () => {
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="industry" render={({ field }) => (
+                {/* Industry - Multi-select checkboxes */}
+                <FormField control={form.control} name="industries" render={() => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-2"><Factory className="w-4 h-4 text-accent" />{t("candidate.industry")} *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl><SelectTrigger><SelectValue placeholder={t("candidate.industryPh")} /></SelectTrigger></FormControl>
-                      <SelectContent>{industries.map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent>
-                    </Select>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 max-h-64 overflow-y-auto border border-border rounded-lg p-3">
+                      {industries.map((industry) => (
+                        <FormField
+                          key={industry}
+                          control={form.control}
+                          name="industries"
+                          render={({ field }) => (
+                            <div className="flex items-center gap-2 py-1">
+                              <Checkbox
+                                checked={field.value?.includes(industry)}
+                                onCheckedChange={(checked) => {
+                                  const updated = checked
+                                    ? [...(field.value || []), industry]
+                                    : (field.value || []).filter((v: string) => v !== industry);
+                                  field.onChange(updated);
+                                }}
+                              />
+                              <Label className="cursor-pointer text-sm">{industry}</Label>
+                            </div>
+                          )}
+                        />
+                      ))}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="work_location" render={({ field }) => (
+                {/* Work Location - Multi-select checkboxes */}
+                <FormField control={form.control} name="work_locations" render={() => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" />{t("candidate.workLocation")} *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl><SelectTrigger><SelectValue placeholder={t("candidate.workLocationPh")} /></SelectTrigger></FormControl>
-                      <SelectContent>{workLocations.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
-                    </Select>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 max-h-64 overflow-y-auto border border-border rounded-lg p-3">
+                      {workLocations.map((loc) => (
+                        <FormField
+                          key={loc}
+                          control={form.control}
+                          name="work_locations"
+                          render={({ field }) => (
+                            <div className="flex items-center gap-2 py-1">
+                              <Checkbox
+                                checked={field.value?.includes(loc)}
+                                onCheckedChange={(checked) => {
+                                  const updated = checked
+                                    ? [...(field.value || []), loc]
+                                    : (field.value || []).filter((v: string) => v !== loc);
+                                  field.onChange(updated);
+                                }}
+                              />
+                              <Label className="cursor-pointer text-sm">{loc}</Label>
+                            </div>
+                          )}
+                        />
+                      ))}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )} />

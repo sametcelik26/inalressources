@@ -54,8 +54,8 @@ const Jobs = () => {
         .eq("is_active", true)
         .order("created_at", { ascending: false });
 
-      if (typeFilter !== "all") query = query.eq("job_type", typeFilter);
-      if (expFilter !== "all") query = query.eq("experience_level", expFilter);
+      if (typeFilter !== "all") query = query.eq("job_type", typeFilter as any);
+      if (expFilter !== "all") query = query.eq("experience_level", expFilter as any);
 
       const { data, error } = await query;
       if (error) throw error;
