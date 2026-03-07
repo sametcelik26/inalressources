@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -7,37 +7,22 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, CheckCircle } from "lucide-react";
+import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, CheckCircle, AlertCircle } from "lucide-react";
 import Layout from "@/components/Layout";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
-
-const jobTypeLabels: Record<string, { en: string; fr: string }> = {
-  full_time: { en: "Full Time", fr: "Temps plein" },
-  part_time: { en: "Part Time", fr: "Temps partiel" },
-  contract: { en: "Contract", fr: "Contrat" },
-  temporary: { en: "Temporary", fr: "Temporaire" },
-  internship: { en: "Internship", fr: "Stage" },
-};
-
-const experienceLabels: Record<string, { en: string; fr: string }> = {
-  entry: { en: "Entry Level", fr: "Débutant" },
-  junior: { en: "Junior", fr: "Junior" },
-  mid: { en: "Mid Level", fr: "Intermédiaire" },
-  senior: { en: "Senior", fr: "Sénior" },
-  executive: { en: "Executive", fr: "Exécutif" },
-};
 
 const JobDetail = () => {
   const { id } = useParams();
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [job, setJob] = useState<JobPosting | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const applicationSchema = z.object({
@@ -53,11 +38,20 @@ const JobDetail = () => {
     resolver: zodResolver(applicationSchema),
   });
 
-  useEffect(() => {
-    if (id) {
-      supabase.from("job_postings").select("*").eq("id", id).single().then(({ data }) => setJob(data));
-    }
-  }, [id]);
+  const { data: job, isLoading, isError } = useQuery<JobPosting | null>({
+    queryKey: ["job", id],
+    queryFn: async () => {
+      if (!id) return null;
+      const { data, error } = await supabase
+        .from("job_postings")
+        .select("*")
+        .eq("id", id)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!id,
+  });
 
   const onSubmit = async (data: ApplicationForm) => {
     if (!id) return;
@@ -76,7 +70,40 @@ const JobDetail = () => {
     }
   };
 
-  if (!job) return <Layout><div className="container mx-auto px-4 py-12 text-center text-muted-foreground">{t("jobs.loading")}</div></Layout>;
+  if (isError) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16 text-center">
+          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+          <p className="font-heading font-bold text-lg text-foreground mb-2">{t("jobs.errorTitle")}</p>
+          <p className="text-muted-foreground mb-6">{t("jobs.errorDesc")}</p>
+          <Button onClick={() => navigate("/jobs")} variant="outline" className="rounded-full">
+            <ArrowLeft className="w-4 h-4 mr-2" /> {t("jobs.back")}
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (isLoading || !job) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8 max-w-4xl animate-pulse">
+          <div className="h-4 bg-muted rounded w-20 mb-6" />
+          <div className="bg-card border border-border rounded-xl p-8">
+            <div className="h-8 bg-muted rounded w-2/3 mb-4" />
+            <div className="flex gap-4 mb-6">
+              <div className="h-4 bg-muted rounded w-24" />
+              <div className="h-4 bg-muted rounded w-20" />
+            </div>
+            <div className="h-4 bg-muted rounded w-full mb-2" />
+            <div className="h-4 bg-muted rounded w-5/6 mb-2" />
+            <div className="h-4 bg-muted rounded w-4/6" />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -92,7 +119,12 @@ const JobDetail = () => {
             <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{jobTypeLabels[job.job_type]?.[language]}</span>
             {job.experience_level && <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{experienceLabels[job.experience_level]?.[language]}</span>}
             {(job.salary_min || job.salary_max) && (
-              <span className="flex items-center gap-1"><DollarSign className="w-4 h-4" />{job.salary_min && `$${job.salary_min.toLocaleString()}`}{job.salary_min && job.salary_max && " - "}{job.salary_max && `$${job.salary_max.toLocaleString()}`}</span>
+              <span className="flex items-center gap-1">
+                <DollarSign className="w-4 h-4" />
+                {job.salary_min && `$${job.salary_min.toLocaleString()}`}
+                {job.salary_min && job.salary_max && " - "}
+                {job.salary_max && `$${job.salary_max.toLocaleString()}`}
+              </span>
             )}
             {job.deadline && <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{t("jobs.deadline")}: {new Date(job.deadline).toLocaleDateString()}</span>}
           </div>
@@ -148,7 +180,7 @@ const JobDetail = () => {
                   <Textarea id="cover_letter" placeholder={t("jobs.coverLetterPlaceholder")} rows={5} maxLength={2000} {...register("cover_letter")} />
                 </div>
                 <Button type="submit" disabled={isSubmitting} className="rounded-full bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold">
-                  {isSubmitting ? "..." : t("jobs.submitApplication")}
+                  {isSubmitting ? t("common.loading") : t("jobs.submitApplication")}
                 </Button>
               </form>
             )}

@@ -80,6 +80,9 @@ const translations: Translations = {
   "jobs.applicationSent": { en: "Application submitted!", fr: "Candidature soumise!" },
   "jobs.applicationConfirm": { en: "Thank you for your application. We will contact you soon.", fr: "Merci pour votre candidature. Nous vous contacterons bientôt." },
   "jobs.applyAgain": { en: "Submit Another Application", fr: "Soumettre une autre candidature" },
+  "jobs.errorTitle": { en: "Could not load jobs", fr: "Impossible de charger les emplois" },
+  "jobs.errorDesc": { en: "Something went wrong. Please try again.", fr: "Une erreur est survenue. Veuillez réessayer." },
+  "jobs.clearFilters": { en: "Clear Filters", fr: "Effacer les filtres" },
 
   // Dashboard
   "dashboard.seekerTitle": { en: "My Dashboard", fr: "Mon tableau de bord" },
@@ -145,6 +148,8 @@ const translations: Translations = {
 
   // Common
   "common.loading": { en: "Loading...", fr: "Chargement..." },
+  "common.required": { en: "This field is required.", fr: "Ce champ est requis." },
+  "common.invalidEmail": { en: "Please enter a valid email.", fr: "Veuillez entrer un courriel valide." },
 
   // Contact page
   "contact.title": { en: "Contact Us", fr: "Contactez-nous" },

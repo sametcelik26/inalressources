@@ -4,9 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import TopBar from "@/components/TopBar";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
+import { industries } from "@/lib/constants";
 import { Building2, User, MapPin, Phone, Mail, Briefcase, Factory, Users, MessageSquare, CheckCircle, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,34 +14,27 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
-const employerSchema = z.object({
-  company_name: z.string().trim().min(1, "Required").max(200),
-  contact_person: z.string().trim().min(1, "Required").max(200),
-  company_address: z.string().trim().max(500).optional().or(z.literal("")),
-  phone: z.string().trim().max(30).optional().or(z.literal("")),
-  email: z.string().trim().email("Invalid email").max(255),
-  job_title: z.string().trim().max(200).optional().or(z.literal("")),
-  industry: z.string().optional().or(z.literal("")),
-  employees_needed: z.coerce.number().int().min(1).max(9999).optional().or(z.literal("")),
-  preferred_contact: z.string().default("either"),
-  comments: z.string().trim().max(2000).optional().or(z.literal("")),
-});
-
-type EmployerFormValues = z.infer<typeof employerSchema>;
-
-const industries = [
-  "Construction", "Manufacturing", "Warehousing & Logistics",
-  "Hospitality & Food Services", "Retail", "Healthcare",
-  "Information Technology", "Finance & Banking", "Education",
-  "Transportation", "Agriculture", "Mining & Resources",
-  "Real Estate", "Telecommunications", "Energy & Utilities", "Other",
-];
-
 const EmployerForm = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Zod schema with localized error messages via t()
+  const employerSchema = z.object({
+    company_name: z.string().trim().min(1, t("common.required")).max(200),
+    contact_person: z.string().trim().min(1, t("common.required")).max(200),
+    company_address: z.string().trim().max(500).optional().or(z.literal("")),
+    phone: z.string().trim().max(30).optional().or(z.literal("")),
+    email: z.string().trim().email(t("common.invalidEmail")).max(255),
+    job_title: z.string().trim().max(200).optional().or(z.literal("")),
+    industry: z.string().optional().or(z.literal("")),
+    employees_needed: z.coerce.number().int().min(1).max(9999).optional().or(z.literal("")),
+    preferred_contact: z.string().default("either"),
+    comments: z.string().trim().max(2000).optional().or(z.literal("")),
+  });
+
+  type EmployerFormValues = z.infer<typeof employerSchema>;
 
   const form = useForm<EmployerFormValues>({
     resolver: zodResolver(employerSchema),
@@ -77,27 +69,27 @@ const EmployerForm = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <TopBar /><NavBar />
-        <main className="flex-1 flex items-center justify-center bg-secondary px-4 py-16">
+      <Layout mainClassName="bg-secondary">
+        <div className="flex-1 flex items-center justify-center px-4 py-16">
           <div className="bg-card rounded-2xl shadow-xl p-10 max-w-lg w-full text-center">
             <CheckCircle className="w-16 h-16 text-accent mx-auto mb-4" />
             <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{t("employer.successTitle")}</h2>
             <p className="text-muted-foreground mb-6">{t("employer.successDesc")}</p>
-            <Button onClick={() => { setSubmitted(false); form.reset(); }} className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8">
+            <Button
+              onClick={() => { setSubmitted(false); form.reset(); }}
+              className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8"
+            >
               {t("employer.submitAnother")}
             </Button>
           </div>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopBar /><NavBar />
-      <main className="flex-1 bg-secondary px-4 py-12">
+    <Layout mainClassName="bg-secondary">
+      <div className="px-4 py-12">
         <div className="max-w-2xl mx-auto">
           <div className="bg-card rounded-2xl shadow-xl p-8 md:p-10">
             <div className="flex items-center gap-3 mb-8">
@@ -111,7 +103,7 @@ const EmployerForm = () => {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <FormField control={form.control} name="company_name" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><Building2 className="w-4 h-4 text-accent" />{t("employer.companyName")}</FormLabel>
+                    <FormLabel className="flex items-center gap-2"><Building2 className="w-4 h-4 text-accent" />{t("employer.companyName")} *</FormLabel>
                     <FormControl><Input placeholder={t("employer.companyNamePh")} {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -119,7 +111,7 @@ const EmployerForm = () => {
 
                 <FormField control={form.control} name="contact_person" render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><User className="w-4 h-4 text-accent" />{t("employer.contactPerson")}</FormLabel>
+                    <FormLabel className="flex items-center gap-2"><User className="w-4 h-4 text-accent" />{t("employer.contactPerson")} *</FormLabel>
                     <FormControl><Input placeholder={t("employer.contactPersonPh")} {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
@@ -143,7 +135,7 @@ const EmployerForm = () => {
                   )} />
                   <FormField control={form.control} name="email" render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2"><Mail className="w-4 h-4 text-accent" />{t("employer.email")}</FormLabel>
+                      <FormLabel className="flex items-center gap-2"><Mail className="w-4 h-4 text-accent" />{t("employer.email")} *</FormLabel>
                       <FormControl><Input type="email" placeholder="email@company.com" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -208,9 +200,8 @@ const EmployerForm = () => {
             </Form>
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

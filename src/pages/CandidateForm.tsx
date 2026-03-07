@@ -4,9 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import TopBar from "@/components/TopBar";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
+import { industries, licenseClasses, workLocations } from "@/lib/constants";
 import { User, Phone, Mail, Clock, Car, Factory, MapPin, Shield, Upload, MessageSquare, CheckCircle, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,35 +16,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-const candidateSchema = z.object({
-  full_name: z.string().trim().max(200).optional().or(z.literal("")),
-  phone: z.string().trim().min(1, "Required").max(30),
-  email: z.string().trim().email("Invalid email").max(255),
-  availability: z.string().optional().or(z.literal("")),
-  license_class: z.string().min(1, "Required"),
-  industry: z.string().min(1, "Required"),
-  work_location: z.string().min(1, "Required"),
-  legal_right_to_work: z.string().optional(),
-  preferred_contact: z.string().min(1, "Required"),
-  comments: z.string().trim().max(2000).optional().or(z.literal("")),
-});
-
-type CandidateFormValues = z.infer<typeof candidateSchema>;
-
-const licenseClasses = ["None", "Class 5 (G)", "Class 4 (G2)", "Class 3 (DZ)", "Class 2 (CZ)", "Class 1 (AZ)", "Other"];
-const industries = [
-  "Construction", "Manufacturing", "Warehousing & Logistics",
-  "Hospitality & Food Services", "Retail", "Healthcare",
-  "Information Technology", "Finance & Banking", "Education",
-  "Transportation", "Agriculture", "Mining & Resources",
-  "Real Estate", "Telecommunications", "Energy & Utilities", "Other",
-];
-const locations = [
-  "Montreal", "Laval", "Quebec City", "Gatineau", "Sherbrooke",
-  "Longueuil", "Trois-Rivières", "Saguenay", "Lévis", "Terrebonne",
-  "Toronto", "Ottawa", "Vancouver", "Calgary", "Edmonton", "Other",
-];
-
 const CandidateForm = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -53,6 +23,22 @@ const CandidateForm = () => {
   const [loading, setLoading] = useState(false);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Zod schema with localized error messages via t()
+  const candidateSchema = z.object({
+    full_name: z.string().trim().max(200).optional().or(z.literal("")),
+    phone: z.string().trim().min(1, t("common.required")).max(30),
+    email: z.string().trim().email(t("common.invalidEmail")).max(255),
+    availability: z.string().optional().or(z.literal("")),
+    license_class: z.string().min(1, t("common.required")),
+    industry: z.string().min(1, t("common.required")),
+    work_location: z.string().min(1, t("common.required")),
+    legal_right_to_work: z.string().optional(),
+    preferred_contact: z.string().min(1, t("common.required")),
+    comments: z.string().trim().max(2000).optional().or(z.literal("")),
+  });
+
+  type CandidateFormValues = z.infer<typeof candidateSchema>;
 
   const form = useForm<CandidateFormValues>({
     resolver: zodResolver(candidateSchema),
@@ -102,27 +88,27 @@ const CandidateForm = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <TopBar /><NavBar />
-        <main className="flex-1 flex items-center justify-center bg-secondary px-4 py-16">
+      <Layout mainClassName="bg-secondary">
+        <div className="flex-1 flex items-center justify-center px-4 py-16">
           <div className="bg-card rounded-2xl shadow-xl p-10 max-w-lg w-full text-center">
             <CheckCircle className="w-16 h-16 text-accent mx-auto mb-4" />
             <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{t("candidate.successTitle")}</h2>
             <p className="text-muted-foreground mb-6">{t("candidate.successDesc")}</p>
-            <Button onClick={() => { setSubmitted(false); form.reset(); setCvFile(null); }} className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8">
+            <Button
+              onClick={() => { setSubmitted(false); form.reset(); setCvFile(null); }}
+              className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8"
+            >
               {t("candidate.submitAnother")}
             </Button>
           </div>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopBar /><NavBar />
-      <main className="flex-1 bg-secondary px-4 py-12">
+    <Layout mainClassName="bg-secondary">
+      <div className="px-4 py-12">
         <div className="max-w-2xl mx-auto">
           <div className="bg-card rounded-2xl shadow-xl p-8 md:p-10">
             <div className="flex items-center gap-3 mb-8">
@@ -201,7 +187,7 @@ const CandidateForm = () => {
                     <FormLabel className="flex items-center gap-2"><MapPin className="w-4 h-4 text-accent" />{t("candidate.workLocation")} *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl><SelectTrigger><SelectValue placeholder={t("candidate.workLocationPh")} /></SelectTrigger></FormControl>
-                      <SelectContent>{locations.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
+                      <SelectContent>{workLocations.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
@@ -279,9 +265,8 @@ const CandidateForm = () => {
             </Form>
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 
