@@ -58,6 +58,10 @@ const Contact = () => {
 
 
   const onSubmit = async (data: ContactForm) => {
+    if (!checkLimit()) {
+      toast({ title: t("contact.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("contact_messages").insert({
       name: data.name,
