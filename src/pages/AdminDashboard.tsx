@@ -437,7 +437,7 @@ const AdminDashboard = () => {
                             { label: "Title", value: job.title },
                             { label: "Company", value: job.company_name || "" },
                             { label: "Location", value: job.location },
-                            { label: "Type", value: (typeof jobTypeLabels[job.job_type] === 'object' ? jobTypeLabels[job.job_type].en : jobTypeLabels[job.job_type]) || job.job_type },
+                            { label: "Type", value: (jobTypeLabels[job.job_type] as any)?.en || job.job_type },
                             { label: "Salary", value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
                             { label: "Description", value: job.description },
                             { label: "Responsibilities", value: (job as any).responsibilities || "" },
