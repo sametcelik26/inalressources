@@ -35,42 +35,6 @@ const JobDetail = () => {
     enabled: !!id,
   });
 
-
-  if (isError) {
-    return (
-      <Layout>
-        <div className="container mx-auto px-4 py-16 text-center">
-          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
-          <p className="font-heading font-bold text-lg text-foreground mb-2">{t("jobs.errorTitle")}</p>
-          <p className="text-muted-foreground mb-6">{t("jobs.errorDesc")}</p>
-          <Button onClick={() => navigate("/jobs")} variant="outline" className="rounded-full">
-            <ArrowLeft className="w-4 h-4 mr-2" /> {t("jobs.back")}
-          </Button>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (isLoading || !job) {
-    return (
-      <Layout>
-        <div className="container mx-auto px-4 py-8 max-w-4xl animate-pulse">
-          <div className="h-4 bg-muted rounded w-20 mb-6" />
-          <div className="bg-card border border-border rounded-xl p-8">
-            <div className="h-8 bg-muted rounded w-2/3 mb-4" />
-            <div className="flex gap-4 mb-6">
-              <div className="h-4 bg-muted rounded w-24" />
-              <div className="h-4 bg-muted rounded w-20" />
-            </div>
-            <div className="h-4 bg-muted rounded w-full mb-2" />
-            <div className="h-4 bg-muted rounded w-5/6 mb-2" />
-            <div className="h-4 bg-muted rounded w-4/6" />
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   const jobJsonLd = useMemo(() => {
     if (!job) return undefined;
     return {
@@ -109,15 +73,50 @@ const JobDetail = () => {
     };
   }, [job, language]);
 
+  if (isError) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16 text-center">
+          <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+          <p className="font-heading font-bold text-lg text-foreground mb-2">{t("jobs.errorTitle")}</p>
+          <p className="text-muted-foreground mb-6">{t("jobs.errorDesc")}</p>
+          <Button onClick={() => navigate("/jobs")} variant="outline" className="rounded-full">
+            <ArrowLeft className="w-4 h-4 mr-2" /> {t("jobs.back")}
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (isLoading || !job) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8 max-w-4xl animate-pulse">
+          <div className="h-4 bg-muted rounded w-20 mb-6" />
+          <div className="bg-card border border-border rounded-xl p-8">
+            <div className="h-8 bg-muted rounded w-2/3 mb-4" />
+            <div className="flex gap-4 mb-6">
+              <div className="h-4 bg-muted rounded w-24" />
+              <div className="h-4 bg-muted rounded w-20" />
+            </div>
+            <div className="h-4 bg-muted rounded w-full mb-2" />
+            <div className="h-4 bg-muted rounded w-5/6 mb-2" />
+            <div className="h-4 bg-muted rounded w-4/6" />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
-      {job && (
-        <SEOHead
-          title={getJobTitle(job, language)}
-          description={getJobDescription(job, language).substring(0, 155)}
-          canonical={`https://www.inalressources.info/jobs/${id}`}
-          ogType="article"
-          jsonLd={jobJsonLd}
+      <SEOHead
+        title={getJobTitle(job, language)}
+        description={getJobDescription(job, language).substring(0, 155)}
+        canonical={`https://www.inalressources.info/jobs/${id}`}
+        ogType="article"
+        jsonLd={jobJsonLd}
+      />
         />
       )}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
