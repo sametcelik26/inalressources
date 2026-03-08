@@ -283,6 +283,7 @@ const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [employerRequests, setEmployerRequests] = useState<any[]>([]);
   const [candidateApps, setCandidateApps] = useState<any[]>([]);
+  const [contactMessages, setContactMessages] = useState<any[]>([]);
 
   // Job form states
   const [jobView, setJobView] = useState<"list" | "form">("list");
