@@ -84,6 +84,10 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   };
 
   const onSubmit = async (data: ApplicationForm) => {
+    if (!checkLimit()) {
+      toast({ title: t("contact.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setUploading(true);
     let cvUrl: string | null = null;
     if (cvFile) {
