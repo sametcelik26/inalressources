@@ -137,7 +137,7 @@ const CandidateForm = () => {
             <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{t("candidate.successTitle")}</h2>
             <p className="text-muted-foreground mb-6">{t("candidate.successDesc")}</p>
             <Button
-              onClick={() => { setSubmitted(false); form.reset(); setCvFile(null); }}
+              onClick={() => { setSubmitted(false); form.reset(); setCvFiles([]); }}
               className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8"
             >
               {t("candidate.submitAnother")}
