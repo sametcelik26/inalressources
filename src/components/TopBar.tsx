@@ -1,4 +1,4 @@
-import { Shield, MapPin, Headphones, Phone } from "lucide-react";
+import { Shield, MapPin, Phone } from "lucide-react";
 import logoTopbar from "@/assets/logo-topbar.avif";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -8,7 +8,7 @@ const TopBar = () => {
   const t = {
     license: language === 'fr' ? 'Permis' : 'License',
     available: language === 'fr' ? 'Disponible' : 'Available',
-    hrServices: language === 'fr' ? 'Services RH Lun - Ven: 8h00 - 18h00' : 'HR Services Mon - Fri: 8:00 AM - 6:00 PM',
+    hrServices: language === 'fr' ? 'Services RH Lun - Ven: 8h00 - 18h00' : 'HR Services Mon - Fri: 8:00 AM - 6:00 PM'
   };
 
   return (
@@ -46,7 +46,7 @@ const TopBar = () => {
           {/* HR Services */}
           <div className="flex items-center gap-2 text-sm">
             <div className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
-              <Headphones className="w-4 h-4 text-accent" />
+              
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-xs text-primary-foreground/60">{t.available}</span>
