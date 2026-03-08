@@ -1127,6 +1127,55 @@ const AdminDashboard = () => {
               </div>
             )}
           </TabsContent>
+
+          {/* ═══ TAB 5: CONTACT MESSAGES ═══ */}
+          <TabsContent value="messages">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <h2 className="text-xl font-heading font-bold text-foreground">{at.contactMessages}</h2>
+            </div>
+            {contactMessages.length === 0 ? (
+              <div className="text-center py-16 text-muted-foreground">
+                <Mail className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <p className="font-heading font-bold text-lg">{at.noContactMessages} {at.yet}</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {contactMessages.map((msg: any) => (
+                  <div key={msg.id} className="bg-card border border-border rounded-xl p-5 hover:border-primary/30 transition-colors">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-heading font-bold text-foreground">{msg.name}</h3>
+                          <Badge variant="secondary" className="text-xs">{msg.subject}</Badge>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-2">
+                          <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /><a href={`mailto:${msg.email}`} className="hover:text-primary hover:underline">{msg.email}</a></span>
+                          {msg.phone && <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" />{msg.phone}</span>}
+                          <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{new Date(msg.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap">{msg.message}</p>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                        <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Contact_${msg.name}`, [
+                          { label: "Name", value: msg.name },
+                          { label: "Email", value: msg.email },
+                          { label: "Phone", value: msg.phone || "" },
+                          { label: "Subject", value: msg.subject },
+                          { label: "Message", value: msg.message },
+                          { label: "Received", value: new Date(msg.created_at).toLocaleString() },
+                        ])}>
+                          <FileText className="w-3.5 h-3.5 mr-1" /> PDF
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => deleteRecord("contact_messages", msg.id, setContactMessages)}>
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
     </Layout>
