@@ -33,48 +33,6 @@ const JobDetail = () => {
     enabled: !!id,
   });
 
-  const formLabels = {
-    en: {
-      firstName: "First Name",
-      lastName: "Last Name",
-      email: "Email",
-      phone: "Phone",
-      city: "City",
-      linkedin: "LinkedIn Profile (optional)",
-      cv: "Resume / CV",
-      cvHelper: "PDF, DOC or DOCX (max 5MB)",
-      coverLetter: "Cover Letter (optional)",
-      coverLetterHelper: "Tell us why you're a great fit for this role",
-      submit: "Submit Application",
-      submitting: "Submitting...",
-      browseFiles: "Browse Files",
-      dragDrop: "or drag and drop your file here",
-      fileSelected: "File selected",
-      applyTitle: "Apply for this position",
-      applySubtitle: "Fill out the form below and we'll get back to you",
-    },
-    fr: {
-      firstName: "Prénom",
-      lastName: "Nom",
-      email: "Courriel",
-      phone: "Téléphone",
-      city: "Ville",
-      linkedin: "Profil LinkedIn (optionnel)",
-      cv: "CV / Curriculum vitae",
-      cvHelper: "PDF, DOC ou DOCX (max 5 Mo)",
-      coverLetter: "Lettre de motivation (optionnel)",
-      coverLetterHelper: "Dites-nous pourquoi vous êtes le candidat idéal",
-      submit: "Soumettre ma candidature",
-      submitting: "Envoi en cours...",
-      browseFiles: "Parcourir",
-      dragDrop: "ou glissez-déposez votre fichier ici",
-      fileSelected: "Fichier sélectionné",
-      applyTitle: "Postuler pour ce poste",
-      applySubtitle: "Remplissez le formulaire ci-dessous et nous vous contacterons",
-    },
-  };
-
-  const labels = formLabels[language];
 
   if (isError) {
     return (
