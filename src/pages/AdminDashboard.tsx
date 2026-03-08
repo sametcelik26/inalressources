@@ -59,6 +59,31 @@ const AdminDashboard = () => {
   const [form, setForm] = useState(emptyJob);
   const [searchQuery, setSearchQuery] = useState("");
   const [saving, setSaving] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const filteredSubmissions = submissions.filter(
+    (sub: any) => statusFilter === "all" || (sub.status || "new") === statusFilter
+  );
+
+  const updateSubmissionStatus = async (id: string, status: string) => {
+    const { error } = await supabase
+      .from("job_submissions")
+      .update({ status } as any)
+      .eq("id", id);
+    if (!error) {
+      setSubmissions((prev: any[]) => prev.map((s) => s.id === id ? { ...s, status } : s));
+      toast({ title: "Status updated", description: `Application marked as ${status}.` });
+    }
+  };
+
+  const deleteSubmission = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this application?")) return;
+    const { error } = await supabase.from("job_submissions").delete().eq("id", id);
+    if (!error) {
+      setSubmissions((prev: any[]) => prev.filter((s) => s.id !== id));
+      toast({ title: "Deleted", description: "Application removed." });
+    }
+  };
 
   // Auth check
   useEffect(() => {
