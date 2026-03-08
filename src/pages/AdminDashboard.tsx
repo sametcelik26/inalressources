@@ -558,12 +558,13 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
           {[
             { icon: Briefcase, label: at.jobPostings, count: jobs.length, color: "text-primary" },
             { icon: FileText, label: at.applications, count: submissions.length, color: "text-accent" },
             { icon: Building2, label: at.employerRequests, count: employerRequests.length, color: "text-green-600" },
             { icon: Users, label: at.candidates, count: candidateApps.length, color: "text-purple-600" },
+            { icon: Mail, label: at.contactMessages, count: contactMessages.length, color: "text-orange-600" },
           ].map(({ icon: Icon, label, count, color }) => (
             <div key={label} className="bg-card border border-border rounded-xl p-4">
               <div className="flex items-center gap-3">
