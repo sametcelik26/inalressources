@@ -48,11 +48,11 @@ const TopBar = () => {
               <Clock className="w-3.5 h-3.5 text-accent" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-[10px] md:text-xs text-primary-foreground/60">
+              <span className="text-[10px] md:text-xs text-primary-foreground/60 whitespace-nowrap">
                 {language === 'fr' ? 'Lun - Ven' : 'Mon - Fri'}
               </span>
-              <span className="font-heading font-semibold text-primary-foreground text-xs md:text-sm">
-                {language === 'fr' ? '8h00 - 17h00' : '8:00 AM - 5:00 PM'}
+              <span className="font-heading font-semibold text-primary-foreground text-xs md:text-sm whitespace-nowrap">
+                {language === 'fr' ? '8h - 17h' : '8AM - 5PM'}
               </span>
             </div>
           </div>
