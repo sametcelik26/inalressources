@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/Layout";
 import { industries, licenseClasses, workLocations } from "@/lib/constants";
-import { User, Phone, Mail, Clock, Car, Factory, MapPin, Shield, Upload, MessageSquare, CheckCircle, Send } from "lucide-react";
+import { User, Phone, Mail, Clock, Car, Factory, MapPin, Shield, Upload, MessageSquare, CheckCircle, Send, X, Plus, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useRateLimit } from "@/hooks/useRateLimit";
-import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
+import { validateCVFile, FILE_VALIDATION_MESSAGES, getTotalSize, formatFileSize, CV_MAX_TOTAL } from "@/lib/fileValidation";
 
 const CandidateForm = () => {
   const { t, language } = useLanguage();
@@ -25,8 +25,26 @@ const CandidateForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { checkLimit, recordSubmission } = useRateLimit({ key: "candidate", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFiles, setCvFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const totalSize = getTotalSize(cvFiles);
+  const canAddMore = totalSize < CV_MAX_TOTAL;
+
+  const addFile = (file: File) => {
+    const result = validateCVFile(file, totalSize);
+    if (!result.valid) {
+      const msgs = FILE_VALIDATION_MESSAGES[language];
+      toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+      return false;
+    }
+    setCvFiles(prev => [...prev, file]);
+    return true;
+  };
+
+  const removeFile = (index: number) => {
+    setCvFiles(prev => prev.filter((_, i) => i !== index));
+  };
 
   const candidateSchema = z.object({
     full_name: z.string().trim().max(200).optional().or(z.literal("")),
@@ -69,16 +87,20 @@ const CandidateForm = () => {
     setLoading(true);
     let cv_url: string | null = null;
 
-    if (cvFile) {
-      const ext = cvFile.name.split(".").pop();
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("candidate-cvs").upload(path, cvFile);
-      if (uploadError) {
-        toast({ title: t("candidate.errorTitle"), description: t("candidate.uploadError"), variant: "destructive" });
-        setLoading(false);
-        return;
+    if (cvFiles.length > 0) {
+      const uploadedPaths: string[] = [];
+      for (const file of cvFiles) {
+        const ext = file.name.split(".").pop();
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error: uploadError } = await supabase.storage.from("candidate-cvs").upload(path, file);
+        if (uploadError) {
+          toast({ title: t("candidate.errorTitle"), description: t("candidate.uploadError"), variant: "destructive" });
+          setLoading(false);
+          return;
+        }
+        uploadedPaths.push(path);
       }
-      cv_url = path;
+      cv_url = uploadedPaths.join(",");
     }
 
     const { error } = await supabase.from("candidate_applications").insert({
@@ -115,7 +137,7 @@ const CandidateForm = () => {
             <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{t("candidate.successTitle")}</h2>
             <p className="text-muted-foreground mb-6">{t("candidate.successDesc")}</p>
             <Button
-              onClick={() => { setSubmitted(false); form.reset(); setCvFile(null); }}
+              onClick={() => { setSubmitted(false); form.reset(); setCvFiles([]); }}
               className="bg-accent hover:bg-orange-hover text-accent-foreground font-heading font-bold rounded-full px-8"
             >
               {t("candidate.submitAnother")}
@@ -292,60 +314,81 @@ const CandidateForm = () => {
                   <label className="flex items-center gap-2 text-sm font-medium mb-2">
                     <Upload className="w-4 h-4 text-accent" />{t("candidate.uploadCv")}
                   </label>
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onDrop={(e) => {
-                      e.preventDefault(); e.stopPropagation();
-                      const file = e.dataTransfer.files?.[0];
-                      if (file) {
-                        const result = validateCVFile(file);
-                        if (!result.valid) {
-                          const msgs = FILE_VALIDATION_MESSAGES[language];
-                          toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                          return;
-                        }
-                        setCvFile(file);
-                      }
-                    }}
-                    className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      className="hidden"
-                      accept=".pdf,.doc,.docx"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const result = validateCVFile(file);
-                          if (!result.valid) {
-                            const msgs = FILE_VALIDATION_MESSAGES[language];
-                            toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                            e.target.value = "";
-                            return;
-                          }
-                          setCvFile(file);
-                        }
+
+                  {/* File list */}
+                  {cvFiles.length > 0 && (
+                    <div className="space-y-2 mb-3">
+                      {cvFiles.map((file, index) => (
+                        <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-secondary rounded-lg px-3 py-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText className="w-4 h-4 text-accent shrink-0" />
+                            <span className="text-sm font-medium truncate">{file.name}</span>
+                            <span className="text-xs text-muted-foreground shrink-0">({formatFileSize(file.size)})</span>
+                          </div>
+                          <button type="button" onClick={() => removeFile(index)} className="text-muted-foreground hover:text-destructive ml-2 shrink-0">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <p className="text-xs text-muted-foreground">
+                        {language === 'fr' ? 'Total' : 'Total'}: {formatFileSize(totalSize)} / 5 MB
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Drop zone - show when no files or can add more */}
+                  {cvFiles.length === 0 && (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) addFile(file);
                       }}
-                    />
-                    {cvFile ? (
-                      <div className="flex items-center justify-center gap-2 text-accent">
-                        <CheckCircle className="w-5 h-5" />
-                        <span className="font-medium text-sm">{cvFile.name}</span>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setCvFile(null); }} className="text-muted-foreground hover:text-destructive ml-1 text-xs underline">✕</button>
-                      </div>
-                    ) : (
-                      <>
-                        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <p className="text-sm">
-                          <span className="text-accent font-medium">{t("candidate.browseFiles")}</span>{" "}
-                          <span className="text-muted-foreground">{t("candidate.dragDrop")}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">{t("candidate.cvHelper")}</p>
-                      </>
-                    )}
-                  </div>
+                      className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
+                    >
+                      <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-sm">
+                        <span className="text-accent font-medium">{t("candidate.browseFiles")}</span>{" "}
+                        <span className="text-muted-foreground">{t("candidate.dragDrop")}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("candidate.cvHelper")}</p>
+                    </div>
+                  )}
+
+                  {/* Add more button */}
+                  {cvFiles.length > 0 && canAddMore && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mt-2 gap-1"
+                    >
+                      <Plus className="w-4 h-4" />
+                      {language === 'fr' ? 'Ajouter un autre fichier' : 'Add another file'}
+                    </Button>
+                  )}
+
+                  {/* Total size warning */}
+                  {cvFiles.length > 0 && !canAddMore && (
+                    <p className="text-xs text-destructive mt-2">
+                      {language === 'fr' ? 'La taille totale des fichiers est au maximum de 5 Mo.' : 'Total file size must not exceed 5 MB.'}
+                    </p>
+                  )}
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    className="hidden"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) addFile(file);
+                      if (fileInputRef.current) fileInputRef.current.value = "";
+                    }}
+                  />
                 </div>
 
                 <FormField control={form.control} name="preferred_contact" render={({ field }) => (
