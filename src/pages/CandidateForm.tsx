@@ -25,8 +25,26 @@ const CandidateForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { checkLimit, recordSubmission } = useRateLimit({ key: "candidate", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFiles, setCvFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const totalSize = getTotalSize(cvFiles);
+  const canAddMore = totalSize < CV_MAX_TOTAL;
+
+  const addFile = (file: File) => {
+    const result = validateCVFile(file, totalSize);
+    if (!result.valid) {
+      const msgs = FILE_VALIDATION_MESSAGES[language];
+      toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+      return false;
+    }
+    setCvFiles(prev => [...prev, file]);
+    return true;
+  };
+
+  const removeFile = (index: number) => {
+    setCvFiles(prev => prev.filter((_, i) => i !== index));
+  };
 
   const candidateSchema = z.object({
     full_name: z.string().trim().max(200).optional().or(z.literal("")),
