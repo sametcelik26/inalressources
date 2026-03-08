@@ -25,7 +25,7 @@ const AdminLogin = () => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
       setLoading(false);
       return;
     }
