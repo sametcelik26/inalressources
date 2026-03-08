@@ -31,7 +31,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 const Contact = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
