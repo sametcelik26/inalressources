@@ -30,14 +30,13 @@ const AdminLogin = () => {
       return;
     }
 
-    // Verify admin role server-side
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.user.id)
-      .maybeSingle();
+    // Verify admin role server-side (supports users with multiple roles)
+    const { data: isAdmin, error: roleError } = await supabase.rpc("has_role", {
+      _user_id: data.user.id,
+      _role: "admin",
+    });
 
-    if (roleData?.role !== "admin") {
+    if (roleError || !isAdmin) {
       await supabase.auth.signOut();
       toast({ title: "Access Denied", description: "You do not have admin privileges.", variant: "destructive" });
       setLoading(false);
