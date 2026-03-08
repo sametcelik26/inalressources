@@ -622,9 +622,13 @@ const AdminDashboard = () => {
     );
   }
 
+  const statusTranslations: Record<string, string> = {
+    new: at.new, reviewed: at.reviewed, interview: at.interview, rejected: at.rejected,
+  };
+
   const StatusBadge = ({ status }: { status: string }) => (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[status] || "bg-secondary text-secondary-foreground"}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {statusTranslations[status] || (status.charAt(0).toUpperCase() + status.slice(1))}
     </span>
   );
 
