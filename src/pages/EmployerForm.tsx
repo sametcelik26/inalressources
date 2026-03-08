@@ -27,6 +27,7 @@ const EmployerForm = () => {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "employer", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
   const [step, setStep] = useState(1);
 
   const employerSchema = z.object({
