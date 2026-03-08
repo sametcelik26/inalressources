@@ -29,6 +29,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "job_application", cooldownSeconds: 30, maxSubmissions: 5, windowSeconds: 3600 });
 
   const applicationSchema = z.object({
     first_name: z.string().trim().min(1, t("contact.fieldRequired")).max(50),
