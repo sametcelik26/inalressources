@@ -29,6 +29,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/employers" element={<EmployerForm />} />
             <Route path="/candidates" element={<CandidateForm />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
