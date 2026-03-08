@@ -1,7 +1,16 @@
 import { Shield, MapPin, Headphones, Phone } from "lucide-react";
 import logoTopbar from "@/assets/logo-topbar.avif";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const TopBar = () => {
+  const { language } = useLanguage();
+
+  const t = {
+    license: language === 'fr' ? 'Permis' : 'License',
+    available: language === 'fr' ? 'Disponible' : 'Available',
+    hrServices: language === 'fr' ? 'Services RH 24/7' : 'HR Services 24/7',
+  };
+
   return (
     <div className="w-full bg-[hsl(var(--topbar-bg))] border-b border-[hsl(var(--topbar-border))]">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-5 px-4 gap-4">
@@ -18,7 +27,7 @@ const TopBar = () => {
               <Shield className="w-4 h-4 text-accent" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-xs text-primary-foreground/60">License</span>
+              <span className="text-xs text-primary-foreground/60">{t.license}</span>
               <span className="font-heading font-semibold text-primary-foreground text-sm">AP-2000138</span>
             </div>
           </div>
@@ -40,8 +49,8 @@ const TopBar = () => {
               <Headphones className="w-4 h-4 text-accent" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-xs text-primary-foreground/60">Available</span>
-              <span className="font-heading font-semibold text-primary-foreground text-sm">HR Services 24/7</span>
+              <span className="text-xs text-primary-foreground/60">{t.available}</span>
+              <span className="font-heading font-semibold text-primary-foreground text-sm">{t.hrServices}</span>
             </div>
           </div>
 
