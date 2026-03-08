@@ -272,7 +272,7 @@ const Jobs = () => {
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{timeAgo(job.created_at)}</span>
                           </div>
 
-                          <p className="text-xs text-muted-foreground mt-2.5 line-clamp-2 leading-relaxed">{job.description}</p>
+                          <p className="text-xs text-muted-foreground mt-2.5 line-clamp-2 leading-relaxed">{getJobDescription(job, language)}</p>
 
                           {job.skills && job.skills.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2.5">
