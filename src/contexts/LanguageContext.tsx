@@ -329,7 +329,7 @@ const translations: Translations = {
   "footer.quickLinks": { en: "Quick Links", fr: "Liens rapides" },
   "footer.contactUs": { en: "Contact Us", fr: "Contactez-nous" },
   "footer.hours": { en: "Business Hours", fr: "Heures d'ouverture" },
-  "footer.weekdays": { en: "Mon - Fri: 8:00 AM - 6:00 PM", fr: "Lun - Ven: 8h00 - 18h00" },
+  "footer.weekdays": { en: "Mon - Fri: 8:00 AM - 5:00 PM", fr: "Lun - Ven: 8h00 - 17h00" },
   "footer.weekend": { en: "Sat - Sun: By appointment", fr: "Sam - Dim: Sur rendez-vous" },
   "footer.emergency": { en: "24/7 Emergency HR Line", fr: "Ligne RH d'urgence 24/7" },
   "footer.rights": { en: "All rights reserved.", fr: "Tous droits réservés." },
