@@ -244,8 +244,8 @@ const AdminDashboard = () => {
   };
 
   // ─── Generic status update & delete ───
-  const updateStatus = async (table: string, id: string, status: string, setter: Function) => {
-    const { error } = await supabase.from(table).update({ status } as any).eq("id", id);
+  const updateStatus = async (table: "job_submissions" | "employer_requests" | "candidate_applications", id: string, status: string, setter: Function) => {
+    const { error } = await (supabase.from(table) as any).update({ status }).eq("id", id);
     if (!error) {
       setter((prev: any[]) => prev.map((r) => r.id === id ? { ...r, status } : r));
       toast({ title: "Status updated" });
