@@ -411,6 +411,7 @@ const AdminDashboard = () => {
   // Admin panel language (independent from site language)
   const [adminLang, setAdminLang] = useState<"en" | "fr">("en");
   const at = adminT[adminLang];
+  const jobTypeLabels = getJobTypeLabels(at);
 
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
