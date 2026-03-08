@@ -20,7 +20,7 @@ import { useRateLimit } from "@/hooks/useRateLimit";
 import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
 
 const CandidateForm = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
