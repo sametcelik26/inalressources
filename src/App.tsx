@@ -16,6 +16,8 @@ const CandidateForm = lazy(() => import("./pages/CandidateForm"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminForgotPassword = lazy(() => import("./pages/AdminForgotPassword"));
+const AdminResetPassword = lazy(() => import("./pages/AdminResetPassword"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 
 const queryClient = new QueryClient();

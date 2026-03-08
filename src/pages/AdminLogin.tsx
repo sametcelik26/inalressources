@@ -1,19 +1,22 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Mail, Shield, Eye, EyeOff } from "lucide-react";
+import { Lock, User, Shield, Eye, EyeOff } from "lucide-react";
 import Layout from "@/components/Layout";
+
+const ADMIN_USERNAME = "inal";
+const ADMIN_EMAIL = "info@inalressources.com";
 
 const AdminLogin = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -22,7 +25,16 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (username.toLowerCase() !== ADMIN_USERNAME) {
+      toast({ title: t("admin.error"), description: t("admin.invalidUsername"), variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: ADMIN_EMAIL,
+      password,
+    });
 
     if (error) {
       toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
@@ -30,7 +42,6 @@ const AdminLogin = () => {
       return;
     }
 
-    // Verify admin role server-side (supports users with multiple roles)
     const { data: isAdmin, error: roleError } = await supabase.rpc("has_role", {
       _user_id: data.user.id,
       _role: "admin",
@@ -63,17 +74,18 @@ const AdminLogin = () => {
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-muted-foreground" />
-                  {t("admin.email")}
+                <Label htmlFor="username" className="flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-muted-foreground" />
+                  {t("admin.username")}
                 </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="info@inalressources.com"
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="inal"
                   required
+                  autoComplete="username"
                   className="h-11"
                 />
               </div>
@@ -91,6 +103,7 @@ const AdminLogin = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
+                    autoComplete="current-password"
                     className="h-11 pr-10"
                   />
                   <button
@@ -111,6 +124,15 @@ const AdminLogin = () => {
                 {loading ? t("admin.signingIn") : t("admin.signIn")}
               </Button>
             </form>
+
+            <div className="text-center mt-4">
+              <Link
+                to="/admin/forgot-password"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {t("admin.forgotPassword")}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
