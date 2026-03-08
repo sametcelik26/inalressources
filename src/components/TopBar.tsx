@@ -18,7 +18,7 @@ const TopBar = () => {
         </div>
 
         {/* Info blocks - grid on mobile, flex on desktop */}
-        <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-row md:items-center gap-3 md:gap-6">
+        <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-row md:items-center gap-3 md:gap-4 lg:gap-6">
           {/* License */}
           <div className="flex items-center gap-2 text-sm">
             <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
