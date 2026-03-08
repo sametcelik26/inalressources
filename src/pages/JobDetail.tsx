@@ -9,6 +9,7 @@ import { useState } from "react";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
+import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
