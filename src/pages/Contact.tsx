@@ -70,6 +70,9 @@ const Contact = () => {
     } else {
       setSubmitted(true);
       reset();
+      supabase.functions.invoke("notify-submission", {
+        body: { type: "contact_message", data: { name: data.name, email: data.email, phone: data.phone, subject: data.subject, message: data.message } },
+      }).catch(() => {});
     }
   };
 

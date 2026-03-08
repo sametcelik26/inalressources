@@ -101,6 +101,9 @@ const EmployerForm = () => {
       toast({ title: t("employer.errorTitle"), description: t("employer.errorDesc"), variant: "destructive" });
     } else {
       setSubmitted(true);
+      supabase.functions.invoke("notify-submission", {
+        body: { type: "employer_request", data: { company_name: data.company_name, contact_person: data.contact_person, email: data.email, phone: data.phone, industry: data.industry, job_title: data.job_title, employees_needed: data.employees_needed, urgency: data.urgency, comments: data.comments } },
+      }).catch(() => {});
     }
   };
 
