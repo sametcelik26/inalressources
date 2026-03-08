@@ -289,6 +289,19 @@ const translations: Translations = {
   "candidate.errorDesc": { en: "Something went wrong. Please try again.", fr: "Une erreur est survenue. Veuillez réessayer." },
   "candidate.uploadError": { en: "Failed to upload file. Please try again.", fr: "Échec du téléchargement. Veuillez réessayer." },
 
+  // Admin Login
+  "admin.loginTitle": { en: "Admin Login", fr: "Connexion administrateur" },
+  "admin.loginSubtitle": { en: "Sign in to manage job postings", fr: "Connectez-vous pour gérer les offres d'emploi" },
+  "admin.email": { en: "Email", fr: "Courriel" },
+  "admin.password": { en: "Password", fr: "Mot de passe" },
+  "admin.signingIn": { en: "Signing in...", fr: "Connexion en cours..." },
+  "admin.signIn": { en: "Sign In", fr: "Se connecter" },
+  "admin.error": { en: "Error", fr: "Erreur" },
+  "admin.accessDenied": { en: "Access Denied", fr: "Accès refusé" },
+  "admin.noPrivileges": { en: "You do not have admin privileges.", fr: "Vous n'avez pas les privilèges administrateur." },
+  "admin.welcome": { en: "Welcome!", fr: "Bienvenue!" },
+  "admin.loggedIn": { en: "Logged in as administrator.", fr: "Connecté en tant qu'administrateur." },
+
   // Footer
   "footer.about": { en: "Inal Resources is a licensed recruitment agency based in Verdun, Quebec, specializing in connecting qualified professionals with top employers across Canada.", fr: "Inal Resources est une agence de recrutement agréée basée à Verdun, Québec, spécialisée dans la mise en relation de professionnels qualifiés avec les meilleurs employeurs au Canada." },
   "footer.quickLinks": { en: "Quick Links", fr: "Liens rapides" },

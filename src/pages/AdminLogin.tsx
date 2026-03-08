@@ -25,7 +25,7 @@ const AdminLogin = () => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: t("admin.error"), description: error.message, variant: "destructive" });
       setLoading(false);
       return;
     }
@@ -38,12 +38,12 @@ const AdminLogin = () => {
 
     if (roleError || !isAdmin) {
       await supabase.auth.signOut();
-      toast({ title: "Access Denied", description: "You do not have admin privileges.", variant: "destructive" });
+      toast({ title: t("admin.accessDenied"), description: t("admin.noPrivileges"), variant: "destructive" });
       setLoading(false);
       return;
     }
 
-    toast({ title: "Welcome!", description: "Logged in as administrator." });
+    toast({ title: t("admin.welcome"), description: t("admin.loggedIn") });
     navigate("/admin/dashboard");
     setLoading(false);
   };
@@ -57,15 +57,15 @@ const AdminLogin = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-heading font-bold text-foreground">Admin Login</h1>
-              <p className="text-muted-foreground text-sm mt-1">Sign in to manage job postings</p>
+              <h1 className="text-2xl font-heading font-bold text-foreground">{t("admin.loginTitle")}</h1>
+              <p className="text-muted-foreground text-sm mt-1">{t("admin.loginSubtitle")}</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-muted-foreground" />
-                  Email
+                  {t("admin.email")}
                 </Label>
                 <Input
                   id="email"
@@ -81,7 +81,7 @@ const AdminLogin = () => {
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-muted-foreground" />
-                  Password
+                  {t("admin.password")}
                 </Label>
                 <div className="relative">
                   <Input
@@ -108,7 +108,7 @@ const AdminLogin = () => {
                 disabled={loading}
                 className="w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
               >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("admin.signingIn") : t("admin.signIn")}
               </Button>
             </form>
           </div>
