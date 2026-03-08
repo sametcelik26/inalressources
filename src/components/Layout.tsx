@@ -15,6 +15,7 @@ const Layout = ({ children, mainClassName }: LayoutProps) => (
     <NavBar />
     <main className={`flex-1 ${mainClassName ?? ""}`}>{children}</main>
     <Footer />
+    <ScrollToTop />
   </div>
 );
 
