@@ -294,12 +294,22 @@ const CandidateForm = () => {
                   </label>
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent transition-colors"
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                    onDrop={(e) => {
+                      e.preventDefault(); e.stopPropagation();
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) {
+                        const result = validateCVFile(file);
+                        if (!result.valid) {
+                          const msgs = FILE_VALIDATION_MESSAGES[language];
+                          toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                          return;
+                        }
+                        setCvFile(file);
+                      }
+                    }}
+                    className="border-2 border-dashed border-border rounded-xl p-6 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
                   >
-                    <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">
-                      {cvFile ? cvFile.name : t("candidate.uploadCvPh")}
-                    </p>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -319,6 +329,22 @@ const CandidateForm = () => {
                         }
                       }}
                     />
+                    {cvFile ? (
+                      <div className="flex items-center justify-center gap-2 text-accent">
+                        <CheckCircle className="w-5 h-5" />
+                        <span className="font-medium text-sm">{cvFile.name}</span>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); setCvFile(null); }} className="text-muted-foreground hover:text-destructive ml-1 text-xs underline">✕</button>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                        <p className="text-sm">
+                          <span className="text-accent font-medium">{t("candidate.browseFiles")}</span>{" "}
+                          <span className="text-muted-foreground">{t("candidate.dragDrop")}</span>
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("candidate.cvHelper")}</p>
+                      </>
+                    )}
                   </div>
                 </div>
 
