@@ -48,7 +48,9 @@ const TopBar = () => {
             <span className="text-xs text-primary-foreground/60">
               {language === 'fr' ? 'Lun - Ven' : 'Mon - Fri'}
             </span>
-            <span className="font-heading font-semibold text-primary-foreground text-sm">8:00 - 18:00</span>
+            <span className="font-heading font-semibold text-primary-foreground text-sm">
+              {language === 'fr' ? '8h00 - 17h00' : '8:00 AM - 5:00 PM'}
+            </span>
           </div>
 
           {/* Phone button */}
