@@ -494,8 +494,14 @@ const AdminDashboard = () => {
 
   const getCvDownloadUrl = async (path: string): Promise<string | null> => {
     if (!path) return null;
-    if (path.startsWith("http")) return path;
-    const { data } = await supabase.storage.from("candidate-cvs").createSignedUrl(path, 3600);
+    // Extract storage path from full public URL if needed
+    let storagePath = path;
+    const bucketMarker = "/candidate-cvs/";
+    const idx = path.indexOf(bucketMarker);
+    if (idx !== -1) {
+      storagePath = path.substring(idx + bucketMarker.length);
+    }
+    const { data } = await supabase.storage.from("candidate-cvs").createSignedUrl(storagePath, 3600);
     return data?.signedUrl || null;
   };
 
