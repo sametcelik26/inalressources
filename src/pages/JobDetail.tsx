@@ -110,34 +110,34 @@ const JobDetail = () => {
 
           <div className="prose max-w-none">
             <h3 className="font-heading font-bold text-foreground">{t("jobs.description")}</h3>
-            <p className="text-foreground/80 whitespace-pre-wrap">{job.description}</p>
+            <p className="text-foreground/80 whitespace-pre-wrap">{getJobDescription(job, language)}</p>
           </div>
 
-          {(job as any).responsibilities && (
+          {getBilingualField(job, "responsibilities", "responsibilities_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.responsibilities")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).responsibilities}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "responsibilities", "responsibilities_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).skills_required && (
+          {getBilingualField(job, "skills_required", "skills_required_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.skillsRequired")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).skills_required}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "skills_required", "skills_required_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).conditions && (
+          {getBilingualField(job, "conditions", "conditions_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.conditions")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).conditions}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "conditions", "conditions_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).benefits && (
+          {getBilingualField(job, "benefits", "benefits_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.benefits")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).benefits}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "benefits", "benefits_fr", language)}</p>
             </div>
           )}
 
