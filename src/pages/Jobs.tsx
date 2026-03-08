@@ -12,6 +12,7 @@ import Layout from "@/components/Layout";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Database } from "@/integrations/supabase/types";
+import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
@@ -64,6 +65,8 @@ const Jobs = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [sortBy, setSortBy] = useState<"date" | "salary">("date");
+  const [applyJobId, setApplyJobId] = useState<string | null>(null);
+  const [applyJobTitle, setApplyJobTitle] = useState("");
 
   const hasActiveFilters = search || locationFilter || typeFilter !== "all" || expFilter !== "all";
 
@@ -315,11 +318,12 @@ const Jobs = () => {
                       )}
 
                       {/* Apply button */}
-                      <Link to={`/jobs/${activeJob.id}`}>
-                        <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6">
-                          {t("jobs.applyNow")}
-                        </Button>
-                      </Link>
+                      <Button
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6"
+                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(activeJob.title); }}
+                      >
+                        {t("jobs.applyNow")}
+                      </Button>
 
                       {/* Description */}
                       <div className="mb-6">
@@ -380,6 +384,14 @@ const Jobs = () => {
           )}
         </div>
       </div>
+
+      {/* Application Overlay */}
+      <JobApplicationOverlay
+        isOpen={!!applyJobId}
+        onClose={() => setApplyJobId(null)}
+        jobId={applyJobId || ""}
+        jobTitle={applyJobTitle}
+      />
     </Layout>
   );
 };
