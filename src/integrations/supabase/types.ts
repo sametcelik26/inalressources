@@ -282,6 +282,7 @@ export type Database = {
           linkedin_url: string | null
           phone: string | null
           resume_url: string | null
+          status: string
         }
         Insert: {
           city?: string | null
@@ -296,6 +297,7 @@ export type Database = {
           linkedin_url?: string | null
           phone?: string | null
           resume_url?: string | null
+          status?: string
         }
         Update: {
           city?: string | null
@@ -310,6 +312,7 @@ export type Database = {
           linkedin_url?: string | null
           phone?: string | null
           resume_url?: string | null
+          status?: string
         }
         Relationships: [
           {
