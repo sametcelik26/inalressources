@@ -72,7 +72,7 @@ const Contact = () => {
       setSubmitted(true);
       reset();
       supabase.functions.invoke("notify-submission", {
-        body: { type: "contact_message", data: { name: data.name, email: data.email, phone: data.phone, subject: data.subject, message: data.message } },
+        body: { type: "contact_message", data: { name: data.name, email: data.email, phone: data.phone, subject: data.subject, message: data.message } }
       }).catch(() => {});
     }
   };
@@ -82,12 +82,12 @@ const Contact = () => {
       <SEOHead
         title={language === "fr" ? "Contactez-nous" : "Contact Us"}
         description={
-          language === "fr"
-            ? "Contactez INAL Ressources pour vos besoins en recrutement. Agence licenciée à Verdun, Québec. Téléphone: (514) 762-0409."
-            : "Contact INAL Ressources for your recruitment needs. Licensed agency in Verdun, Quebec. Phone: (514) 762-0409."
+        language === "fr" ?
+        "Contactez INAL Ressources pour vos besoins en recrutement. Agence licenciée à Verdun, Québec. Téléphone: (514) 762-0409." :
+        "Contact INAL Ressources for your recruitment needs. Licensed agency in Verdun, Quebec. Phone: (514) 762-0409."
         }
-        canonical="https://www.inalressources.info/contact"
-      />
+        canonical="https://www.inalressources.info/contact" />
+      
       {/* Header */}
       <section className="bg-primary py-16">
         <div className="container mx-auto px-4 text-center">
@@ -221,7 +221,7 @@ Verdun (Québec) H4G 1C2</p>
                   <div>
                     <p className="font-heading font-semibold text-sm text-foreground">{t("contact.hoursLabel")}</p>
                     <p className="text-sm text-muted-foreground">{t("footer.weekdays")}</p>
-                    <p className="text-sm text-muted-foreground">{t("footer.weekend")}</p>
+                    
                   </div>
                 </div>
               </div>
