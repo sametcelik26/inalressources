@@ -161,6 +161,8 @@ const translations: Translations = {
   "common.loading": { en: "Loading...", fr: "Chargement..." },
   "common.required": { en: "This field is required.", fr: "Ce champ est requis." },
   "common.invalidEmail": { en: "Please enter a valid email.", fr: "Veuillez entrer un courriel valide." },
+  "common.rateLimited": { en: "Too many submissions. Please wait {seconds} seconds.", fr: "Trop de soumissions. Veuillez attendre {seconds} secondes." },
+  "common.rateLimitedGeneric": { en: "You are submitting too quickly. Please try again later.", fr: "Vous soumettez trop rapidement. Veuillez réessayer plus tard." },
 
   // Contact page
   "contact.title": { en: "Contact Us", fr: "Contactez-nous" },

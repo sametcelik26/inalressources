@@ -16,12 +16,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useRateLimit } from "@/hooks/useRateLimit";
 
 const CandidateForm = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "candidate", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
   const [cvFile, setCvFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +61,10 @@ const CandidateForm = () => {
   ];
 
   const onSubmit = async (data: CandidateFormValues) => {
+    if (!checkLimit()) {
+      toast({ title: t("candidate.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     let cv_url: string | null = null;
 
@@ -91,6 +97,7 @@ const CandidateForm = () => {
     if (error) {
       toast({ title: t("candidate.errorTitle"), description: t("candidate.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       supabase.functions.invoke("notify-submission", {
         body: { type: "candidate_registration", data: { full_name: data.full_name || "N/A", email: data.email, phone: data.phone, availability: data.availability.join(", "), industry: data.industries.join(", "), work_location: data.work_locations.join(", "), license_class: data.license_class, comments: data.comments } },

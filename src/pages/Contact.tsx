@@ -8,6 +8,7 @@ import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useRateLimit } from "@/hooks/useRateLimit";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ const Contact = () => {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission, isLimited, remainingSeconds } = useRateLimit({ key: "contact", cooldownSeconds: 30, maxSubmissions: 5, windowSeconds: 3600 });
 
   const {
     register,
@@ -56,6 +58,10 @@ const Contact = () => {
 
 
   const onSubmit = async (data: ContactForm) => {
+    if (!checkLimit()) {
+      toast({ title: t("contact.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("contact_messages").insert({
       name: data.name,
@@ -69,6 +75,7 @@ const Contact = () => {
     if (error) {
       toast({ title: t("contact.errorTitle"), description: t("contact.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       reset();
       supabase.functions.invoke("notify-submission", {

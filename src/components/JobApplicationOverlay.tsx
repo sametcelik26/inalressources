@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building } from "lucide-react";
 import { z } from "zod";
+import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -28,6 +29,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "job_application", cooldownSeconds: 30, maxSubmissions: 5, windowSeconds: 3600 });
 
   const applicationSchema = z.object({
     first_name: z.string().trim().min(1, t("contact.fieldRequired")).max(50),
@@ -82,6 +84,10 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   };
 
   const onSubmit = async (data: ApplicationForm) => {
+    if (!checkLimit()) {
+      toast({ title: t("contact.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setUploading(true);
     let cvUrl: string | null = null;
     if (cvFile) {
@@ -111,6 +117,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
     if (error) {
       toast({ title: t("contact.errorTitle"), description: t("contact.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       reset();
       setCvFile(null);

@@ -20,12 +20,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useRateLimit } from "@/hooks/useRateLimit";
 
 const EmployerForm = () => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "employer", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
   const [step, setStep] = useState(1);
 
   const employerSchema = z.object({
@@ -76,6 +78,10 @@ const EmployerForm = () => {
   ];
 
   const onSubmit = async (data: EmployerFormValues) => {
+    if (!checkLimit()) {
+      toast({ title: t("employer.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("employer_requests").insert({
       company_name: data.company_name,
@@ -100,6 +106,7 @@ const EmployerForm = () => {
     if (error) {
       toast({ title: t("employer.errorTitle"), description: t("employer.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       supabase.functions.invoke("notify-submission", {
         body: { type: "employer_request", data: { company_name: data.company_name, contact_person: data.contact_person, email: data.email, phone: data.phone, industry: data.industry, job_title: data.job_title, employees_needed: data.employees_needed, urgency: data.urgency, comments: data.comments } },
