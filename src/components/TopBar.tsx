@@ -43,15 +43,12 @@ const TopBar = () => {
             </div>
           </div>
 
-          {/* HR Services */}
-          <div className="flex items-center gap-2 text-sm">
-            
-
-            
-            <div className="flex flex-col leading-tight">
-              <span className="text-xs text-primary-foreground/60">{t.available}</span>
-              <span className="font-heading font-semibold text-primary-foreground text-sm">{t.hrServices}</span>
-            </div>
+          {/* Hours */}
+          <div className="flex flex-col items-end leading-tight text-sm">
+            <span className="text-xs text-primary-foreground/60">
+              {language === 'fr' ? 'Lun - Ven' : 'Mon - Fri'}
+            </span>
+            <span className="font-heading font-semibold text-primary-foreground text-sm">8:00 - 18:00</span>
           </div>
 
           {/* Phone button */}
