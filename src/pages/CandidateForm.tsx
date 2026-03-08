@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useRateLimit } from "@/hooks/useRateLimit";
-import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
+import { validateCVFile, FILE_VALIDATION_MESSAGES, getTotalSize, formatFileSize, CV_MAX_TOTAL } from "@/lib/fileValidation";
 
 const CandidateForm = () => {
   const { t, language } = useLanguage();
