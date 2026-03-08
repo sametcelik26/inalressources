@@ -384,6 +384,14 @@ const Jobs = () => {
           )}
         </div>
       </div>
+
+      {/* Application Overlay */}
+      <JobApplicationOverlay
+        isOpen={!!applyJobId}
+        onClose={() => setApplyJobId(null)}
+        jobId={applyJobId || ""}
+        jobTitle={applyJobTitle}
+      />
     </Layout>
   );
 };
