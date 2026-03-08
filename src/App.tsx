@@ -12,6 +12,8 @@ import EmployerForm from "./pages/EmployerForm";
 import CandidateForm from "./pages/CandidateForm";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
