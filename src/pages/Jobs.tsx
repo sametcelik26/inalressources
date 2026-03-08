@@ -318,11 +318,12 @@ const Jobs = () => {
                       )}
 
                       {/* Apply button */}
-                      <Link to={`/jobs/${activeJob.id}`}>
-                        <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6">
-                          {t("jobs.applyNow")}
-                        </Button>
-                      </Link>
+                      <Button
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6"
+                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(activeJob.title); }}
+                      >
+                        {t("jobs.applyNow")}
+                      </Button>
 
                       {/* Description */}
                       <div className="mb-6">
