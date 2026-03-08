@@ -585,44 +585,111 @@ const AdminDashboard = () => {
         {/* Submissions View */}
         {view === "submissions" && (
           <div>
-            <h2 className="text-xl font-heading font-bold text-foreground mb-4">Job Applications</h2>
-            {submissions.length === 0 ? (
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-heading font-bold text-foreground">Job Applications</h2>
+              <div className="flex gap-2">
+                {["all", "new", "reviewed", "interview", "rejected"].map((s) => (
+                  <Button
+                    key={s}
+                    variant={statusFilter === s ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setStatusFilter(s)}
+                    className="rounded-full capitalize text-xs"
+                  >
+                    {s === "all" ? "All" : s}
+                    {s !== "all" && (
+                      <span className="ml-1 text-xs opacity-70">
+                        ({submissions.filter((sub: any) => (sub.status || "new") === s).length})
+                      </span>
+                    )}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            {filteredSubmissions.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">
                 <FileText className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p className="font-heading font-bold text-lg">No applications yet</p>
+                <p className="font-heading font-bold text-lg">No applications {statusFilter !== "all" ? `with status "${statusFilter}"` : "yet"}</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b border-border text-left">
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">Name</th>
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">Email</th>
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">Phone</th>
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">Job</th>
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">Date</th>
-                      <th className="py-3 px-4 text-sm font-heading font-bold text-foreground">CV</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {submissions.map((sub) => (
-                      <tr key={sub.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                        <td className="py-3 px-4 text-sm text-foreground">{sub.full_name}</td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">{sub.email}</td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">{sub.phone || "—"}</td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">{sub.job_postings?.title || "—"}</td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">{new Date(sub.created_at).toLocaleDateString()}</td>
-                        <td className="py-3 px-4 text-sm">
-                          {sub.resume_url ? (
-                            <a href={sub.resume_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                              View CV
-                            </a>
-                          ) : "—"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="space-y-3">
+                {filteredSubmissions.map((sub: any) => (
+                  <div
+                    key={sub.id}
+                    className="bg-card border border-border rounded-xl p-5 hover:border-primary/30 transition-colors"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-heading font-bold text-foreground">{sub.full_name}</h3>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                            (sub.status || "new") === "new" ? "bg-blue-100 text-blue-700" :
+                            sub.status === "reviewed" ? "bg-yellow-100 text-yellow-700" :
+                            sub.status === "interview" ? "bg-green-100 text-green-700" :
+                            sub.status === "rejected" ? "bg-red-100 text-red-700" :
+                            "bg-secondary text-secondary-foreground"
+                          }`}>
+                            {(sub.status || "new").charAt(0).toUpperCase() + (sub.status || "new").slice(1)}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-2">
+                          <span className="flex items-center gap-1">
+                            <Mail className="w-3.5 h-3.5" />
+                            <a href={`mailto:${sub.email}`} className="hover:text-primary hover:underline">{sub.email}</a>
+                          </span>
+                          {sub.phone && (
+                            <span className="flex items-center gap-1">
+                              <Users className="w-3.5 h-3.5" />{sub.phone}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1">
+                            <Briefcase className="w-3.5 h-3.5" />{sub.job_postings?.title || "—"}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5" />{new Date(sub.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        {sub.city && <p className="text-xs text-muted-foreground mb-1">📍 {sub.city}</p>}
+                        {sub.cover_letter && (
+                          <p className="text-xs text-muted-foreground line-clamp-2 mt-1 italic">"{sub.cover_letter}"</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {sub.resume_url && (
+                          <a
+                            href={sub.resume_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-sm bg-primary/10 text-primary px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors"
+                          >
+                            <FileText className="w-3.5 h-3.5" /> Download CV
+                          </a>
+                        )}
+                        <Select
+                          value={sub.status || "new"}
+                          onValueChange={(v) => updateSubmissionStatus(sub.id, v)}
+                        >
+                          <SelectTrigger className="h-9 w-32 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">New</SelectItem>
+                            <SelectItem value="reviewed">Reviewed</SelectItem>
+                            <SelectItem value="interview">Interview</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteSubmission(sub.id)}
+                        >
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
