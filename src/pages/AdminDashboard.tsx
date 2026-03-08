@@ -887,7 +887,7 @@ const AdminDashboard = () => {
                         <Select value={form.job_type} onValueChange={(v: any) => setForm({ ...form, job_type: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v as string}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
