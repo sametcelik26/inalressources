@@ -7,7 +7,7 @@ const TopBar = () => {
 
   const t = {
     license: language === 'fr' ? 'Permis' : 'License',
-    available: language === 'fr' ? 'Disponible' : 'Available',
+    available: '',
     hrServices: ''
   };
 
