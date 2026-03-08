@@ -28,6 +28,7 @@ export type Database = {
           license_class: string | null
           phone: string
           preferred_contact: string | null
+          status: string
           work_location: string | null
         }
         Insert: {
@@ -43,6 +44,7 @@ export type Database = {
           license_class?: string | null
           phone: string
           preferred_contact?: string | null
+          status?: string
           work_location?: string | null
         }
         Update: {
@@ -58,6 +60,7 @@ export type Database = {
           license_class?: string | null
           phone?: string
           preferred_contact?: string | null
+          status?: string
           work_location?: string | null
         }
         Relationships: []
@@ -111,6 +114,7 @@ export type Database = {
           required_skills: string | null
           salary_range: string | null
           start_date: string | null
+          status: string
           urgency: string | null
           work_schedule: string | null
         }
@@ -132,6 +136,7 @@ export type Database = {
           required_skills?: string | null
           salary_range?: string | null
           start_date?: string | null
+          status?: string
           urgency?: string | null
           work_schedule?: string | null
         }
@@ -153,6 +158,7 @@ export type Database = {
           required_skills?: string | null
           salary_range?: string | null
           start_date?: string | null
+          status?: string
           urgency?: string | null
           work_schedule?: string | null
         }
