@@ -40,7 +40,7 @@ const emptyJob = {
   application_email: "",
   deadline: "",
   category: "",
-  experience_level: "entry" as const,
+  experience_level: "entry" as Database["public"]["Enums"]["experience_level"],
   skills: [] as string[],
   is_active: true,
 };
