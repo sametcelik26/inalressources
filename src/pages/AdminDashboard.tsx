@@ -338,6 +338,10 @@ const AdminDashboard = () => {
     const { data } = await supabase.from("candidate_applications").select("*").order("created_at", { ascending: false });
     if (data) setCandidateApps(data);
   };
+  const fetchContactMessages = async () => {
+    const { data } = await supabase.from("contact_messages").select("*").order("created_at", { ascending: false });
+    if (data) setContactMessages(data);
+  };
 
   const handleLogout = async () => { await supabase.auth.signOut(); navigate("/admin"); };
 
