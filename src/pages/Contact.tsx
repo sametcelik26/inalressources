@@ -218,7 +218,7 @@ Verdun (Québec) H4G 1C2</p>
 
               {/* Google Maps */}
               <div className="rounded-xl overflow-hidden shadow-lg border border-border">
-                <iframe title="Inal Ressources - Verdun, QC" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=3901+Avenue+Bannantyne,+Verdun,+QC+H4G+1C2,+Canada&zoom=16"
+                <iframe title="Inal Ressources - Verdun, QC" src="https://maps.google.com/maps?q=3901+Avenue+Bannantyne+Verdun+QC+H4G+1C2+Canada&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="280"
                 style={{ border: 0 }}
