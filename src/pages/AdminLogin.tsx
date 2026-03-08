@@ -38,7 +38,7 @@ const AdminLogin = () => {
 
     if (roleError || !isAdmin) {
       await supabase.auth.signOut();
-      toast({ title: "Access Denied", description: "You do not have admin privileges.", variant: "destructive" });
+      toast({ title: t("admin.accessDenied"), description: t("admin.noPrivileges"), variant: "destructive" });
       setLoading(false);
       return;
     }
