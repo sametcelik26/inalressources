@@ -582,7 +582,7 @@ const AdminDashboard = () => {
 
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-5 mb-6">
             <TabsTrigger value="jobs" className="text-xs sm:text-sm">
               <Briefcase className="w-4 h-4 mr-1 hidden sm:inline" /> {at.jobPostings}
             </TabsTrigger>
@@ -594,6 +594,10 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="candidates" className="text-xs sm:text-sm">
               <Users className="w-4 h-4 mr-1 hidden sm:inline" /> {at.candidates}
+            </TabsTrigger>
+            <TabsTrigger value="messages" className="text-xs sm:text-sm">
+              <Mail className="w-4 h-4 mr-1 hidden sm:inline" /> {at.contactMessages}
+            </TabsTrigger>
             </TabsTrigger>
           </TabsList>
 
