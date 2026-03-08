@@ -290,6 +290,7 @@ const translations: Translations = {
   "footer.weekend": { en: "Sat - Sun: By appointment", fr: "Sam - Dim: Sur rendez-vous" },
   "footer.emergency": { en: "24/7 Emergency HR Line", fr: "Ligne RH d'urgence 24/7" },
   "footer.rights": { en: "All rights reserved.", fr: "Tous droits réservés." },
+  "footer.privacy": { en: "Privacy Policy", fr: "Politique de confidentialité" },
 };
 
 interface LanguageContextType {
