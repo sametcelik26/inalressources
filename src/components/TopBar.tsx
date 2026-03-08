@@ -47,7 +47,7 @@ const TopBar = () => {
             <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
               <Clock className="w-3.5 h-3.5 text-accent" />
             </div>
-            <div className="flex flex-col leading-tight md:items-end">
+            <div className="flex flex-col leading-tight">
               <span className="text-[10px] md:text-xs text-primary-foreground/60">
                 {language === 'fr' ? 'Lun - Ven' : 'Mon - Fri'}
               </span>
