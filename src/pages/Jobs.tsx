@@ -65,6 +65,8 @@ const Jobs = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [sortBy, setSortBy] = useState<"date" | "salary">("date");
+  const [applyJobId, setApplyJobId] = useState<string | null>(null);
+  const [applyJobTitle, setApplyJobTitle] = useState("");
 
   const hasActiveFilters = search || locationFilter || typeFilter !== "all" || expFilter !== "all";
 
