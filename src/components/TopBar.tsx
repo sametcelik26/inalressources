@@ -18,7 +18,7 @@ const TopBar = () => {
         </div>
 
         {/* Info blocks - grid on mobile, flex on desktop */}
-        <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-row md:items-center gap-3 md:gap-6">
+        <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-row md:items-center gap-3 md:gap-4 lg:gap-6">
           {/* License */}
           <div className="flex items-center gap-2 text-sm">
             <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
@@ -48,11 +48,11 @@ const TopBar = () => {
               <Clock className="w-3.5 h-3.5 text-accent" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-[10px] md:text-xs text-primary-foreground/60">
+              <span className="text-[10px] md:text-xs text-primary-foreground/60 whitespace-nowrap">
                 {language === 'fr' ? 'Lun - Ven' : 'Mon - Fri'}
               </span>
-              <span className="font-heading font-semibold text-primary-foreground text-xs md:text-sm">
-                {language === 'fr' ? '8h00 - 17h00' : '8:00 AM - 5:00 PM'}
+              <span className="font-heading font-semibold text-primary-foreground text-xs md:text-sm whitespace-nowrap">
+                {language === 'fr' ? '8h - 17h' : '8AM - 5PM'}
               </span>
             </div>
           </div>
