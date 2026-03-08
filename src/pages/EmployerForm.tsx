@@ -78,6 +78,10 @@ const EmployerForm = () => {
   ];
 
   const onSubmit = async (data: EmployerFormValues) => {
+    if (!checkLimit()) {
+      toast({ title: t("employer.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("employer_requests").insert({
       company_name: data.company_name,
