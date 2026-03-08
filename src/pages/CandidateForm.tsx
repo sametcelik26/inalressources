@@ -61,6 +61,10 @@ const CandidateForm = () => {
   ];
 
   const onSubmit = async (data: CandidateFormValues) => {
+    if (!checkLimit()) {
+      toast({ title: t("candidate.errorTitle"), description: t("common.rateLimitedGeneric"), variant: "destructive" });
+      return;
+    }
     setLoading(true);
     let cv_url: string | null = null;
 
