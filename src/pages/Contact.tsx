@@ -218,7 +218,7 @@ Verdun (Québec) H4G 1C2</p>
 
               {/* Google Maps */}
               <div className="rounded-xl overflow-hidden shadow-lg border border-border">
-                <iframe title="Inal Resources - Laval, QC" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89217.47362070877!2d-73.78844685!3d45.5844906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc923a4f2db3d61%3A0x5040cadae4d7580!2sLaval%2C%20QC!5e0!3m2!1sen!2sca!4v1700000000000"
+                <iframe title="Inal Ressources - Verdun, QC" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2797.5!2d-73.5712!3d45.4528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc9115a38e6e1a1%3A0x2!2s3901+Avenue+Bannantyne%2C+Verdun%2C+QC+H4G+1C2!5e0!3m2!1sen!2sca!4v1700000000000"
                 width="100%"
                 height="280"
                 style={{ border: 0 }}
