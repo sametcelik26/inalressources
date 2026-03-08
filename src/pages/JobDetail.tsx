@@ -117,8 +117,6 @@ const JobDetail = () => {
         ogType="article"
         jsonLd={jobJsonLd}
       />
-        />
-      )}
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" /> {t("jobs.back")}
