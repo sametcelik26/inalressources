@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +31,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 const Contact = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,6 +79,15 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={language === "fr" ? "Contactez-nous" : "Contact Us"}
+        description={
+          language === "fr"
+            ? "Contactez INAL Ressources pour vos besoins en recrutement. Agence licenciée à Verdun, Québec. Téléphone: (514) 762-0409."
+            : "Contact INAL Ressources for your recruitment needs. Licensed agency in Verdun, Quebec. Phone: (514) 762-0409."
+        }
+        canonical="https://www.inalressources.info/contact"
+      />
       {/* Header */}
       <section className="bg-primary py-16">
         <div className="container mx-auto px-4 text-center">

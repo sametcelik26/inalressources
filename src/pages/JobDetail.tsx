@@ -5,11 +5,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, AlertCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
+import SEOHead from "@/components/SEOHead";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
@@ -34,6 +35,43 @@ const JobDetail = () => {
     enabled: !!id,
   });
 
+  const jobJsonLd = useMemo(() => {
+    if (!job) return undefined;
+    return {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": getJobTitle(job, language),
+      "description": getJobDescription(job, language),
+      "datePosted": job.created_at,
+      "validThrough": job.deadline || undefined,
+      "employmentType": job.job_type === "full_time" ? "FULL_TIME" : job.job_type === "part_time" ? "PART_TIME" : "CONTRACTOR",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": job.company_name || "INAL Ressources",
+        "sameAs": "https://www.inalressources.info"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": job.location,
+          "addressCountry": "CA"
+        }
+      },
+      ...(job.salary_min || job.salary_max ? {
+        "baseSalary": {
+          "@type": "MonetaryAmount",
+          "currency": "CAD",
+          "value": {
+            "@type": "QuantitativeValue",
+            "minValue": job.salary_min,
+            "maxValue": job.salary_max,
+            "unitText": "HOUR"
+          }
+        }
+      } : {})
+    };
+  }, [job, language]);
 
   if (isError) {
     return (
@@ -72,6 +110,13 @@ const JobDetail = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={getJobTitle(job, language)}
+        description={getJobDescription(job, language).substring(0, 155)}
+        canonical={`https://www.inalressources.info/jobs/${id}`}
+        ogType="article"
+        jsonLd={jobJsonLd}
+      />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" /> {t("jobs.back")}
