@@ -92,10 +92,6 @@ const Footer = () => {
                 <Clock className="w-4 h-4 mt-0.5 text-accent shrink-0" />
                 <span>{t("footer.weekdays")}</span>
               </li>
-              <li className="flex items-start gap-3 text-sm text-primary-foreground/65">
-                
-                <span>{t("footer.emergency")}</span>
-              </li>
             </ul>
           </div>
         </div>
