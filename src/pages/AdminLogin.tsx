@@ -72,7 +72,7 @@ const AdminLogin = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@inalressources.info"
+                  placeholder="info@inalressources.com"
                   required
                   className="h-11"
                 />
