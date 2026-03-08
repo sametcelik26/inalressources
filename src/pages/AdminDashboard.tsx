@@ -1231,19 +1231,19 @@ const AdminDashboard = () => {
                           </Button>
                         )}
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Candidate_${app.full_name}`, [
-                          { label: "Full Name", value: app.full_name },
-                          { label: "Email", value: app.email },
-                          { label: "Phone", value: app.phone },
-                          { label: "Availability", value: app.availability || "" },
-                          { label: "License Class", value: app.license_class || "" },
-                          { label: "Industry", value: app.industry || "" },
-                          { label: "Work Location", value: app.work_location || "" },
-                          { label: "Legal Right to Work", value: app.legal_right_to_work ? "Yes" : "No" },
-                          { label: "Preferred Contact", value: app.preferred_contact || "" },
-                          { label: "Comments", value: app.comments || "" },
-                          { label: "CV", value: app.cv_url ? "Attached" : "Not provided" },
-                          { label: "Status", value: app.status || "new" },
-                          { label: "Submitted", value: new Date(app.created_at).toLocaleString() },
+                          { label: at.pdfFullName, value: app.full_name },
+                          { label: at.pdfEmail, value: app.email },
+                          { label: at.pdfPhone, value: app.phone },
+                          { label: at.pdfAvailability, value: app.availability || "" },
+                          { label: at.pdfLicenseClass, value: app.license_class || "" },
+                          { label: at.pdfIndustry, value: app.industry || "" },
+                          { label: at.pdfWorkLocation, value: app.work_location || "" },
+                          { label: at.pdfLegalRight, value: app.legal_right_to_work ? at.pdfYes : at.pdfNo },
+                          { label: at.pdfPreferredContact, value: app.preferred_contact || "" },
+                          { label: at.pdfComments, value: app.comments || "" },
+                          { label: at.pdfCV, value: app.cv_url ? at.pdfAttached : at.pdfNotProvided },
+                          { label: at.pdfStatus, value: app.status || "new" },
+                          { label: at.pdfSubmitted, value: new Date(app.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
