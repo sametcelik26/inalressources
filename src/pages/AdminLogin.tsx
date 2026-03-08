@@ -43,7 +43,7 @@ const AdminLogin = () => {
       return;
     }
 
-    toast({ title: "Welcome!", description: "Logged in as administrator." });
+    toast({ title: t("admin.welcome"), description: t("admin.loggedIn") });
     navigate("/admin/dashboard");
     setLoading(false);
   };
