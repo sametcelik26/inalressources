@@ -31,6 +31,10 @@ const emptyJob = {
   salary_min: null as number | null,
   salary_max: null as number | null,
   description: "",
+  responsibilities: "" as string | null,
+  skills_required: "" as string | null,
+  conditions: "" as string | null,
+  benefits: "" as string | null,
   requirements: "" as string | null,
   application_email: "" as string | null,
   deadline: "",
@@ -182,6 +186,10 @@ const AdminDashboard = () => {
       salary_min: job.salary_min,
       salary_max: job.salary_max,
       description: job.description,
+      responsibilities: (job as any).responsibilities || "",
+      skills_required: (job as any).skills_required || "",
+      conditions: (job as any).conditions || "",
+      benefits: (job as any).benefits || "",
       requirements: job.requirements || "",
       application_email: job.application_email || "",
       deadline: job.deadline ? new Date(job.deadline).toISOString().split("T")[0] : "",
@@ -208,6 +216,10 @@ const AdminDashboard = () => {
       salary_min: form.salary_min,
       salary_max: form.salary_max,
       description: form.description.trim(),
+      responsibilities: form.responsibilities?.trim() || null,
+      skills_required: form.skills_required?.trim() || null,
+      conditions: form.conditions?.trim() || null,
+      benefits: form.benefits?.trim() || null,
       requirements: form.requirements?.trim() || null,
       application_email: form.application_email?.trim() || null,
       deadline: form.deadline ? new Date(form.deadline).toISOString() : null,
@@ -425,9 +437,13 @@ const AdminDashboard = () => {
                             { label: "Title", value: job.title },
                             { label: "Company", value: job.company_name || "" },
                             { label: "Location", value: job.location },
-                            { label: "Type", value: jobTypeLabels[job.job_type] || job.job_type },
+                            { label: "Type", value: (jobTypeLabels[job.job_type] as any)?.en || job.job_type },
                             { label: "Salary", value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
                             { label: "Description", value: job.description },
+                            { label: "Responsibilities", value: (job as any).responsibilities || "" },
+                            { label: "Skills Required", value: (job as any).skills_required || "" },
+                            { label: "Conditions", value: (job as any).conditions || "" },
+                            { label: "Benefits", value: (job as any).benefits || "" },
                             { label: "Requirements", value: job.requirements || "" },
                             { label: "Deadline", value: job.deadline ? new Date(job.deadline).toLocaleDateString() : "" },
                           ])} title="Export PDF">
@@ -467,7 +483,7 @@ const AdminDashboard = () => {
                         <Select value={form.job_type} onValueChange={(v: any) => setForm({ ...form, job_type: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{(v as any)?.en || k}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
@@ -497,16 +513,32 @@ const AdminDashboard = () => {
                     </div>
                     <div className="space-y-1.5">
                       <Label>Job Description <span className="text-destructive">*</span></Label>
-                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={6} />
+                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={5} placeholder="Describe the role and its purpose..." />
                     </div>
                     <div className="space-y-1.5">
-                      <Label>Requirements</Label>
-                      <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={4} />
+                      <Label>Responsibilities</Label>
+                      <Textarea value={form.responsibilities || ""} onChange={(e) => setForm({ ...form, responsibilities: e.target.value })} rows={4} placeholder="List the key responsibilities..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Skills Required</Label>
+                      <Textarea value={form.skills_required || ""} onChange={(e) => setForm({ ...form, skills_required: e.target.value })} rows={3} placeholder="Required skills and qualifications..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Conditions</Label>
+                      <Textarea value={form.conditions || ""} onChange={(e) => setForm({ ...form, conditions: e.target.value })} rows={3} placeholder="Working conditions, schedule, etc." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Benefits</Label>
+                      <Textarea value={form.benefits || ""} onChange={(e) => setForm({ ...form, benefits: e.target.value })} rows={3} placeholder="Benefits offered with this position..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Requirements (Legacy)</Label>
+                      <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={3} placeholder="Additional requirements..." />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Application Email</Label>
-                        <Input type="email" value={form.application_email || ""} onChange={(e) => setForm({ ...form, application_email: e.target.value })} className="h-11" />
+                        <Label>Application Email / Link</Label>
+                        <Input type="email" value={form.application_email || ""} onChange={(e) => setForm({ ...form, application_email: e.target.value })} className="h-11" placeholder="e.g. hr@company.com" />
                       </div>
                       <div className="space-y-1.5">
                         <Label>Application Deadline</Label>
