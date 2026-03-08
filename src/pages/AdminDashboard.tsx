@@ -105,6 +105,75 @@ const adminT = {
     langFilterBoth: "Bilingual",
     frenchFields: "French Content",
     englishFields: "English Content",
+    // Job type labels
+    full_time: "Full-time",
+    part_time: "Part-time",
+    contract: "Contract",
+    temporary: "Temporary",
+    internship: "Internship",
+    // Experience levels
+    entry: "Entry",
+    junior: "Junior",
+    mid: "Mid",
+    senior: "Senior",
+    executive: "Executive",
+    // PDF labels
+    pdfTitle: "Title",
+    pdfTitleFr: "Title (FR)",
+    pdfCompany: "Company",
+    pdfLocation: "Location",
+    pdfLanguage: "Language",
+    pdfType: "Type",
+    pdfSalary: "Salary",
+    pdfDescEn: "Description (EN)",
+    pdfDescFr: "Description (FR)",
+    pdfRespEn: "Responsibilities (EN)",
+    pdfRespFr: "Responsibilities (FR)",
+    pdfSkillsEn: "Skills Required (EN)",
+    pdfSkillsFr: "Skills Required (FR)",
+    pdfCondEn: "Conditions (EN)",
+    pdfCondFr: "Conditions (FR)",
+    pdfBenEn: "Benefits (EN)",
+    pdfBenFr: "Benefits (FR)",
+    pdfDeadline: "Deadline",
+    pdfName: "Name",
+    pdfFullName: "Full Name",
+    pdfEmail: "Email",
+    pdfPhone: "Phone",
+    pdfCity: "City",
+    pdfJobApplied: "Job Applied",
+    pdfLinkedIn: "LinkedIn",
+    pdfCoverLetter: "Cover Letter",
+    pdfStatus: "Status",
+    pdfSubmitted: "Submitted",
+    pdfReceived: "Received",
+    pdfContact: "Contact",
+    pdfAddress: "Address",
+    pdfIndustry: "Industry",
+    pdfDepartment: "Department",
+    pdfJobTitle: "Job Title",
+    pdfDescription: "Description",
+    pdfEmployeesNeeded: "Employees Needed",
+    pdfSalaryRange: "Salary Range",
+    pdfWorkSchedule: "Work Schedule",
+    pdfRequiredSkills: "Required Skills",
+    pdfStartDate: "Start Date",
+    pdfUrgency: "Urgency",
+    pdfPreferredContact: "Preferred Contact",
+    pdfComments: "Comments",
+    pdfAvailability: "Availability",
+    pdfLicenseClass: "License Class",
+    pdfWorkLocation: "Work Location",
+    pdfLegalRight: "Legal Right to Work",
+    pdfCV: "CV",
+    pdfSubject: "Subject",
+    pdfMessage: "Message",
+    pdfAttached: "Attached",
+    pdfNotProvided: "Not provided",
+    pdfYes: "Yes",
+    pdfNo: "No",
+    cvDownloadError: "Could not generate download link.",
+    notes: "Notes",
   },
   fr: {
     dashboard: "Tableau de bord admin",
@@ -186,16 +255,85 @@ const adminT = {
     langFilterBoth: "Bilingue",
     frenchFields: "Contenu en français",
     englishFields: "Contenu en anglais",
+    // Job type labels
+    full_time: "Temps plein",
+    part_time: "Temps partiel",
+    contract: "Contrat",
+    temporary: "Temporaire",
+    internship: "Stage",
+    // Experience levels
+    entry: "Débutant",
+    junior: "Junior",
+    mid: "Intermédiaire",
+    senior: "Sénior",
+    executive: "Exécutif",
+    // PDF labels
+    pdfTitle: "Titre",
+    pdfTitleFr: "Titre (FR)",
+    pdfCompany: "Entreprise",
+    pdfLocation: "Lieu",
+    pdfLanguage: "Langue",
+    pdfType: "Type",
+    pdfSalary: "Salaire",
+    pdfDescEn: "Description (EN)",
+    pdfDescFr: "Description (FR)",
+    pdfRespEn: "Responsabilités (EN)",
+    pdfRespFr: "Responsabilités (FR)",
+    pdfSkillsEn: "Compétences requises (EN)",
+    pdfSkillsFr: "Compétences requises (FR)",
+    pdfCondEn: "Conditions (EN)",
+    pdfCondFr: "Conditions (FR)",
+    pdfBenEn: "Avantages (EN)",
+    pdfBenFr: "Avantages (FR)",
+    pdfDeadline: "Date limite",
+    pdfName: "Nom",
+    pdfFullName: "Nom complet",
+    pdfEmail: "Courriel",
+    pdfPhone: "Téléphone",
+    pdfCity: "Ville",
+    pdfJobApplied: "Poste visé",
+    pdfLinkedIn: "LinkedIn",
+    pdfCoverLetter: "Lettre de motivation",
+    pdfStatus: "Statut",
+    pdfSubmitted: "Soumis le",
+    pdfReceived: "Reçu le",
+    pdfContact: "Contact",
+    pdfAddress: "Adresse",
+    pdfIndustry: "Secteur",
+    pdfDepartment: "Département",
+    pdfJobTitle: "Titre du poste",
+    pdfDescription: "Description",
+    pdfEmployeesNeeded: "Employés nécessaires",
+    pdfSalaryRange: "Échelle salariale",
+    pdfWorkSchedule: "Horaire de travail",
+    pdfRequiredSkills: "Compétences requises",
+    pdfStartDate: "Date de début",
+    pdfUrgency: "Urgence",
+    pdfPreferredContact: "Contact préféré",
+    pdfComments: "Commentaires",
+    pdfAvailability: "Disponibilité",
+    pdfLicenseClass: "Classe de permis",
+    pdfWorkLocation: "Lieu de travail",
+    pdfLegalRight: "Droit légal de travailler",
+    pdfCV: "CV",
+    pdfSubject: "Sujet",
+    pdfMessage: "Message",
+    pdfAttached: "Joint",
+    pdfNotProvided: "Non fourni",
+    pdfYes: "Oui",
+    pdfNo: "Non",
+    cvDownloadError: "Impossible de générer le lien de téléchargement.",
+    notes: "Notes",
   },
 };
 
-const jobTypeLabels: Record<string, string> = {
-  full_time: "Full-time",
-  part_time: "Part-time",
-  contract: "Contract",
-  temporary: "Temporary",
-  internship: "Internship",
-};
+const getJobTypeLabels = (t: typeof adminT.en) => ({
+  full_time: t.full_time,
+  part_time: t.part_time,
+  contract: t.contract,
+  temporary: t.temporary,
+  internship: t.internship,
+});
 
 const emptyJob = {
   title: "",
@@ -273,6 +411,7 @@ const AdminDashboard = () => {
   // Admin panel language (independent from site language)
   const [adminLang, setAdminLang] = useState<"en" | "fr">("en");
   const at = adminT[adminLang];
+  const jobTypeLabels = getJobTypeLabels(at);
 
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -483,9 +622,13 @@ const AdminDashboard = () => {
     );
   }
 
+  const statusTranslations: Record<string, string> = {
+    new: at.new, reviewed: at.reviewed, interview: at.interview, rejected: at.rejected,
+  };
+
   const StatusBadge = ({ status }: { status: string }) => (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[status] || "bg-secondary text-secondary-foreground"}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+      {statusTranslations[status] || (status.charAt(0).toUpperCase() + status.slice(1))}
     </span>
   );
 
@@ -494,7 +637,7 @@ const AdminDashboard = () => {
       {["all", "new", "reviewed", "interview", "rejected"].map((s) => (
         <Button key={s} variant={filter === s ? "default" : "ghost"} size="sm"
           onClick={() => setFilter(s)} className="rounded-full capitalize text-xs">
-          {s === "all" ? at.all : s}
+          {s === "all" ? at.all : (statusTranslations[s] || s)}
           {s !== "all" && <span className="ml-1 opacity-70">({data.filter((d) => (d.status || "new") === s).length})</span>}
         </Button>
       ))}
@@ -517,7 +660,7 @@ const AdminDashboard = () => {
   const handleCvDownload = async (path: string) => {
     const url = await getCvDownloadUrl(path);
     if (url) window.open(url, "_blank");
-    else toast({ title: at.error, description: "Could not generate download link.", variant: "destructive" });
+    else toast({ title: at.error, description: at.cvDownloadError, variant: "destructive" });
   };
 
   const showEnFields = form.language_option === "en" || form.language_option === "both";
@@ -667,24 +810,24 @@ const AdminDashboard = () => {
                               <Trash2 className="w-4 h-4 text-destructive" />
                             </Button>
                             <Button variant="ghost" size="sm" onClick={() => exportToPDF(`Job_${job.title}`, [
-                              { label: "Title", value: job.title },
-                              { label: "Title (FR)", value: (job as any).title_fr || "" },
-                              { label: "Company", value: job.company_name || "" },
-                              { label: "Location", value: job.location },
-                              { label: "Language", value: lo.toUpperCase() },
-                              { label: "Type", value: jobTypeLabels[job.job_type] || job.job_type },
-                              { label: "Salary", value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
-                              { label: "Description (EN)", value: job.description },
-                              { label: "Description (FR)", value: (job as any).description_fr || "" },
-                              { label: "Responsibilities (EN)", value: (job as any).responsibilities || "" },
-                              { label: "Responsibilities (FR)", value: (job as any).responsibilities_fr || "" },
-                              { label: "Skills Required (EN)", value: (job as any).skills_required || "" },
-                              { label: "Skills Required (FR)", value: (job as any).skills_required_fr || "" },
-                              { label: "Conditions (EN)", value: (job as any).conditions || "" },
-                              { label: "Conditions (FR)", value: (job as any).conditions_fr || "" },
-                              { label: "Benefits (EN)", value: (job as any).benefits || "" },
-                              { label: "Benefits (FR)", value: (job as any).benefits_fr || "" },
-                              { label: "Deadline", value: job.deadline ? new Date(job.deadline).toLocaleDateString() : "" },
+                              { label: at.pdfTitle, value: job.title },
+                              { label: at.pdfTitleFr, value: (job as any).title_fr || "" },
+                              { label: at.pdfCompany, value: job.company_name || "" },
+                              { label: at.pdfLocation, value: job.location },
+                              { label: at.pdfLanguage, value: lo.toUpperCase() },
+                              { label: at.pdfType, value: jobTypeLabels[job.job_type] || job.job_type },
+                              { label: at.pdfSalary, value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
+                              { label: at.pdfDescEn, value: job.description },
+                              { label: at.pdfDescFr, value: (job as any).description_fr || "" },
+                              { label: at.pdfRespEn, value: (job as any).responsibilities || "" },
+                              { label: at.pdfRespFr, value: (job as any).responsibilities_fr || "" },
+                              { label: at.pdfSkillsEn, value: (job as any).skills_required || "" },
+                              { label: at.pdfSkillsFr, value: (job as any).skills_required_fr || "" },
+                              { label: at.pdfCondEn, value: (job as any).conditions || "" },
+                              { label: at.pdfCondFr, value: (job as any).conditions_fr || "" },
+                              { label: at.pdfBenEn, value: (job as any).benefits || "" },
+                              { label: at.pdfBenFr, value: (job as any).benefits_fr || "" },
+                              { label: at.pdfDeadline, value: job.deadline ? new Date(job.deadline).toLocaleDateString() : "" },
                             ])} title="Export PDF">
                               <Download className="w-4 h-4 text-muted-foreground" />
                             </Button>
@@ -748,7 +891,7 @@ const AdminDashboard = () => {
                         <Select value={form.job_type} onValueChange={(v: any) => setForm({ ...form, job_type: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v as string}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
@@ -768,11 +911,11 @@ const AdminDashboard = () => {
                         <Select value={form.experience_level} onValueChange={(v: any) => setForm({ ...form, experience_level: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="entry">Entry</SelectItem>
-                            <SelectItem value="junior">Junior</SelectItem>
-                            <SelectItem value="mid">Mid</SelectItem>
-                            <SelectItem value="senior">Senior</SelectItem>
-                            <SelectItem value="executive">Executive</SelectItem>
+                            <SelectItem value="entry">{at.entry}</SelectItem>
+                            <SelectItem value="junior">{at.junior}</SelectItem>
+                            <SelectItem value="mid">{at.mid}</SelectItem>
+                            <SelectItem value="senior">{at.senior}</SelectItem>
+                            <SelectItem value="executive">{at.executive}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -938,15 +1081,15 @@ const AdminDashboard = () => {
                           </Button>
                         )}
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Application_${sub.full_name}`, [
-                          { label: "Name", value: sub.full_name },
-                          { label: "Email", value: sub.email },
-                          { label: "Phone", value: sub.phone || "" },
-                          { label: "City", value: sub.city || "" },
-                          { label: "Job Applied", value: sub.job_postings?.title || "" },
-                          { label: "LinkedIn", value: sub.linkedin_url || "" },
-                          { label: "Cover Letter", value: sub.cover_letter || "" },
-                          { label: "Status", value: sub.status || "new" },
-                          { label: "Submitted", value: new Date(sub.created_at).toLocaleString() },
+                          { label: at.pdfName, value: sub.full_name },
+                          { label: at.pdfEmail, value: sub.email },
+                          { label: at.pdfPhone, value: sub.phone || "" },
+                          { label: at.pdfCity, value: sub.city || "" },
+                          { label: at.pdfJobApplied, value: sub.job_postings?.title || "" },
+                          { label: at.pdfLinkedIn, value: sub.linkedin_url || "" },
+                          { label: at.pdfCoverLetter, value: sub.cover_letter || "" },
+                          { label: at.pdfStatus, value: sub.status || "new" },
+                          { label: at.pdfSubmitted, value: new Date(sub.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
@@ -1004,29 +1147,29 @@ const AdminDashboard = () => {
                           {req.employees_needed && <span>👥 {req.employees_needed} {at.employees}</span>}
                         </div>
                         {req.job_description && <p className="text-xs text-muted-foreground line-clamp-2 mt-1">"{req.job_description}"</p>}
-                        {req.comments && <p className="text-xs text-muted-foreground line-clamp-1 mt-1 italic">Notes: {req.comments}</p>}
+                        {req.comments && <p className="text-xs text-muted-foreground line-clamp-1 mt-1 italic">{at.notes}: {req.comments}</p>}
                       </div>
                       <div className="flex items-center gap-2 shrink-0 flex-wrap">
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Employer_${req.company_name}`, [
-                          { label: "Company", value: req.company_name },
-                          { label: "Contact", value: req.contact_person },
-                          { label: "Email", value: req.email },
-                          { label: "Phone", value: req.phone || "" },
-                          { label: "Address", value: req.company_address || "" },
-                          { label: "Industry", value: req.industry || "" },
-                          { label: "Department", value: req.department || "" },
-                          { label: "Job Title", value: req.job_title || "" },
-                          { label: "Description", value: req.job_description || "" },
-                          { label: "Employees Needed", value: req.employees_needed?.toString() || "" },
-                          { label: "Salary Range", value: req.salary_range || "" },
-                          { label: "Work Schedule", value: req.work_schedule || "" },
-                          { label: "Required Skills", value: req.required_skills || "" },
-                          { label: "Start Date", value: req.start_date || "" },
-                          { label: "Urgency", value: req.urgency || "" },
-                          { label: "Preferred Contact", value: req.preferred_contact || "" },
-                          { label: "Comments", value: req.comments || "" },
-                          { label: "Status", value: req.status || "new" },
-                          { label: "Submitted", value: new Date(req.created_at).toLocaleString() },
+                          { label: at.pdfCompany, value: req.company_name },
+                          { label: at.pdfContact, value: req.contact_person },
+                          { label: at.pdfEmail, value: req.email },
+                          { label: at.pdfPhone, value: req.phone || "" },
+                          { label: at.pdfAddress, value: req.company_address || "" },
+                          { label: at.pdfIndustry, value: req.industry || "" },
+                          { label: at.pdfDepartment, value: req.department || "" },
+                          { label: at.pdfJobTitle, value: req.job_title || "" },
+                          { label: at.pdfDescription, value: req.job_description || "" },
+                          { label: at.pdfEmployeesNeeded, value: req.employees_needed?.toString() || "" },
+                          { label: at.pdfSalaryRange, value: req.salary_range || "" },
+                          { label: at.pdfWorkSchedule, value: req.work_schedule || "" },
+                          { label: at.pdfRequiredSkills, value: req.required_skills || "" },
+                          { label: at.pdfStartDate, value: req.start_date || "" },
+                          { label: at.pdfUrgency, value: req.urgency || "" },
+                          { label: at.pdfPreferredContact, value: req.preferred_contact || "" },
+                          { label: at.pdfComments, value: req.comments || "" },
+                          { label: at.pdfStatus, value: req.status || "new" },
+                          { label: at.pdfSubmitted, value: new Date(req.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
@@ -1092,19 +1235,19 @@ const AdminDashboard = () => {
                           </Button>
                         )}
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Candidate_${app.full_name}`, [
-                          { label: "Full Name", value: app.full_name },
-                          { label: "Email", value: app.email },
-                          { label: "Phone", value: app.phone },
-                          { label: "Availability", value: app.availability || "" },
-                          { label: "License Class", value: app.license_class || "" },
-                          { label: "Industry", value: app.industry || "" },
-                          { label: "Work Location", value: app.work_location || "" },
-                          { label: "Legal Right to Work", value: app.legal_right_to_work ? "Yes" : "No" },
-                          { label: "Preferred Contact", value: app.preferred_contact || "" },
-                          { label: "Comments", value: app.comments || "" },
-                          { label: "CV", value: app.cv_url ? "Attached" : "Not provided" },
-                          { label: "Status", value: app.status || "new" },
-                          { label: "Submitted", value: new Date(app.created_at).toLocaleString() },
+                          { label: at.pdfFullName, value: app.full_name },
+                          { label: at.pdfEmail, value: app.email },
+                          { label: at.pdfPhone, value: app.phone },
+                          { label: at.pdfAvailability, value: app.availability || "" },
+                          { label: at.pdfLicenseClass, value: app.license_class || "" },
+                          { label: at.pdfIndustry, value: app.industry || "" },
+                          { label: at.pdfWorkLocation, value: app.work_location || "" },
+                          { label: at.pdfLegalRight, value: app.legal_right_to_work ? at.pdfYes : at.pdfNo },
+                          { label: at.pdfPreferredContact, value: app.preferred_contact || "" },
+                          { label: at.pdfComments, value: app.comments || "" },
+                          { label: at.pdfCV, value: app.cv_url ? at.pdfAttached : at.pdfNotProvided },
+                          { label: at.pdfStatus, value: app.status || "new" },
+                          { label: at.pdfSubmitted, value: new Date(app.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
@@ -1157,12 +1300,12 @@ const AdminDashboard = () => {
                       </div>
                       <div className="flex items-center gap-2 shrink-0 flex-wrap">
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Contact_${msg.name}`, [
-                          { label: "Name", value: msg.name },
-                          { label: "Email", value: msg.email },
-                          { label: "Phone", value: msg.phone || "" },
-                          { label: "Subject", value: msg.subject },
-                          { label: "Message", value: msg.message },
-                          { label: "Received", value: new Date(msg.created_at).toLocaleString() },
+                          { label: at.pdfName, value: msg.name },
+                          { label: at.pdfEmail, value: msg.email },
+                          { label: at.pdfPhone, value: msg.phone || "" },
+                          { label: at.pdfSubject, value: msg.subject },
+                          { label: at.pdfMessage, value: msg.message },
+                          { label: at.pdfReceived, value: new Date(msg.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
