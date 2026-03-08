@@ -320,7 +320,7 @@ const AdminDashboard = () => {
 
   useEffect(() => { if (userId) fetchAll(); }, [userId]);
 
-  const fetchAll = () => { fetchJobs(); fetchSubmissions(); fetchEmployerRequests(); fetchCandidateApps(); };
+  const fetchAll = () => { fetchJobs(); fetchSubmissions(); fetchEmployerRequests(); fetchCandidateApps(); fetchContactMessages(); };
 
   const fetchJobs = async () => {
     const { data } = await supabase.from("job_postings").select("*").order("created_at", { ascending: false });
