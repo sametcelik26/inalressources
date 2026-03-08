@@ -45,9 +45,11 @@ export const FILE_VALIDATION_MESSAGES = {
   en: {
     invalidType: 'Only PDF, DOC, and DOCX files are accepted.',
     fileTooLarge: 'File size must not exceed 5 MB.',
+    totalTooLarge: 'Total file size must not exceed 5 MB.',
   },
   fr: {
     invalidType: 'Seuls les fichiers PDF, DOC et DOCX sont acceptés.',
     fileTooLarge: 'La taille du fichier ne doit pas dépasser 5 Mo.',
+    totalTooLarge: 'La taille totale des fichiers ne doit pas dépasser 5 Mo.',
   },
 } as const;
