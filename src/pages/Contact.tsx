@@ -79,6 +79,15 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={language === "fr" ? "Contactez-nous" : "Contact Us"}
+        description={
+          language === "fr"
+            ? "Contactez INAL Ressources pour vos besoins en recrutement. Agence licenciée à Verdun, Québec. Téléphone: (514) 762-0409."
+            : "Contact INAL Ressources for your recruitment needs. Licensed agency in Verdun, Quebec. Phone: (514) 762-0409."
+        }
+        canonical="https://www.inalressources.info/contact"
+      />
       {/* Header */}
       <section className="bg-primary py-16">
         <div className="container mx-auto px-4 text-center">
