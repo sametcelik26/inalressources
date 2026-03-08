@@ -57,8 +57,8 @@ const AdminLogin = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-heading font-bold text-foreground">Admin Login</h1>
-              <p className="text-muted-foreground text-sm mt-1">Sign in to manage job postings</p>
+              <h1 className="text-2xl font-heading font-bold text-foreground">{t("admin.loginTitle")}</h1>
+              <p className="text-muted-foreground text-sm mt-1">{t("admin.loginSubtitle")}</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
