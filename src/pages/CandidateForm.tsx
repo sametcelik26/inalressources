@@ -390,10 +390,6 @@ const CandidateForm = () => {
                     }}
                   />
                 </div>
-                      </>
-                    )}
-                  </div>
-                </div>
 
                 <FormField control={form.control} name="preferred_contact" render={({ field }) => (
                   <FormItem>
