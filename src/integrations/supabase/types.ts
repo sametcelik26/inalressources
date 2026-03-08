@@ -201,7 +201,9 @@ export type Database = {
       }
       job_postings: {
         Row: {
+          application_email: string | null
           category: string | null
+          company_name: string | null
           created_at: string
           deadline: string | null
           description: string
@@ -213,6 +215,7 @@ export type Database = {
           is_active: boolean
           job_type: Database["public"]["Enums"]["job_type"]
           location: string
+          requirements: string | null
           salary_max: number | null
           salary_min: number | null
           skills: string[] | null
@@ -220,7 +223,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          application_email?: string | null
           category?: string | null
+          company_name?: string | null
           created_at?: string
           deadline?: string | null
           description: string
@@ -232,6 +237,7 @@ export type Database = {
           is_active?: boolean
           job_type?: Database["public"]["Enums"]["job_type"]
           location: string
+          requirements?: string | null
           salary_max?: number | null
           salary_min?: number | null
           skills?: string[] | null
@@ -239,7 +245,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          application_email?: string | null
           category?: string | null
+          company_name?: string | null
           created_at?: string
           deadline?: string | null
           description?: string
@@ -251,6 +259,7 @@ export type Database = {
           is_active?: boolean
           job_type?: Database["public"]["Enums"]["job_type"]
           location?: string
+          requirements?: string | null
           salary_max?: number | null
           salary_min?: number | null
           skills?: string[] | null

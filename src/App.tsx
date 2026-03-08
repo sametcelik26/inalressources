@@ -12,6 +12,8 @@ import EmployerForm from "./pages/EmployerForm";
 import CandidateForm from "./pages/CandidateForm";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/employers" element={<EmployerForm />} />
             <Route path="/candidates" element={<CandidateForm />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -198,7 +198,12 @@ const JobDetail = () => {
 
         {/* Job Details Card */}
         <div className="bg-card border border-border rounded-xl p-8 mb-8">
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-4">{job.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">{job.title}</h1>
+          {(job as any).company_name && (
+            <p className="text-lg text-muted-foreground mb-4 flex items-center gap-1.5">
+              <Briefcase className="w-4 h-4" /> {(job as any).company_name}
+            </p>
+          )}
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
             <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</span>
             <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{jobTypeLabels[job.job_type]?.[language]}</span>
@@ -226,6 +231,24 @@ const JobDetail = () => {
             <h3 className="font-heading font-bold text-foreground">{t("jobs.description")}</h3>
             <p className="text-foreground/80 whitespace-pre-wrap">{job.description}</p>
           </div>
+
+          {(job as any).requirements && (
+            <div className="prose max-w-none mt-6">
+              <h3 className="font-heading font-bold text-foreground">{language === "fr" ? "Exigences" : "Requirements"}</h3>
+              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).requirements}</p>
+            </div>
+          )}
+
+          {(job as any).application_email && (
+            <div className="mt-6 p-4 bg-secondary/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                {language === "fr" ? "Vous pouvez aussi postuler par courriel:" : "You can also apply via email:"}{" "}
+                <a href={`mailto:${(job as any).application_email}`} className="text-primary font-medium hover:underline">
+                  {(job as any).application_email}
+                </a>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Application Form Card */}
