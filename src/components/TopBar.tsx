@@ -8,7 +8,7 @@ const TopBar = () => {
   const t = {
     license: language === 'fr' ? 'Permis' : 'License',
     available: language === 'fr' ? 'Disponible' : 'Available',
-    hrServices: language === 'fr' ? 'Services RH Lun - Ven: 8h00 - 18h00' : 'HR Services Mon - Fri: 8:00 AM - 6:00 PM'
+    hrServices: ''
   };
 
   return (
