@@ -97,6 +97,7 @@ const CandidateForm = () => {
     if (error) {
       toast({ title: t("candidate.errorTitle"), description: t("candidate.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       supabase.functions.invoke("notify-submission", {
         body: { type: "candidate_registration", data: { full_name: data.full_name || "N/A", email: data.email, phone: data.phone, availability: data.availability.join(", "), industry: data.industries.join(", "), work_location: data.work_locations.join(", "), license_class: data.license_class, comments: data.comments } },

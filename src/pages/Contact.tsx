@@ -75,6 +75,7 @@ const Contact = () => {
     if (error) {
       toast({ title: t("contact.errorTitle"), description: t("contact.errorDesc"), variant: "destructive" });
     } else {
+      recordSubmission();
       setSubmitted(true);
       reset();
       supabase.functions.invoke("notify-submission", {
