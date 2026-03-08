@@ -45,6 +45,8 @@ const App = () => (
               <Route path="/candidates" element={<CandidateForm />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+              <Route path="/admin/reset-password" element={<AdminResetPassword />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
