@@ -87,16 +87,20 @@ const CandidateForm = () => {
     setLoading(true);
     let cv_url: string | null = null;
 
-    if (cvFile) {
-      const ext = cvFile.name.split(".").pop();
-      const path = `${crypto.randomUUID()}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("candidate-cvs").upload(path, cvFile);
-      if (uploadError) {
-        toast({ title: t("candidate.errorTitle"), description: t("candidate.uploadError"), variant: "destructive" });
-        setLoading(false);
-        return;
+    if (cvFiles.length > 0) {
+      const uploadedPaths: string[] = [];
+      for (const file of cvFiles) {
+        const ext = file.name.split(".").pop();
+        const path = `${crypto.randomUUID()}.${ext}`;
+        const { error: uploadError } = await supabase.storage.from("candidate-cvs").upload(path, file);
+        if (uploadError) {
+          toast({ title: t("candidate.errorTitle"), description: t("candidate.uploadError"), variant: "destructive" });
+          setLoading(false);
+          return;
+        }
+        uploadedPaths.push(path);
       }
-      cv_url = path;
+      cv_url = uploadedPaths.join(",");
     }
 
     const { error } = await supabase.from("candidate_applications").insert({
