@@ -1143,7 +1143,7 @@ const AdminDashboard = () => {
                           {req.employees_needed && <span>👥 {req.employees_needed} {at.employees}</span>}
                         </div>
                         {req.job_description && <p className="text-xs text-muted-foreground line-clamp-2 mt-1">"{req.job_description}"</p>}
-                        {req.comments && <p className="text-xs text-muted-foreground line-clamp-1 mt-1 italic">Notes: {req.comments}</p>}
+                        {req.comments && <p className="text-xs text-muted-foreground line-clamp-1 mt-1 italic">{at.notes}: {req.comments}</p>}
                       </div>
                       <div className="flex items-center gap-2 shrink-0 flex-wrap">
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Employer_${req.company_name}`, [
