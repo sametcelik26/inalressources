@@ -45,9 +45,9 @@ const TopBar = () => {
 
           {/* HR Services */}
           <div className="flex items-center gap-2 text-sm">
-            <div className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
-              
-            </div>
+            
+
+            
             <div className="flex flex-col leading-tight">
               <span className="text-xs text-primary-foreground/60">{t.available}</span>
               <span className="font-heading font-semibold text-primary-foreground text-sm">{t.hrServices}</span>
