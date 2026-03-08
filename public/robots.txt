@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.inalressources.info/sitemap.xml
+Sitemap: https://ibsjuvvjzxbaycmrfkao.supabase.co/functions/v1/sitemap
