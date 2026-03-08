@@ -12,8 +12,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img src={logo} alt="Inal Resources" className="h-10 w-auto" />
+            <div className="flex items-center gap-3 mb-5">
+              <img src={logo} alt="Inal Resources" className="h-16 w-auto object-contain drop-shadow-md" />
               <span className="font-heading font-bold text-xl">Inal Resources</span>
             </div>
             <p className="text-sm text-primary-foreground/65 leading-relaxed font-body">
