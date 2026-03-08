@@ -907,11 +907,11 @@ const AdminDashboard = () => {
                         <Select value={form.experience_level} onValueChange={(v: any) => setForm({ ...form, experience_level: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="entry">Entry</SelectItem>
-                            <SelectItem value="junior">Junior</SelectItem>
-                            <SelectItem value="mid">Mid</SelectItem>
-                            <SelectItem value="senior">Senior</SelectItem>
-                            <SelectItem value="executive">Executive</SelectItem>
+                            <SelectItem value="entry">{at.entry}</SelectItem>
+                            <SelectItem value="junior">{at.junior}</SelectItem>
+                            <SelectItem value="mid">{at.mid}</SelectItem>
+                            <SelectItem value="senior">{at.senior}</SelectItem>
+                            <SelectItem value="executive">{at.executive}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
