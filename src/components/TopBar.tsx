@@ -44,7 +44,7 @@ const TopBar = () => {
 
           {/* Hours */}
           <div className="flex items-center gap-2 text-sm">
-            <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0 md:hidden">
+            <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center shrink-0">
               <Clock className="w-3.5 h-3.5 text-accent" />
             </div>
             <div className="flex flex-col leading-tight md:items-end">
