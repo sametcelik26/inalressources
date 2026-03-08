@@ -117,12 +117,11 @@ const AdminDashboard = () => {
     const checkAdmin = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/admin"); return; }
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-      if (roleData?.role !== "admin") {
+      const { data: isAdmin, error: roleError } = await supabase.rpc("has_role", {
+        _user_id: session.user.id,
+        _role: "admin",
+      });
+      if (roleError || !isAdmin) {
         await supabase.auth.signOut();
         navigate("/admin");
         return;
