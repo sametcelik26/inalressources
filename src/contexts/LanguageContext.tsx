@@ -91,6 +91,9 @@ const translations: Translations = {
   "jobs.errorTitle": { en: "Could not load jobs", fr: "Impossible de charger les emplois" },
   "jobs.errorDesc": { en: "Something went wrong. Please try again.", fr: "Une erreur est survenue. Veuillez réessayer." },
   "jobs.clearFilters": { en: "Clear Filters", fr: "Effacer les filtres" },
+  "jobs.shareJob": { en: "Share this job", fr: "Partager cette offre" },
+  "jobs.copyLink": { en: "Copy Link", fr: "Copier le lien" },
+  "jobs.linkCopied": { en: "Link copied!", fr: "Lien copié!" },
 
   // Dashboard
   "dashboard.seekerTitle": { en: "My Dashboard", fr: "Mon tableau de bord" },
