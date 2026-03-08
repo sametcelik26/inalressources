@@ -15,12 +15,8 @@ type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 const JobDetail = () => {
   const { id } = useParams();
   const { t, language } = useLanguage();
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const [submitted, setSubmitted] = useState(false);
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showApply, setShowApply] = useState(false);
 
   const applicationSchema = z.object({
     first_name: z.string().trim().min(1, t("contact.fieldRequired")).max(50),
