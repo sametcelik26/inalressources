@@ -108,7 +108,7 @@ const AdminLogin = () => {
                 disabled={loading}
                 className="w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
               >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("admin.signingIn") : t("admin.signIn")}
               </Button>
             </form>
           </div>
