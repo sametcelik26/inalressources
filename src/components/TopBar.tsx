@@ -16,7 +16,7 @@ const TopBar = () => {
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-5 px-4 gap-4">
         {/* Logo */}
         <div className="flex items-center shrink-0">
-          <img src={logoTopbar} alt="Inal Resources" className="h-28 w-auto object-contain drop-shadow-lg" />
+          <img src={logoTopbar} alt="INAL Ressources - Licensed Recruitment Agency" className="h-28 w-auto object-contain drop-shadow-lg" width={200} height={112} fetchPriority="high" />
         </div>
 
         {/* Info blocks */}
