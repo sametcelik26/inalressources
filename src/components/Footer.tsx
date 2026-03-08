@@ -112,14 +112,12 @@ const Footer = () => {
             © {new Date().getFullYear()} Inal Resources. {t("footer.rights")}
           </p>
           <div className="flex items-center gap-4">
-            <a
-              href="https://www.inalressources.info/en/politique-de-confidentialite"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/privacy-policy"
               className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body"
             >
               {t("footer.privacy")}
-            </a>
+            </Link>
             <a href="https://www.inalressources.info/" target="_blank" rel="noopener noreferrer"
               className="text-xs text-primary-foreground/50 hover:text-accent transition-colors font-body">
               www.inalressources.info

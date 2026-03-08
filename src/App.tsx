@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import EmployerForm from "./pages/EmployerForm";
 import CandidateForm from "./pages/CandidateForm";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/employers" element={<EmployerForm />} />
             <Route path="/candidates" element={<CandidateForm />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
