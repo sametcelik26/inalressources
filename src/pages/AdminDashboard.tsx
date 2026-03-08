@@ -32,7 +32,7 @@ const emptyJob = {
   title: "",
   company_name: "",
   location: "",
-  job_type: "full_time" as const,
+  job_type: "full_time" as Database["public"]["Enums"]["job_type"],
   salary_min: null as number | null,
   salary_max: null as number | null,
   description: "",
