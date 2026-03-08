@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building } from "lucide-react";
 import { z } from "zod";
+import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
