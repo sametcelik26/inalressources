@@ -251,7 +251,7 @@ const Jobs = () => {
                           }}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <h3 className="text-base font-heading font-bold text-foreground leading-tight">{job.title}</h3>
+                            <h3 className="text-base font-heading font-bold text-foreground leading-tight">{getJobTitle(job, language)}</h3>
                             {!isMobile && <ChevronRight className={`w-4 h-4 shrink-0 mt-1 transition-colors ${isSelected ? "text-accent" : "text-muted-foreground/40"}`} />}
                           </div>
 
