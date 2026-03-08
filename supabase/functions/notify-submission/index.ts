@@ -5,6 +5,31 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+/** Escape HTML special characters to prevent injection */
+function esc(value: unknown): string {
+  const str = String(value ?? '—');
+  if (str === '' || str === 'undefined' || str === 'null') return '—';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Sanitize a URL — only allow http(s) schemes */
+function escUrl(value: unknown): string {
+  const str = String(value ?? '');
+  if (!str) return '';
+  try {
+    const url = new URL(str);
+    if (url.protocol === 'http:' || url.protocol === 'https:') {
+      return url.href.replace(/"/g, '%22').replace(/'/g, '%27');
+    }
+  } catch { /* invalid URL */ }
+  return '';
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -23,70 +48,77 @@ serve(async (req) => {
     // Build email content based on submission type
     let subject = '';
     let body = '';
-    const adminLink = `${SUPABASE_URL.replace('.supabase.co', '')}/admin/dashboard`;
+
+    const row = (label: string, val: unknown) =>
+      `<tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">${esc(label)}</td><td style="padding:8px;border-bottom:1px solid #eee">${esc(val)}</td></tr>`;
+
+    const rowLast = (label: string, val: unknown) =>
+      `<tr><td style="padding:8px;font-weight:bold">${esc(label)}</td><td style="padding:8px">${esc(val)}</td></tr>`;
 
     switch (type) {
-      case 'job_application':
-        subject = `📋 New Job Application: ${data.full_name}`;
+      case 'job_application': {
+        subject = `📋 New Job Application: ${esc(data.full_name)}`;
+        const cvUrl = escUrl(data.resume_url);
         body = `
           <h2>New Job Application Received</h2>
           <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Name</td><td style="padding:8px;border-bottom:1px solid #eee">${data.full_name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Email</td><td style="padding:8px;border-bottom:1px solid #eee">${data.email}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Phone</td><td style="padding:8px;border-bottom:1px solid #eee">${data.phone || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">City</td><td style="padding:8px;border-bottom:1px solid #eee">${data.city || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Job</td><td style="padding:8px;border-bottom:1px solid #eee">${data.job_title || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Cover Letter</td><td style="padding:8px;border-bottom:1px solid #eee">${data.cover_letter || '—'}</td></tr>
-            ${data.resume_url ? `<tr><td style="padding:8px;font-weight:bold">CV</td><td style="padding:8px"><a href="${data.resume_url}">Download CV</a></td></tr>` : ''}
+            ${row('Name', data.full_name)}
+            ${row('Email', data.email)}
+            ${row('Phone', data.phone)}
+            ${row('City', data.city)}
+            ${row('Job', data.job_title)}
+            ${row('Cover Letter', data.cover_letter)}
+            ${cvUrl ? `<tr><td style="padding:8px;font-weight:bold">CV</td><td style="padding:8px"><a href="${cvUrl}">Download CV</a></td></tr>` : ''}
           </table>
         `;
         break;
+      }
 
       case 'employer_request':
-        subject = `🏢 New Employer Request: ${data.company_name}`;
+        subject = `🏢 New Employer Request: ${esc(data.company_name)}`;
         body = `
           <h2>New Employer Request Received</h2>
           <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Company</td><td style="padding:8px;border-bottom:1px solid #eee">${data.company_name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Contact</td><td style="padding:8px;border-bottom:1px solid #eee">${data.contact_person}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Email</td><td style="padding:8px;border-bottom:1px solid #eee">${data.email}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Phone</td><td style="padding:8px;border-bottom:1px solid #eee">${data.phone || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Industry</td><td style="padding:8px;border-bottom:1px solid #eee">${data.industry || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Job Title</td><td style="padding:8px;border-bottom:1px solid #eee">${data.job_title || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Employees Needed</td><td style="padding:8px;border-bottom:1px solid #eee">${data.employees_needed || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Urgency</td><td style="padding:8px;border-bottom:1px solid #eee">${data.urgency || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Comments</td><td style="padding:8px">${data.comments || '—'}</td></tr>
+            ${row('Company', data.company_name)}
+            ${row('Contact', data.contact_person)}
+            ${row('Email', data.email)}
+            ${row('Phone', data.phone)}
+            ${row('Industry', data.industry)}
+            ${row('Job Title', data.job_title)}
+            ${row('Employees Needed', data.employees_needed)}
+            ${row('Urgency', data.urgency)}
+            ${rowLast('Comments', data.comments)}
           </table>
         `;
         break;
 
       case 'candidate_registration':
-        subject = `👤 New Candidate Registration: ${data.full_name}`;
+        subject = `👤 New Candidate Registration: ${esc(data.full_name)}`;
         body = `
           <h2>New Candidate Registration Received</h2>
           <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Name</td><td style="padding:8px;border-bottom:1px solid #eee">${data.full_name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Email</td><td style="padding:8px;border-bottom:1px solid #eee">${data.email}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Phone</td><td style="padding:8px;border-bottom:1px solid #eee">${data.phone}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Availability</td><td style="padding:8px;border-bottom:1px solid #eee">${data.availability || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Industry</td><td style="padding:8px;border-bottom:1px solid #eee">${data.industry || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Work Location</td><td style="padding:8px;border-bottom:1px solid #eee">${data.work_location || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">License</td><td style="padding:8px;border-bottom:1px solid #eee">${data.license_class || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Comments</td><td style="padding:8px">${data.comments || '—'}</td></tr>
+            ${row('Name', data.full_name)}
+            ${row('Email', data.email)}
+            ${row('Phone', data.phone)}
+            ${row('Availability', data.availability)}
+            ${row('Industry', data.industry)}
+            ${row('Work Location', data.work_location)}
+            ${row('License', data.license_class)}
+            ${rowLast('Comments', data.comments)}
           </table>
         `;
         break;
 
       case 'contact_message':
-        subject = `✉️ New Contact Message: ${data.subject}`;
+        subject = `✉️ New Contact Message: ${esc(data.subject)}`;
         body = `
           <h2>New Contact Message</h2>
           <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Name</td><td style="padding:8px;border-bottom:1px solid #eee">${data.name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Email</td><td style="padding:8px;border-bottom:1px solid #eee">${data.email}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Phone</td><td style="padding:8px;border-bottom:1px solid #eee">${data.phone || '—'}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee">Subject</td><td style="padding:8px;border-bottom:1px solid #eee">${data.subject}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Message</td><td style="padding:8px">${data.message}</td></tr>
+            ${row('Name', data.name)}
+            ${row('Email', data.email)}
+            ${row('Phone', data.phone)}
+            ${row('Subject', data.subject)}
+            ${rowLast('Message', data.message)}
           </table>
         `;
         break;
@@ -117,9 +149,6 @@ serve(async (req) => {
       </html>
     `;
 
-    // Send email using Supabase's built-in email (via database insert for logging)
-    // For actual email delivery, we log the notification. 
-    // In production, integrate with Resend or similar service.
     console.log(`Email notification prepared: ${subject}`);
     console.log(`To: info@inalressources.com`);
     console.log(`Body length: ${htmlEmail.length}`);
