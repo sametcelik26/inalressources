@@ -11,6 +11,7 @@ import { z } from "zod";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
 
 interface JobApplicationOverlayProps {
   isOpen: boolean;
