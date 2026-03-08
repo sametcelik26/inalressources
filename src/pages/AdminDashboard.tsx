@@ -327,13 +327,13 @@ const adminT = {
   },
 };
 
-const jobTypeLabels: Record<string, string> = {
-  full_time: "Full-time",
-  part_time: "Part-time",
-  contract: "Contract",
-  temporary: "Temporary",
-  internship: "Internship",
-};
+const getJobTypeLabels = (t: typeof adminT.en) => ({
+  full_time: t.full_time,
+  part_time: t.part_time,
+  contract: t.contract,
+  temporary: t.temporary,
+  internship: t.internship,
+});
 
 const emptyJob = {
   title: "",
