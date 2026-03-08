@@ -509,16 +509,32 @@ const AdminDashboard = () => {
                     </div>
                     <div className="space-y-1.5">
                       <Label>Job Description <span className="text-destructive">*</span></Label>
-                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={6} />
+                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={5} placeholder="Describe the role and its purpose..." />
                     </div>
                     <div className="space-y-1.5">
-                      <Label>Requirements</Label>
-                      <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={4} />
+                      <Label>Responsibilities</Label>
+                      <Textarea value={form.responsibilities || ""} onChange={(e) => setForm({ ...form, responsibilities: e.target.value })} rows={4} placeholder="List the key responsibilities..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Skills Required</Label>
+                      <Textarea value={form.skills_required || ""} onChange={(e) => setForm({ ...form, skills_required: e.target.value })} rows={3} placeholder="Required skills and qualifications..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Conditions</Label>
+                      <Textarea value={form.conditions || ""} onChange={(e) => setForm({ ...form, conditions: e.target.value })} rows={3} placeholder="Working conditions, schedule, etc." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Benefits</Label>
+                      <Textarea value={form.benefits || ""} onChange={(e) => setForm({ ...form, benefits: e.target.value })} rows={3} placeholder="Benefits offered with this position..." />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Requirements (Legacy)</Label>
+                      <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={3} placeholder="Additional requirements..." />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Application Email</Label>
-                        <Input type="email" value={form.application_email || ""} onChange={(e) => setForm({ ...form, application_email: e.target.value })} className="h-11" />
+                        <Label>Application Email / Link</Label>
+                        <Input type="email" value={form.application_email || ""} onChange={(e) => setForm({ ...form, application_email: e.target.value })} className="h-11" placeholder="e.g. hr@company.com" />
                       </div>
                       <div className="space-y-1.5">
                         <Label>Application Deadline</Label>
