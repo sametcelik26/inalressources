@@ -236,6 +236,34 @@ const JobDetail = () => {
             <p className="text-foreground/80 whitespace-pre-wrap">{job.description}</p>
           </div>
 
+          {(job as any).responsibilities && (
+            <div className="prose max-w-none mt-6">
+              <h3 className="font-heading font-bold text-foreground">{t("jobs.responsibilities")}</h3>
+              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).responsibilities}</p>
+            </div>
+          )}
+
+          {(job as any).skills_required && (
+            <div className="prose max-w-none mt-6">
+              <h3 className="font-heading font-bold text-foreground">{t("jobs.skillsRequired")}</h3>
+              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).skills_required}</p>
+            </div>
+          )}
+
+          {(job as any).conditions && (
+            <div className="prose max-w-none mt-6">
+              <h3 className="font-heading font-bold text-foreground">{t("jobs.conditions")}</h3>
+              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).conditions}</p>
+            </div>
+          )}
+
+          {(job as any).benefits && (
+            <div className="prose max-w-none mt-6">
+              <h3 className="font-heading font-bold text-foreground">{t("jobs.benefits")}</h3>
+              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).benefits}</p>
+            </div>
+          )}
+
           {(job as any).requirements && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{language === "fr" ? "Exigences" : "Requirements"}</h3>

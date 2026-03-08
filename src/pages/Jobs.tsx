@@ -327,7 +327,39 @@ const Jobs = () => {
                         <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{activeJob.description}</p>
                       </div>
 
-                      {/* Skills */}
+                      {/* Responsibilities */}
+                      {(activeJob as any).responsibilities && (
+                        <div className="mb-6">
+                          <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.responsibilities")}</h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).responsibilities}</p>
+                        </div>
+                      )}
+
+                      {/* Skills Required */}
+                      {(activeJob as any).skills_required && (
+                        <div className="mb-6">
+                          <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.skillsRequired")}</h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).skills_required}</p>
+                        </div>
+                      )}
+
+                      {/* Conditions */}
+                      {(activeJob as any).conditions && (
+                        <div className="mb-6">
+                          <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.conditions")}</h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).conditions}</p>
+                        </div>
+                      )}
+
+                      {/* Benefits */}
+                      {(activeJob as any).benefits && (
+                        <div className="mb-6">
+                          <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.benefits")}</h3>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).benefits}</p>
+                        </div>
+                      )}
+
+                      {/* Skills Tags */}
                       {activeJob.skills && activeJob.skills.length > 0 && (
                         <div>
                           <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.requiredSkills")}</h3>
