@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import {
   Plus, Edit, Trash2, Eye, LogOut, Briefcase, MapPin, DollarSign,
-  Calendar, Save, X, Search, LayoutDashboard, FileText, Users
+  Calendar, Save, X, Search, LayoutDashboard, FileText, Users, Mail
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
