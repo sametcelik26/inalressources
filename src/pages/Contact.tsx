@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
