@@ -1296,12 +1296,12 @@ const AdminDashboard = () => {
                       </div>
                       <div className="flex items-center gap-2 shrink-0 flex-wrap">
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Contact_${msg.name}`, [
-                          { label: "Name", value: msg.name },
-                          { label: "Email", value: msg.email },
-                          { label: "Phone", value: msg.phone || "" },
-                          { label: "Subject", value: msg.subject },
-                          { label: "Message", value: msg.message },
-                          { label: "Received", value: new Date(msg.created_at).toLocaleString() },
+                          { label: at.pdfName, value: msg.name },
+                          { label: at.pdfEmail, value: msg.email },
+                          { label: at.pdfPhone, value: msg.phone || "" },
+                          { label: at.pdfSubject, value: msg.subject },
+                          { label: at.pdfMessage, value: msg.message },
+                          { label: at.pdfReceived, value: new Date(msg.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
