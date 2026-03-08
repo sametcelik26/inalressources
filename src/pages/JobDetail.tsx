@@ -19,7 +19,9 @@ const JobDetail = () => {
   const { id } = useParams();
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [showApply, setShowApply] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const { data: job, isLoading, isError } = useQuery<JobPosting | null>({
     queryKey: ["job", id],
