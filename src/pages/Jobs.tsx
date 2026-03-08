@@ -115,6 +115,15 @@ const Jobs = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title={language === "fr" ? "Offres d'emploi" : "Job Listings"}
+        description={
+          language === "fr"
+            ? "Parcourez les offres d'emploi disponibles chez INAL Ressources. Postes à temps plein, temps partiel et contractuels au Québec."
+            : "Browse available job openings at INAL Ressources. Full-time, part-time and contract positions across Quebec."
+        }
+        canonical="https://www.inalressources.info/jobs"
+      />
       {/* Search Header */}
       <div className="bg-navy py-8">
         <div className="container mx-auto px-4">
