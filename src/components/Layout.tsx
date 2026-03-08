@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
+import ScrollToTop from "./ScrollToTop";
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ const Layout = ({ children, mainClassName }: LayoutProps) => (
     <NavBar />
     <main className={`flex-1 ${mainClassName ?? ""}`}>{children}</main>
     <Footer />
+    <ScrollToTop />
   </div>
 );
 
