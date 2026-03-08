@@ -321,7 +321,7 @@ const Jobs = () => {
                       {/* Apply button */}
                       <Button
                         className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6"
-                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(activeJob.title); }}
+                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(getJobTitle(activeJob, language)); }}
                       >
                         {t("jobs.applyNow")}
                       </Button>
