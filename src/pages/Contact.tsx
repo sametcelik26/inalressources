@@ -36,6 +36,7 @@ const Contact = () => {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission, isLimited, remainingSeconds } = useRateLimit({ key: "contact", cooldownSeconds: 30, maxSubmissions: 5, windowSeconds: 3600 });
 
   const {
     register,
