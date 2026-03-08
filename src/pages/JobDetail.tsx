@@ -18,22 +18,6 @@ const JobDetail = () => {
   const navigate = useNavigate();
   const [showApply, setShowApply] = useState(false);
 
-  const applicationSchema = z.object({
-    first_name: z.string().trim().min(1, t("contact.fieldRequired")).max(50),
-    last_name: z.string().trim().min(1, t("contact.fieldRequired")).max(50),
-    email: z.string().trim().email(t("contact.invalidEmail")).max(255),
-    phone: z.string().trim().min(1, t("contact.fieldRequired")).max(20),
-    city: z.string().trim().max(100).optional().or(z.literal("")),
-    linkedin_url: z.string().trim().max(500).optional().or(z.literal("")),
-    cover_letter: z.string().trim().max(2000).optional().or(z.literal("")),
-  });
-
-  type ApplicationForm = z.infer<typeof applicationSchema>;
-
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ApplicationForm>({
-    resolver: zodResolver(applicationSchema),
-  });
-
   const { data: job, isLoading, isError } = useQuery<JobPosting | null>({
     queryKey: ["job", id],
     queryFn: async () => {
@@ -48,62 +32,6 @@ const JobDetail = () => {
     },
     enabled: !!id,
   });
-
-  const uploadCV = async (file: File): Promise<string | null> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${id}/${Date.now()}.${fileExt}`;
-    const { data, error } = await supabase.storage
-      .from("candidate-cvs")
-      .upload(fileName, file, { upsert: false });
-    if (error) {
-      console.error("CV upload error:", error);
-      return null;
-    }
-    const { data: urlData } = supabase.storage.from("candidate-cvs").getPublicUrl(data.path);
-    return urlData.publicUrl;
-  };
-
-  const onSubmit = async (data: ApplicationForm) => {
-    if (!id) return;
-    setUploading(true);
-
-    let cvUrl: string | null = null;
-    if (cvFile) {
-      cvUrl = await uploadCV(cvFile);
-      if (!cvUrl) {
-        toast({ title: t("contact.errorTitle"), description: "CV upload failed", variant: "destructive" });
-        setUploading(false);
-        return;
-      }
-    }
-
-    const { error } = await supabase.from("job_submissions").insert({
-      job_id: id,
-      full_name: `${data.first_name} ${data.last_name}`,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      email: data.email,
-      phone: data.phone || null,
-      city: data.city || null,
-      linkedin_url: data.linkedin_url || null,
-      cover_letter: data.cover_letter || null,
-      resume_url: cvUrl,
-    });
-
-    setUploading(false);
-
-    if (error) {
-      toast({ title: t("contact.errorTitle"), description: t("contact.errorDesc"), variant: "destructive" });
-    } else {
-      setSubmitted(true);
-      reset();
-      setCvFile(null);
-      // Send notification email (fire-and-forget)
-      supabase.functions.invoke("notify-submission", {
-        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: cvUrl, job_title: job?.title } },
-      }).catch(() => {});
-    }
-  };
 
   const formLabels = {
     en: {
