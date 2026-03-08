@@ -302,7 +302,19 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                       type="file"
                       accept=".pdf,.doc,.docx"
                       className="hidden"
-                      onChange={(e) => { const file = e.target.files?.[0]; if (file) setCvFile(file); }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const result = validateCVFile(file);
+                          if (!result.valid) {
+                            const msgs = FILE_VALIDATION_MESSAGES[language];
+                            toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                            e.target.value = "";
+                            return;
+                          }
+                          setCvFile(file);
+                        }
+                      }}
                     />
                     {cvFile ? (
                       <div className="flex items-center justify-center gap-2 text-accent">
