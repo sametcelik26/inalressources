@@ -637,7 +637,7 @@ const AdminDashboard = () => {
       {["all", "new", "reviewed", "interview", "rejected"].map((s) => (
         <Button key={s} variant={filter === s ? "default" : "ghost"} size="sm"
           onClick={() => setFilter(s)} className="rounded-full capitalize text-xs">
-          {s === "all" ? at.all : s}
+          {s === "all" ? at.all : (statusTranslations[s] || s)}
           {s !== "all" && <span className="ml-1 opacity-70">({data.filter((d) => (d.status || "new") === s).length})</span>}
         </Button>
       ))}
