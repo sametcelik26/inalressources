@@ -5,11 +5,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, AlertCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
+import SEOHead from "@/components/SEOHead";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
