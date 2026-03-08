@@ -3,18 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, CheckCircle, AlertCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building } from "lucide-react";
+import { MapPin, Clock, DollarSign, Briefcase, Calendar, ArrowLeft, Send, AlertCircle } from "lucide-react";
 import Layout from "@/components/Layout";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
+import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
