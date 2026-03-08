@@ -293,7 +293,7 @@ const Jobs = () => {
                   {!isMobile && activeJob && (
                     <div className="flex-1 bg-card border border-border rounded-xl p-8 max-h-[70vh] overflow-y-auto sticky top-4" style={{ scrollbarWidth: "thin" }}>
                       <div className="mb-6">
-                        <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{activeJob.title}</h2>
+                        <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{getJobTitle(activeJob, language)}</h2>
                         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{activeJob.location}</span>
                           <Badge variant={jobTypeBadgeVariant(activeJob.job_type) as any}>
