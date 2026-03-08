@@ -293,7 +293,15 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                     onDrop={(e) => {
                       e.preventDefault(); e.stopPropagation();
                       const file = e.dataTransfer.files?.[0];
-                      if (file) setCvFile(file);
+                      if (file) {
+                        const result = validateCVFile(file);
+                        if (!result.valid) {
+                          const msgs = FILE_VALIDATION_MESSAGES[language];
+                          toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                          return;
+                        }
+                        setCvFile(file);
+                      }
                     }}
                     className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
                   >

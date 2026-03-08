@@ -305,7 +305,19 @@ const CandidateForm = () => {
                       type="file"
                       className="hidden"
                       accept=".pdf,.doc,.docx,.txt"
-                      onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const result = validateCVFile(file);
+                          if (!result.valid) {
+                            const msgs = FILE_VALIDATION_MESSAGES[language];
+                            toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                            e.target.value = "";
+                            return;
+                          }
+                          setCvFile(file);
+                        }
+                      }}
                     />
                   </div>
                 </div>
