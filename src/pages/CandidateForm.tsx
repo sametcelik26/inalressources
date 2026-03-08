@@ -23,6 +23,7 @@ const CandidateForm = () => {
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { checkLimit, recordSubmission } = useRateLimit({ key: "candidate", cooldownSeconds: 60, maxSubmissions: 3, windowSeconds: 3600 });
   const [cvFile, setCvFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
