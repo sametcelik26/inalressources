@@ -14,6 +14,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
+import SEOHead from "@/components/SEOHead";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
