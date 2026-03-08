@@ -252,9 +252,9 @@ const AdminDashboard = () => {
     }
   };
 
-  const deleteRecord = async (table: string, id: string, setter: Function) => {
+  const deleteRecord = async (table: "job_submissions" | "employer_requests" | "candidate_applications" | "contact_messages", id: string, setter: Function) => {
     if (!confirm("Delete this record?")) return;
-    const { error } = await supabase.from(table).delete().eq("id", id);
+    const { error } = await (supabase.from(table) as any).delete().eq("id", id);
     if (!error) {
       setter((prev: any[]) => prev.filter((r) => r.id !== id));
       toast({ title: "Deleted" });
