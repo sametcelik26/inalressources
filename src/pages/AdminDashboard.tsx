@@ -1077,15 +1077,15 @@ const AdminDashboard = () => {
                           </Button>
                         )}
                         <Button variant="outline" size="sm" className="rounded-full text-xs" onClick={() => exportToPDF(`Application_${sub.full_name}`, [
-                          { label: "Name", value: sub.full_name },
-                          { label: "Email", value: sub.email },
-                          { label: "Phone", value: sub.phone || "" },
-                          { label: "City", value: sub.city || "" },
-                          { label: "Job Applied", value: sub.job_postings?.title || "" },
-                          { label: "LinkedIn", value: sub.linkedin_url || "" },
-                          { label: "Cover Letter", value: sub.cover_letter || "" },
-                          { label: "Status", value: sub.status || "new" },
-                          { label: "Submitted", value: new Date(sub.created_at).toLocaleString() },
+                          { label: at.pdfName, value: sub.full_name },
+                          { label: at.pdfEmail, value: sub.email },
+                          { label: at.pdfPhone, value: sub.phone || "" },
+                          { label: at.pdfCity, value: sub.city || "" },
+                          { label: at.pdfJobApplied, value: sub.job_postings?.title || "" },
+                          { label: at.pdfLinkedIn, value: sub.linkedin_url || "" },
+                          { label: at.pdfCoverLetter, value: sub.cover_letter || "" },
+                          { label: at.pdfStatus, value: sub.status || "new" },
+                          { label: at.pdfSubmitted, value: new Date(sub.created_at).toLocaleString() },
                         ])}>
                           <FileText className="w-3.5 h-3.5 mr-1" /> PDF
                         </Button>
