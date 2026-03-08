@@ -261,32 +261,44 @@ export type Database = {
       }
       job_submissions: {
         Row: {
+          city: string | null
           cover_letter: string | null
           created_at: string
           email: string
+          first_name: string | null
           full_name: string
           id: string
           job_id: string
+          last_name: string | null
+          linkedin_url: string | null
           phone: string | null
           resume_url: string | null
         }
         Insert: {
+          city?: string | null
           cover_letter?: string | null
           created_at?: string
           email: string
+          first_name?: string | null
           full_name: string
           id?: string
           job_id: string
+          last_name?: string | null
+          linkedin_url?: string | null
           phone?: string | null
           resume_url?: string | null
         }
         Update: {
+          city?: string | null
           cover_letter?: string | null
           created_at?: string
           email?: string
+          first_name?: string | null
           full_name?: string
           id?: string
           job_id?: string
+          last_name?: string | null
+          linkedin_url?: string | null
           phone?: string | null
           resume_url?: string | null
         }
