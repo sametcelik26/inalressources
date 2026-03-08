@@ -17,9 +17,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useRateLimit } from "@/hooks/useRateLimit";
+import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
 
 const CandidateForm = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -303,8 +304,20 @@ const CandidateForm = () => {
                       ref={fileInputRef}
                       type="file"
                       className="hidden"
-                      accept=".pdf,.doc,.docx,.txt"
-                      onChange={(e) => setCvFile(e.target.files?.[0] || null)}
+                      accept=".pdf,.doc,.docx"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const result = validateCVFile(file);
+                          if (!result.valid) {
+                            const msgs = FILE_VALIDATION_MESSAGES[language];
+                            toast({ title: t("candidate.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                            e.target.value = "";
+                            return;
+                          }
+                          setCvFile(file);
+                        }
+                      }}
                     />
                   </div>
                 </div>

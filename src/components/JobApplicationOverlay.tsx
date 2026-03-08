@@ -11,6 +11,7 @@ import { z } from "zod";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
 
 interface JobApplicationOverlayProps {
   isOpen: boolean;
@@ -292,7 +293,15 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                     onDrop={(e) => {
                       e.preventDefault(); e.stopPropagation();
                       const file = e.dataTransfer.files?.[0];
-                      if (file) setCvFile(file);
+                      if (file) {
+                        const result = validateCVFile(file);
+                        if (!result.valid) {
+                          const msgs = FILE_VALIDATION_MESSAGES[language];
+                          toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                          return;
+                        }
+                        setCvFile(file);
+                      }
                     }}
                     className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
                   >
@@ -301,7 +310,19 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                       type="file"
                       accept=".pdf,.doc,.docx"
                       className="hidden"
-                      onChange={(e) => { const file = e.target.files?.[0]; if (file) setCvFile(file); }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const result = validateCVFile(file);
+                          if (!result.valid) {
+                            const msgs = FILE_VALIDATION_MESSAGES[language];
+                            toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+                            e.target.value = "";
+                            return;
+                          }
+                          setCvFile(file);
+                        }
+                      }}
                     />
                     {cvFile ? (
                       <div className="flex items-center justify-center gap-2 text-accent">
