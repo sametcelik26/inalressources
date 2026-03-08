@@ -209,12 +209,15 @@ export type Database = {
         Row: {
           application_email: string | null
           benefits: string | null
+          benefits_fr: string | null
           category: string | null
           company_name: string | null
           conditions: string | null
+          conditions_fr: string | null
           created_at: string
           deadline: string | null
           description: string
+          description_fr: string | null
           employer_id: string
           experience_level:
             | Database["public"]["Enums"]["experience_level"]
@@ -222,25 +225,33 @@ export type Database = {
           id: string
           is_active: boolean
           job_type: Database["public"]["Enums"]["job_type"]
+          language_option: string
           location: string
           requirements: string | null
+          requirements_fr: string | null
           responsibilities: string | null
+          responsibilities_fr: string | null
           salary_max: number | null
           salary_min: number | null
           skills: string[] | null
           skills_required: string | null
+          skills_required_fr: string | null
           title: string
+          title_fr: string | null
           updated_at: string
         }
         Insert: {
           application_email?: string | null
           benefits?: string | null
+          benefits_fr?: string | null
           category?: string | null
           company_name?: string | null
           conditions?: string | null
+          conditions_fr?: string | null
           created_at?: string
           deadline?: string | null
           description: string
+          description_fr?: string | null
           employer_id: string
           experience_level?:
             | Database["public"]["Enums"]["experience_level"]
@@ -248,25 +259,33 @@ export type Database = {
           id?: string
           is_active?: boolean
           job_type?: Database["public"]["Enums"]["job_type"]
+          language_option?: string
           location: string
           requirements?: string | null
+          requirements_fr?: string | null
           responsibilities?: string | null
+          responsibilities_fr?: string | null
           salary_max?: number | null
           salary_min?: number | null
           skills?: string[] | null
           skills_required?: string | null
+          skills_required_fr?: string | null
           title: string
+          title_fr?: string | null
           updated_at?: string
         }
         Update: {
           application_email?: string | null
           benefits?: string | null
+          benefits_fr?: string | null
           category?: string | null
           company_name?: string | null
           conditions?: string | null
+          conditions_fr?: string | null
           created_at?: string
           deadline?: string | null
           description?: string
+          description_fr?: string | null
           employer_id?: string
           experience_level?:
             | Database["public"]["Enums"]["experience_level"]
@@ -274,14 +293,19 @@ export type Database = {
           id?: string
           is_active?: boolean
           job_type?: Database["public"]["Enums"]["job_type"]
+          language_option?: string
           location?: string
           requirements?: string | null
+          requirements_fr?: string | null
           responsibilities?: string | null
+          responsibilities_fr?: string | null
           salary_max?: number | null
           salary_min?: number | null
           skills?: string[] | null
           skills_required?: string | null
+          skills_required_fr?: string | null
           title?: string
+          title_fr?: string | null
           updated_at?: string
         }
         Relationships: []

@@ -13,6 +13,7 @@ import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
+import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
@@ -250,7 +251,7 @@ const Jobs = () => {
                           }}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <h3 className="text-base font-heading font-bold text-foreground leading-tight">{job.title}</h3>
+                            <h3 className="text-base font-heading font-bold text-foreground leading-tight">{getJobTitle(job, language)}</h3>
                             {!isMobile && <ChevronRight className={`w-4 h-4 shrink-0 mt-1 transition-colors ${isSelected ? "text-accent" : "text-muted-foreground/40"}`} />}
                           </div>
 
@@ -271,7 +272,7 @@ const Jobs = () => {
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{timeAgo(job.created_at)}</span>
                           </div>
 
-                          <p className="text-xs text-muted-foreground mt-2.5 line-clamp-2 leading-relaxed">{job.description}</p>
+                          <p className="text-xs text-muted-foreground mt-2.5 line-clamp-2 leading-relaxed">{getJobDescription(job, language)}</p>
 
                           {job.skills && job.skills.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2.5">
@@ -292,7 +293,7 @@ const Jobs = () => {
                   {!isMobile && activeJob && (
                     <div className="flex-1 bg-card border border-border rounded-xl p-8 max-h-[70vh] overflow-y-auto sticky top-4" style={{ scrollbarWidth: "thin" }}>
                       <div className="mb-6">
-                        <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{activeJob.title}</h2>
+                        <h2 className="text-2xl font-heading font-bold text-foreground mb-2">{getJobTitle(activeJob, language)}</h2>
                         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{activeJob.location}</span>
                           <Badge variant={jobTypeBadgeVariant(activeJob.job_type) as any}>
@@ -320,7 +321,7 @@ const Jobs = () => {
                       {/* Apply button */}
                       <Button
                         className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-base py-5 mb-6"
-                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(activeJob.title); }}
+                        onClick={() => { setApplyJobId(activeJob.id); setApplyJobTitle(getJobTitle(activeJob, language)); }}
                       >
                         {t("jobs.applyNow")}
                       </Button>
@@ -328,38 +329,38 @@ const Jobs = () => {
                       {/* Description */}
                       <div className="mb-6">
                         <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.description")}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{activeJob.description}</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{getJobDescription(activeJob, language)}</p>
                       </div>
 
                       {/* Responsibilities */}
-                      {(activeJob as any).responsibilities && (
+                      {getBilingualField(activeJob, "responsibilities", "responsibilities_fr", language) && (
                         <div className="mb-6">
                           <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.responsibilities")}</h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).responsibilities}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{getBilingualField(activeJob, "responsibilities", "responsibilities_fr", language)}</p>
                         </div>
                       )}
 
                       {/* Skills Required */}
-                      {(activeJob as any).skills_required && (
+                      {getBilingualField(activeJob, "skills_required", "skills_required_fr", language) && (
                         <div className="mb-6">
                           <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.skillsRequired")}</h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).skills_required}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{getBilingualField(activeJob, "skills_required", "skills_required_fr", language)}</p>
                         </div>
                       )}
 
                       {/* Conditions */}
-                      {(activeJob as any).conditions && (
+                      {getBilingualField(activeJob, "conditions", "conditions_fr", language) && (
                         <div className="mb-6">
                           <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.conditions")}</h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).conditions}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{getBilingualField(activeJob, "conditions", "conditions_fr", language)}</p>
                         </div>
                       )}
 
                       {/* Benefits */}
-                      {(activeJob as any).benefits && (
+                      {getBilingualField(activeJob, "benefits", "benefits_fr", language) && (
                         <div className="mb-6">
                           <h3 className="font-heading font-bold text-foreground mb-3">{t("jobs.benefits")}</h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{(activeJob as any).benefits}</p>
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{getBilingualField(activeJob, "benefits", "benefits_fr", language)}</p>
                         </div>
                       )}
 

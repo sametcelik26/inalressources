@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Plus, Edit, Trash2, Eye, LogOut, Briefcase, MapPin, DollarSign,
   Calendar, Save, X, Search, LayoutDashboard, FileText, Users, Mail,
-  Download, Building2, User, Phone, Clock, ExternalLink
+  Download, Building2, User, Phone, Clock, ExternalLink, Globe
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,25 +23,203 @@ import jsPDF from "jspdf";
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 type JobInsert = Database["public"]["Tables"]["job_postings"]["Insert"];
 
+// Admin panel translations
+const adminT = {
+  en: {
+    dashboard: "Admin Dashboard",
+    dashboardDesc: "Manage job postings, applications, and forms — inalressources.info",
+    logout: "Logout",
+    jobPostings: "Job Postings",
+    applications: "Applications",
+    employers: "Employers",
+    candidates: "Candidates",
+    searchJobs: "Search jobs...",
+    addJob: "Add Job",
+    noJobsYet: "No job postings yet",
+    active: "Active",
+    inactive: "Inactive",
+    editJobPosting: "Edit Job Posting",
+    createNewJob: "Create New Job Posting",
+    jobTitle: "Job Title",
+    jobTitleFr: "Job Title (French)",
+    companyName: "Company Name",
+    location: "Location",
+    jobType: "Job Type",
+    minSalary: "Min Salary ($)",
+    maxSalary: "Max Salary ($)",
+    experienceLevel: "Experience Level",
+    description: "Job Description",
+    descriptionFr: "Job Description (French)",
+    responsibilities: "Responsibilities",
+    responsibilitiesFr: "Responsibilities (French)",
+    skillsRequired: "Skills Required",
+    skillsRequiredFr: "Skills Required (French)",
+    conditions: "Conditions",
+    conditionsFr: "Conditions (French)",
+    benefits: "Benefits",
+    benefitsFr: "Benefits (French)",
+    requirements: "Requirements (Legacy)",
+    requirementsFr: "Requirements (French)",
+    applicationEmail: "Application Email / Link",
+    applicationDeadline: "Application Deadline",
+    category: "Category",
+    skillsComma: "Skills (comma-separated)",
+    publishImmediately: "Publish immediately (active)",
+    saving: "Saving...",
+    updateJob: "Update Job",
+    publishJob: "Publish Job",
+    cancel: "Cancel",
+    deleteConfirm: "Delete this job posting?",
+    deleteRecordConfirm: "Delete this record?",
+    statusUpdated: "Status updated",
+    deleted: "Deleted",
+    error: "Error",
+    success: "Success",
+    jobUpdated: "Job posting updated.",
+    jobCreated: "Job posting created.",
+    requiredFields: "Title, description, and location are required.",
+    jobApplications: "Job Applications",
+    employerRequests: "Employer Requests",
+    candidateRegistrations: "Candidate Registrations",
+    noApplications: "No applications",
+    noEmployerRequests: "No employer requests",
+    noCandidateRegistrations: "No candidate registrations",
+    withStatus: "with status",
+    yet: "yet",
+    all: "All",
+    new: "New",
+    reviewed: "Reviewed",
+    interview: "Interview",
+    rejected: "Rejected",
+    employees: "employees",
+    legalRightToWork: "Legal right to work",
+    languageOption: "Posting Language",
+    langEn: "English only",
+    langFr: "French only",
+    langBoth: "Both (EN & FR)",
+    langFilter: "All Languages",
+    langFilterEn: "English",
+    langFilterFr: "French",
+    langFilterBoth: "Bilingual",
+    frenchFields: "French Content",
+    englishFields: "English Content",
+  },
+  fr: {
+    dashboard: "Tableau de bord admin",
+    dashboardDesc: "Gérer les offres d'emploi, candidatures et formulaires — inalressources.info",
+    logout: "Déconnexion",
+    jobPostings: "Offres d'emploi",
+    applications: "Candidatures",
+    employers: "Employeurs",
+    candidates: "Candidats",
+    searchJobs: "Rechercher des emplois...",
+    addJob: "Ajouter un emploi",
+    noJobsYet: "Aucune offre d'emploi",
+    active: "Actif",
+    inactive: "Inactif",
+    editJobPosting: "Modifier l'offre d'emploi",
+    createNewJob: "Créer une nouvelle offre d'emploi",
+    jobTitle: "Titre du poste",
+    jobTitleFr: "Titre du poste (Français)",
+    companyName: "Nom de l'entreprise",
+    location: "Lieu",
+    jobType: "Type d'emploi",
+    minSalary: "Salaire min ($)",
+    maxSalary: "Salaire max ($)",
+    experienceLevel: "Niveau d'expérience",
+    description: "Description du poste",
+    descriptionFr: "Description du poste (Français)",
+    responsibilities: "Responsabilités",
+    responsibilitiesFr: "Responsabilités (Français)",
+    skillsRequired: "Compétences recherchées",
+    skillsRequiredFr: "Compétences recherchées (Français)",
+    conditions: "Conditions",
+    conditionsFr: "Conditions (Français)",
+    benefits: "Avantages",
+    benefitsFr: "Avantages (Français)",
+    requirements: "Exigences (ancien)",
+    requirementsFr: "Exigences (Français)",
+    applicationEmail: "Courriel de candidature / Lien",
+    applicationDeadline: "Date limite de candidature",
+    category: "Catégorie",
+    skillsComma: "Compétences (séparées par des virgules)",
+    publishImmediately: "Publier immédiatement (actif)",
+    saving: "Enregistrement...",
+    updateJob: "Mettre à jour",
+    publishJob: "Publier l'emploi",
+    cancel: "Annuler",
+    deleteConfirm: "Supprimer cette offre d'emploi?",
+    deleteRecordConfirm: "Supprimer cet enregistrement?",
+    statusUpdated: "Statut mis à jour",
+    deleted: "Supprimé",
+    error: "Erreur",
+    success: "Succès",
+    jobUpdated: "Offre d'emploi mise à jour.",
+    jobCreated: "Offre d'emploi créée.",
+    requiredFields: "Titre, description et lieu sont requis.",
+    jobApplications: "Candidatures",
+    employerRequests: "Demandes d'employeurs",
+    candidateRegistrations: "Inscriptions de candidats",
+    noApplications: "Aucune candidature",
+    noEmployerRequests: "Aucune demande d'employeur",
+    noCandidateRegistrations: "Aucune inscription de candidat",
+    withStatus: "avec le statut",
+    yet: "pour le moment",
+    all: "Tous",
+    new: "Nouveau",
+    reviewed: "Examiné",
+    interview: "Entrevue",
+    rejected: "Rejeté",
+    employees: "employés",
+    legalRightToWork: "Droit légal de travailler",
+    languageOption: "Langue de publication",
+    langEn: "Anglais seulement",
+    langFr: "Français seulement",
+    langBoth: "Les deux (EN & FR)",
+    langFilter: "Toutes les langues",
+    langFilterEn: "Anglais",
+    langFilterFr: "Français",
+    langFilterBoth: "Bilingue",
+    frenchFields: "Contenu en français",
+    englishFields: "Contenu en anglais",
+  },
+};
+
+const jobTypeLabels: Record<string, string> = {
+  full_time: "Full-time",
+  part_time: "Part-time",
+  contract: "Contract",
+  temporary: "Temporary",
+  internship: "Internship",
+};
+
 const emptyJob = {
   title: "",
+  title_fr: "" as string,
   company_name: "" as string | null,
   location: "",
   job_type: "full_time" as Database["public"]["Enums"]["job_type"],
   salary_min: null as number | null,
   salary_max: null as number | null,
   description: "",
+  description_fr: "" as string,
   responsibilities: "" as string | null,
+  responsibilities_fr: "" as string,
   skills_required: "" as string | null,
+  skills_required_fr: "" as string,
   conditions: "" as string | null,
+  conditions_fr: "" as string,
   benefits: "" as string | null,
+  benefits_fr: "" as string,
   requirements: "" as string | null,
+  requirements_fr: "" as string,
   application_email: "" as string | null,
   deadline: "",
   category: "" as string | null,
   experience_level: "entry" as Database["public"]["Enums"]["experience_level"],
   skills: [] as string[],
   is_active: true,
+  language_option: "en" as string,
 };
 
 const statusColors: Record<string, string> = {
@@ -52,12 +230,10 @@ const statusColors: Record<string, string> = {
   pending: "bg-orange-100 text-orange-700",
 };
 
-const jobTypeLabels: Record<string, string> = {
-  full_time: "Full-time",
-  part_time: "Part-time",
-  contract: "Contract",
-  temporary: "Temporary",
-  internship: "Internship",
+const langBadge: Record<string, { label: string; color: string }> = {
+  en: { label: "EN", color: "bg-blue-100 text-blue-700" },
+  fr: { label: "FR", color: "bg-purple-100 text-purple-700" },
+  both: { label: "EN/FR", color: "bg-green-100 text-green-700" },
 };
 
 // PDF export utility
@@ -72,10 +248,7 @@ const exportToPDF = (title: string, fields: { label: string; value: string }[]) 
   doc.setTextColor(50, 50, 50);
   let y = 42;
   fields.forEach(({ label, value }) => {
-    if (y > 270) {
-      doc.addPage();
-      y = 20;
-    }
+    if (y > 270) { doc.addPage(); y = 20; }
     doc.setFont("helvetica", "bold");
     doc.text(`${label}:`, 20, y);
     doc.setFont("helvetica", "normal");
@@ -90,9 +263,12 @@ const exportToPDF = (title: string, fields: { label: string; value: string }[]) 
 };
 
 const AdminDashboard = () => {
-  const { language } = useLanguage();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Admin panel language (independent from site language)
+  const [adminLang, setAdminLang] = useState<"en" | "fr">("en");
+  const at = adminT[adminLang];
 
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -110,6 +286,7 @@ const AdminDashboard = () => {
   const [form, setForm] = useState(emptyJob);
   const [searchQuery, setSearchQuery] = useState("");
   const [saving, setSaving] = useState(false);
+  const [langFilter, setLangFilter] = useState("all");
 
   // Filter states
   const [submissionFilter, setSubmissionFilter] = useState("all");
@@ -136,43 +313,28 @@ const AdminDashboard = () => {
     checkAdmin();
   }, [navigate]);
 
-  // Fetch all data
-  useEffect(() => {
-    if (!userId) return;
-    fetchAll();
-  }, [userId]);
+  useEffect(() => { if (userId) fetchAll(); }, [userId]);
 
-  const fetchAll = () => {
-    fetchJobs();
-    fetchSubmissions();
-    fetchEmployerRequests();
-    fetchCandidateApps();
-  };
+  const fetchAll = () => { fetchJobs(); fetchSubmissions(); fetchEmployerRequests(); fetchCandidateApps(); };
 
   const fetchJobs = async () => {
     const { data } = await supabase.from("job_postings").select("*").order("created_at", { ascending: false });
     if (data) setJobs(data);
   };
-
   const fetchSubmissions = async () => {
     const { data } = await supabase.from("job_submissions").select("*, job_postings(title)").order("created_at", { ascending: false });
     if (data) setSubmissions(data);
   };
-
   const fetchEmployerRequests = async () => {
     const { data } = await supabase.from("employer_requests").select("*").order("created_at", { ascending: false });
     if (data) setEmployerRequests(data);
   };
-
   const fetchCandidateApps = async () => {
     const { data } = await supabase.from("candidate_applications").select("*").order("created_at", { ascending: false });
     if (data) setCandidateApps(data);
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/admin");
-  };
+  const handleLogout = async () => { await supabase.auth.signOut(); navigate("/admin"); };
 
   // ─── Job CRUD ───
   const openCreateForm = () => { setEditingJob(null); setForm(emptyJob); setJobView("form"); };
@@ -180,23 +342,31 @@ const AdminDashboard = () => {
     setEditingJob(job);
     setForm({
       title: job.title,
+      title_fr: (job as any).title_fr || "",
       company_name: job.company_name || "",
       location: job.location,
       job_type: job.job_type,
       salary_min: job.salary_min,
       salary_max: job.salary_max,
       description: job.description,
+      description_fr: (job as any).description_fr || "",
       responsibilities: (job as any).responsibilities || "",
+      responsibilities_fr: (job as any).responsibilities_fr || "",
       skills_required: (job as any).skills_required || "",
+      skills_required_fr: (job as any).skills_required_fr || "",
       conditions: (job as any).conditions || "",
+      conditions_fr: (job as any).conditions_fr || "",
       benefits: (job as any).benefits || "",
+      benefits_fr: (job as any).benefits_fr || "",
       requirements: job.requirements || "",
+      requirements_fr: (job as any).requirements_fr || "",
       application_email: job.application_email || "",
       deadline: job.deadline ? new Date(job.deadline).toISOString().split("T")[0] : "",
       category: job.category || "",
       experience_level: job.experience_level || "entry",
       skills: job.skills || [],
       is_active: job.is_active,
+      language_option: (job as any).language_option || "en",
     });
     setJobView("form");
   };
@@ -204,39 +374,47 @@ const AdminDashboard = () => {
   const handleSaveJob = async () => {
     if (!userId) return;
     if (!form.title.trim() || !form.description.trim() || !form.location.trim()) {
-      toast({ title: "Error", description: "Title, description, and location are required.", variant: "destructive" });
+      toast({ title: at.error, description: at.requiredFields, variant: "destructive" });
       return;
     }
     setSaving(true);
     const payload: any = {
       title: form.title.trim(),
+      title_fr: form.title_fr?.trim() || null,
       company_name: form.company_name?.trim() || null,
       location: form.location.trim(),
       job_type: form.job_type,
       salary_min: form.salary_min,
       salary_max: form.salary_max,
       description: form.description.trim(),
+      description_fr: form.description_fr?.trim() || null,
       responsibilities: form.responsibilities?.trim() || null,
+      responsibilities_fr: form.responsibilities_fr?.trim() || null,
       skills_required: form.skills_required?.trim() || null,
+      skills_required_fr: form.skills_required_fr?.trim() || null,
       conditions: form.conditions?.trim() || null,
+      conditions_fr: form.conditions_fr?.trim() || null,
       benefits: form.benefits?.trim() || null,
+      benefits_fr: form.benefits_fr?.trim() || null,
       requirements: form.requirements?.trim() || null,
+      requirements_fr: form.requirements_fr?.trim() || null,
       application_email: form.application_email?.trim() || null,
       deadline: form.deadline ? new Date(form.deadline).toISOString() : null,
       category: form.category?.trim() || null,
       experience_level: form.experience_level,
       skills: form.skills.length > 0 ? form.skills : null,
       is_active: form.is_active,
+      language_option: form.language_option,
     };
     if (editingJob) {
       const { error } = await supabase.from("job_postings").update(payload).eq("id", editingJob.id);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Success", description: "Job posting updated." });
+      if (error) toast({ title: at.error, description: error.message, variant: "destructive" });
+      else toast({ title: at.success, description: at.jobUpdated });
     } else {
       payload.employer_id = userId;
       const { error } = await supabase.from("job_postings").insert(payload as JobInsert);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Success", description: "Job posting created." });
+      if (error) toast({ title: at.error, description: error.message, variant: "destructive" });
+      else toast({ title: at.success, description: at.jobCreated });
     }
     setSaving(false);
     await fetchJobs();
@@ -244,9 +422,9 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteJob = async (id: string) => {
-    if (!confirm("Delete this job posting?")) return;
+    if (!confirm(at.deleteConfirm)) return;
     const { error } = await supabase.from("job_postings").delete().eq("id", id);
-    if (!error) { toast({ title: "Deleted" }); fetchJobs(); }
+    if (!error) { toast({ title: at.deleted }); fetchJobs(); }
   };
 
   const toggleActive = async (job: JobPosting) => {
@@ -254,30 +432,34 @@ const AdminDashboard = () => {
     fetchJobs();
   };
 
-  // ─── Generic status update & delete ───
   const updateStatus = async (table: "job_submissions" | "employer_requests" | "candidate_applications", id: string, status: string, setter: Function) => {
     const { error } = await (supabase.from(table) as any).update({ status }).eq("id", id);
     if (!error) {
       setter((prev: any[]) => prev.map((r) => r.id === id ? { ...r, status } : r));
-      toast({ title: "Status updated" });
+      toast({ title: at.statusUpdated });
     }
   };
 
   const deleteRecord = async (table: "job_submissions" | "employer_requests" | "candidate_applications" | "contact_messages", id: string, setter: Function) => {
-    if (!confirm("Delete this record?")) return;
+    if (!confirm(at.deleteRecordConfirm)) return;
     const { error } = await (supabase.from(table) as any).delete().eq("id", id);
     if (!error) {
       setter((prev: any[]) => prev.filter((r) => r.id !== id));
-      toast({ title: "Deleted" });
+      toast({ title: at.deleted });
     }
   };
 
   // ─── Filtered data ───
-  const filteredJobs = jobs.filter((j) =>
-    j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    j.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (j.company_name || "").toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredJobs = jobs
+    .filter((j) =>
+      j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      j.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (j.company_name || "").toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((j) => {
+      if (langFilter === "all") return true;
+      return (j as any).language_option === langFilter;
+    });
 
   const filterByStatus = (data: any[], filter: string) =>
     filter === "all" ? data : data.filter((d) => (d.status || "new") === filter);
@@ -292,31 +474,27 @@ const AdminDashboard = () => {
     );
   }
 
-  // ─── Status Badge Component ───
   const StatusBadge = ({ status }: { status: string }) => (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[status] || "bg-secondary text-secondary-foreground"}`}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
   );
 
-  // ─── Status Filter Buttons ───
   const StatusFilters = ({ filter, setFilter, data }: { filter: string; setFilter: (v: string) => void; data: any[] }) => (
     <div className="flex flex-wrap gap-1">
       {["all", "new", "reviewed", "interview", "rejected"].map((s) => (
         <Button key={s} variant={filter === s ? "default" : "ghost"} size="sm"
           onClick={() => setFilter(s)} className="rounded-full capitalize text-xs">
-          {s === "all" ? "All" : s}
+          {s === "all" ? at.all : s}
           {s !== "all" && <span className="ml-1 opacity-70">({data.filter((d) => (d.status || "new") === s).length})</span>}
         </Button>
       ))}
     </div>
   );
 
-  // ─── CV Download helper ───
   const getCvDownloadUrl = async (path: string): Promise<string | null> => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
-    // It's a storage path
     const { data } = await supabase.storage.from("candidate-cvs").createSignedUrl(path, 3600);
     return data?.signedUrl || null;
   };
@@ -324,8 +502,11 @@ const AdminDashboard = () => {
   const handleCvDownload = async (path: string) => {
     const url = await getCvDownloadUrl(path);
     if (url) window.open(url, "_blank");
-    else toast({ title: "Error", description: "Could not generate download link.", variant: "destructive" });
+    else toast({ title: at.error, description: "Could not generate download link.", variant: "destructive" });
   };
+
+  const showEnFields = form.language_option === "en" || form.language_option === "both";
+  const showFrFields = form.language_option === "fr" || form.language_option === "both";
 
   return (
     <Layout>
@@ -335,22 +516,39 @@ const AdminDashboard = () => {
           <div>
             <h1 className="text-3xl font-heading font-bold text-foreground flex items-center gap-2">
               <LayoutDashboard className="w-8 h-8 text-primary" />
-              Admin Dashboard
+              {at.dashboard}
             </h1>
-            <p className="text-muted-foreground mt-1">Manage job postings, applications, and forms — inalressources.info</p>
+            <p className="text-muted-foreground mt-1">{at.dashboardDesc}</p>
           </div>
-          <Button variant="outline" onClick={handleLogout} className="rounded-full">
-            <LogOut className="w-4 h-4 mr-2" /> Logout
-          </Button>
+          <div className="flex items-center gap-3">
+            {/* Admin Language Toggle */}
+            <div className="flex items-center gap-1 bg-secondary rounded-full p-1">
+              <button
+                onClick={() => setAdminLang("en")}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${adminLang === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setAdminLang("fr")}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${adminLang === "fr" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                FR
+              </button>
+            </div>
+            <Button variant="outline" onClick={handleLogout} className="rounded-full">
+              <LogOut className="w-4 h-4 mr-2" /> {at.logout}
+            </Button>
+          </div>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Briefcase, label: "Job Postings", count: jobs.length, color: "text-primary" },
-            { icon: FileText, label: "Applications", count: submissions.length, color: "text-accent" },
-            { icon: Building2, label: "Employer Requests", count: employerRequests.length, color: "text-green-600" },
-            { icon: Users, label: "Candidate Forms", count: candidateApps.length, color: "text-purple-600" },
+            { icon: Briefcase, label: at.jobPostings, count: jobs.length, color: "text-primary" },
+            { icon: FileText, label: at.applications, count: submissions.length, color: "text-accent" },
+            { icon: Building2, label: at.employerRequests, count: employerRequests.length, color: "text-green-600" },
+            { icon: Users, label: at.candidates, count: candidateApps.length, color: "text-purple-600" },
           ].map(({ icon: Icon, label, count, color }) => (
             <div key={label} className="bg-card border border-border rounded-xl p-4">
               <div className="flex items-center gap-3">
@@ -370,88 +568,111 @@ const AdminDashboard = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="jobs" className="text-xs sm:text-sm">
-              <Briefcase className="w-4 h-4 mr-1 hidden sm:inline" /> Jobs
+              <Briefcase className="w-4 h-4 mr-1 hidden sm:inline" /> {at.jobPostings}
             </TabsTrigger>
             <TabsTrigger value="applications" className="text-xs sm:text-sm">
-              <FileText className="w-4 h-4 mr-1 hidden sm:inline" /> Applications
+              <FileText className="w-4 h-4 mr-1 hidden sm:inline" /> {at.applications}
             </TabsTrigger>
             <TabsTrigger value="employers" className="text-xs sm:text-sm">
-              <Building2 className="w-4 h-4 mr-1 hidden sm:inline" /> Employers
+              <Building2 className="w-4 h-4 mr-1 hidden sm:inline" /> {at.employers}
             </TabsTrigger>
             <TabsTrigger value="candidates" className="text-xs sm:text-sm">
-              <Users className="w-4 h-4 mr-1 hidden sm:inline" /> Candidates
+              <Users className="w-4 h-4 mr-1 hidden sm:inline" /> {at.candidates}
             </TabsTrigger>
           </TabsList>
 
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* TAB 1: JOB POSTINGS                                           */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
+          {/* ═══ TAB 1: JOB POSTINGS ═══ */}
           <TabsContent value="jobs">
             {jobView === "list" ? (
               <div>
-                <div className="flex gap-3 mb-6">
+                <div className="flex flex-col sm:flex-row gap-3 mb-6">
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input placeholder="Search jobs..." value={searchQuery}
+                    <Input placeholder={at.searchJobs} value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 h-11" />
                   </div>
+                  <Select value={langFilter} onValueChange={setLangFilter}>
+                    <SelectTrigger className="w-40 h-11">
+                      <Globe className="w-4 h-4 mr-1" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">{at.langFilter}</SelectItem>
+                      <SelectItem value="en">{at.langFilterEn}</SelectItem>
+                      <SelectItem value="fr">{at.langFilterFr}</SelectItem>
+                      <SelectItem value="both">{at.langFilterBoth}</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button onClick={openCreateForm} className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Plus className="w-4 h-4 mr-2" /> Add Job
+                    <Plus className="w-4 h-4 mr-2" /> {at.addJob}
                   </Button>
                 </div>
 
                 {filteredJobs.length === 0 ? (
                   <div className="text-center py-16 text-muted-foreground">
                     <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                    <p className="font-heading font-bold text-lg">No job postings yet</p>
+                    <p className="font-heading font-bold text-lg">{at.noJobsYet}</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {filteredJobs.map((job) => (
-                      <div key={job.id} className="bg-card border border-border rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-primary/30 transition-colors">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-heading font-bold text-foreground truncate">{job.title}</h3>
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${job.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                              {job.is_active ? "Active" : "Inactive"}
-                            </span>
+                    {filteredJobs.map((job) => {
+                      const lo = (job as any).language_option || "en";
+                      const lb = langBadge[lo] || langBadge.en;
+                      return (
+                        <div key={job.id} className="bg-card border border-border rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-primary/30 transition-colors">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="font-heading font-bold text-foreground truncate">{job.title}</h3>
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${job.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                                {job.is_active ? at.active : at.inactive}
+                              </span>
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${lb.color}`}>
+                                {lb.label}
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                              {job.company_name && <span className="flex items-center gap-1"><Building2 className="w-3.5 h-3.5" />{job.company_name}</span>}
+                              <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{job.location}</span>
+                              <span className="bg-secondary text-secondary-foreground text-xs px-2 py-0.5 rounded-full">{jobTypeLabels[job.job_type] || job.job_type}</span>
+                              {job.deadline && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{new Date(job.deadline).toLocaleDateString()}</span>}
+                            </div>
                           </div>
-                          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                            {job.company_name && <span className="flex items-center gap-1"><Building2 className="w-3.5 h-3.5" />{job.company_name}</span>}
-                            <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{job.location}</span>
-                            <span className="bg-secondary text-secondary-foreground text-xs px-2 py-0.5 rounded-full">{jobTypeLabels[job.job_type] || job.job_type}</span>
-                            {job.deadline && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{new Date(job.deadline).toLocaleDateString()}</span>}
+                          <div className="flex items-center gap-2 shrink-0">
+                            <Button variant="ghost" size="sm" onClick={() => toggleActive(job)} title="Toggle active">
+                              <Eye className={`w-4 h-4 ${job.is_active ? "text-green-600" : "text-muted-foreground"}`} />
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => openEditForm(job)}>
+                              <Edit className="w-4 h-4 text-primary" />
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => handleDeleteJob(job.id)}>
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                            <Button variant="ghost" size="sm" onClick={() => exportToPDF(`Job_${job.title}`, [
+                              { label: "Title", value: job.title },
+                              { label: "Title (FR)", value: (job as any).title_fr || "" },
+                              { label: "Company", value: job.company_name || "" },
+                              { label: "Location", value: job.location },
+                              { label: "Language", value: lo.toUpperCase() },
+                              { label: "Type", value: jobTypeLabels[job.job_type] || job.job_type },
+                              { label: "Salary", value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
+                              { label: "Description (EN)", value: job.description },
+                              { label: "Description (FR)", value: (job as any).description_fr || "" },
+                              { label: "Responsibilities (EN)", value: (job as any).responsibilities || "" },
+                              { label: "Responsibilities (FR)", value: (job as any).responsibilities_fr || "" },
+                              { label: "Skills Required (EN)", value: (job as any).skills_required || "" },
+                              { label: "Skills Required (FR)", value: (job as any).skills_required_fr || "" },
+                              { label: "Conditions (EN)", value: (job as any).conditions || "" },
+                              { label: "Conditions (FR)", value: (job as any).conditions_fr || "" },
+                              { label: "Benefits (EN)", value: (job as any).benefits || "" },
+                              { label: "Benefits (FR)", value: (job as any).benefits_fr || "" },
+                              { label: "Deadline", value: job.deadline ? new Date(job.deadline).toLocaleDateString() : "" },
+                            ])} title="Export PDF">
+                              <Download className="w-4 h-4 text-muted-foreground" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <Button variant="ghost" size="sm" onClick={() => toggleActive(job)} title="Toggle active">
-                            <Eye className={`w-4 h-4 ${job.is_active ? "text-green-600" : "text-muted-foreground"}`} />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => openEditForm(job)}>
-                            <Edit className="w-4 h-4 text-primary" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDeleteJob(job.id)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => exportToPDF(`Job_${job.title}`, [
-                            { label: "Title", value: job.title },
-                            { label: "Company", value: job.company_name || "" },
-                            { label: "Location", value: job.location },
-                            { label: "Type", value: (jobTypeLabels[job.job_type] as any)?.en || job.job_type },
-                            { label: "Salary", value: `${job.salary_min || "—"} – ${job.salary_max || "—"}` },
-                            { label: "Description", value: job.description },
-                            { label: "Responsibilities", value: (job as any).responsibilities || "" },
-                            { label: "Skills Required", value: (job as any).skills_required || "" },
-                            { label: "Conditions", value: (job as any).conditions || "" },
-                            { label: "Benefits", value: (job as any).benefits || "" },
-                            { label: "Requirements", value: job.requirements || "" },
-                            { label: "Deadline", value: job.deadline ? new Date(job.deadline).toLocaleDateString() : "" },
-                          ])} title="Export PDF">
-                            <Download className="w-4 h-4 text-muted-foreground" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -460,45 +681,71 @@ const AdminDashboard = () => {
               <div className="max-w-3xl mx-auto">
                 <div className="bg-card border border-border rounded-xl p-8">
                   <h2 className="text-xl font-heading font-bold text-foreground mb-6">
-                    {editingJob ? "Edit Job Posting" : "Create New Job Posting"}
+                    {editingJob ? at.editJobPosting : at.createNewJob}
                   </h2>
                   <div className="space-y-5">
+                    {/* Language Option */}
+                    <div className="bg-secondary/50 border border-border rounded-lg p-4 space-y-2">
+                      <Label className="flex items-center gap-2 font-bold">
+                        <Globe className="w-4 h-4 text-primary" /> {at.languageOption}
+                      </Label>
+                      <Select value={form.language_option} onValueChange={(v) => setForm({ ...form, language_option: v })}>
+                        <SelectTrigger className="h-11 w-full sm:w-64"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="en">{at.langEn}</SelectItem>
+                          <SelectItem value="fr">{at.langFr}</SelectItem>
+                          <SelectItem value="both">{at.langBoth}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Title */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {showEnFields && (
+                        <div className="space-y-1.5">
+                          <Label>{at.jobTitle} {form.language_option === "both" && "(EN)"} <span className="text-destructive">*</span></Label>
+                          <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Warehouse Worker" className="h-11" />
+                        </div>
+                      )}
+                      {showFrFields && (
+                        <div className="space-y-1.5">
+                          <Label>{at.jobTitleFr} {form.language_option === "fr" && <span className="text-destructive">*</span>}</Label>
+                          <Input value={form.title_fr} onChange={(e) => setForm({ ...form, title_fr: e.target.value })} placeholder="ex. Manutentionnaire" className="h-11" />
+                        </div>
+                      )}
                       <div className="space-y-1.5">
-                        <Label>Job Title <span className="text-destructive">*</span></Label>
-                        <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Warehouse Worker" className="h-11" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <Label>Company Name</Label>
+                        <Label>{at.companyName}</Label>
                         <Input value={form.company_name || ""} onChange={(e) => setForm({ ...form, company_name: e.target.value })} placeholder="e.g. Acme Logistics" className="h-11" />
                       </div>
                     </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Location <span className="text-destructive">*</span></Label>
+                        <Label>{at.location} <span className="text-destructive">*</span></Label>
                         <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="e.g. Laval, QC" className="h-11" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Job Type</Label>
+                        <Label>{at.jobType}</Label>
                         <Select value={form.job_type} onValueChange={(v: any) => setForm({ ...form, job_type: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{(v as any)?.en || k}</SelectItem>)}
+                            {Object.entries(jobTypeLabels).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Min Salary ($)</Label>
+                        <Label>{at.minSalary}</Label>
                         <Input type="number" value={form.salary_min ?? ""} onChange={(e) => setForm({ ...form, salary_min: e.target.value ? Number(e.target.value) : null })} className="h-11" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Max Salary ($)</Label>
+                        <Label>{at.maxSalary}</Label>
                         <Input type="number" value={form.salary_max ?? ""} onChange={(e) => setForm({ ...form, salary_max: e.target.value ? Number(e.target.value) : null })} className="h-11" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Experience Level</Label>
+                        <Label>{at.experienceLevel}</Label>
                         <Select value={form.experience_level} onValueChange={(v: any) => setForm({ ...form, experience_level: v })}>
                           <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
                           <SelectContent>
@@ -511,60 +758,121 @@ const AdminDashboard = () => {
                         </Select>
                       </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <Label>Job Description <span className="text-destructive">*</span></Label>
-                      <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={5} placeholder="Describe the role and its purpose..." />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Responsibilities</Label>
-                      <Textarea value={form.responsibilities || ""} onChange={(e) => setForm({ ...form, responsibilities: e.target.value })} rows={4} placeholder="List the key responsibilities..." />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Skills Required</Label>
-                      <Textarea value={form.skills_required || ""} onChange={(e) => setForm({ ...form, skills_required: e.target.value })} rows={3} placeholder="Required skills and qualifications..." />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Conditions</Label>
-                      <Textarea value={form.conditions || ""} onChange={(e) => setForm({ ...form, conditions: e.target.value })} rows={3} placeholder="Working conditions, schedule, etc." />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Benefits</Label>
-                      <Textarea value={form.benefits || ""} onChange={(e) => setForm({ ...form, benefits: e.target.value })} rows={3} placeholder="Benefits offered with this position..." />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Requirements (Legacy)</Label>
-                      <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={3} placeholder="Additional requirements..." />
-                    </div>
+
+                    {/* Description */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.description} {form.language_option === "both" && "(EN)"} <span className="text-destructive">*</span></Label>
+                        <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={5} placeholder="Describe the role and its purpose..." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.descriptionFr}</Label>
+                        <Textarea value={form.description_fr} onChange={(e) => setForm({ ...form, description_fr: e.target.value })} rows={5} placeholder="Décrivez le rôle et son objectif..." />
+                      </div>
+                    )}
+
+                    {/* Responsibilities */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.responsibilities} {form.language_option === "both" && "(EN)"}</Label>
+                        <Textarea value={form.responsibilities || ""} onChange={(e) => setForm({ ...form, responsibilities: e.target.value })} rows={4} placeholder="List the key responsibilities..." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.responsibilitiesFr}</Label>
+                        <Textarea value={form.responsibilities_fr} onChange={(e) => setForm({ ...form, responsibilities_fr: e.target.value })} rows={4} placeholder="Listez les responsabilités principales..." />
+                      </div>
+                    )}
+
+                    {/* Skills Required */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.skillsRequired} {form.language_option === "both" && "(EN)"}</Label>
+                        <Textarea value={form.skills_required || ""} onChange={(e) => setForm({ ...form, skills_required: e.target.value })} rows={3} placeholder="Required skills and qualifications..." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.skillsRequiredFr}</Label>
+                        <Textarea value={form.skills_required_fr} onChange={(e) => setForm({ ...form, skills_required_fr: e.target.value })} rows={3} placeholder="Compétences et qualifications requises..." />
+                      </div>
+                    )}
+
+                    {/* Conditions */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.conditions} {form.language_option === "both" && "(EN)"}</Label>
+                        <Textarea value={form.conditions || ""} onChange={(e) => setForm({ ...form, conditions: e.target.value })} rows={3} placeholder="Working conditions, schedule, etc." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.conditionsFr}</Label>
+                        <Textarea value={form.conditions_fr} onChange={(e) => setForm({ ...form, conditions_fr: e.target.value })} rows={3} placeholder="Conditions de travail, horaire, etc." />
+                      </div>
+                    )}
+
+                    {/* Benefits */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.benefits} {form.language_option === "both" && "(EN)"}</Label>
+                        <Textarea value={form.benefits || ""} onChange={(e) => setForm({ ...form, benefits: e.target.value })} rows={3} placeholder="Benefits offered with this position..." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.benefitsFr}</Label>
+                        <Textarea value={form.benefits_fr} onChange={(e) => setForm({ ...form, benefits_fr: e.target.value })} rows={3} placeholder="Avantages offerts avec ce poste..." />
+                      </div>
+                    )}
+
+                    {/* Requirements (Legacy) */}
+                    {showEnFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.requirements} {form.language_option === "both" && "(EN)"}</Label>
+                        <Textarea value={form.requirements || ""} onChange={(e) => setForm({ ...form, requirements: e.target.value })} rows={3} placeholder="Additional requirements..." />
+                      </div>
+                    )}
+                    {showFrFields && (
+                      <div className="space-y-1.5">
+                        <Label>{at.requirementsFr}</Label>
+                        <Textarea value={form.requirements_fr} onChange={(e) => setForm({ ...form, requirements_fr: e.target.value })} rows={3} placeholder="Exigences supplémentaires..." />
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Application Email / Link</Label>
+                        <Label>{at.applicationEmail}</Label>
                         <Input type="email" value={form.application_email || ""} onChange={(e) => setForm({ ...form, application_email: e.target.value })} className="h-11" placeholder="e.g. hr@company.com" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Application Deadline</Label>
+                        <Label>{at.applicationDeadline}</Label>
                         <Input type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} className="h-11" />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Category</Label>
+                        <Label>{at.category}</Label>
                         <Input value={form.category || ""} onChange={(e) => setForm({ ...form, category: e.target.value })} className="h-11" />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Skills (comma-separated)</Label>
+                        <Label>{at.skillsComma}</Label>
                         <Input value={(form.skills || []).join(", ")} onChange={(e) => setForm({ ...form, skills: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} className="h-11" />
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <Switch checked={form.is_active} onCheckedChange={(checked) => setForm({ ...form, is_active: checked })} />
-                      <Label>Publish immediately (active)</Label>
+                      <Label>{at.publishImmediately}</Label>
                     </div>
                     <div className="flex gap-3 pt-4">
                       <Button onClick={handleSaveJob} disabled={saving} className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-heading font-bold px-8">
-                        <Save className="w-4 h-4 mr-2" /> {saving ? "Saving..." : editingJob ? "Update Job" : "Publish Job"}
+                        <Save className="w-4 h-4 mr-2" /> {saving ? at.saving : editingJob ? at.updateJob : at.publishJob}
                       </Button>
                       <Button variant="outline" onClick={() => setJobView("list")} className="rounded-full">
-                        <X className="w-4 h-4 mr-2" /> Cancel
+                        <X className="w-4 h-4 mr-2" /> {at.cancel}
                       </Button>
                     </div>
                   </div>
@@ -573,18 +881,16 @@ const AdminDashboard = () => {
             )}
           </TabsContent>
 
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* TAB 2: JOB APPLICATIONS                                       */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
+          {/* ═══ TAB 2: JOB APPLICATIONS ═══ */}
           <TabsContent value="applications">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <h2 className="text-xl font-heading font-bold text-foreground">Job Applications</h2>
+              <h2 className="text-xl font-heading font-bold text-foreground">{at.jobApplications}</h2>
               <StatusFilters filter={submissionFilter} setFilter={setSubmissionFilter} data={submissions} />
             </div>
             {filterByStatus(submissions, submissionFilter).length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">
                 <FileText className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p className="font-heading font-bold text-lg">No applications {submissionFilter !== "all" ? `with status "${submissionFilter}"` : "yet"}</p>
+                <p className="font-heading font-bold text-lg">{at.noApplications} {submissionFilter !== "all" ? `${at.withStatus} "${submissionFilter}"` : at.yet}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -628,10 +934,10 @@ const AdminDashboard = () => {
                         <Select value={sub.status || "new"} onValueChange={(v) => updateStatus("job_submissions", sub.id, v, setSubmissions)}>
                           <SelectTrigger className="h-9 w-32 text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="new">New</SelectItem>
-                            <SelectItem value="reviewed">Reviewed</SelectItem>
-                            <SelectItem value="interview">Interview</SelectItem>
-                            <SelectItem value="rejected">Rejected</SelectItem>
+                            <SelectItem value="new">{at.new}</SelectItem>
+                            <SelectItem value="reviewed">{at.reviewed}</SelectItem>
+                            <SelectItem value="interview">{at.interview}</SelectItem>
+                            <SelectItem value="rejected">{at.rejected}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button variant="ghost" size="sm" onClick={() => deleteRecord("job_submissions", sub.id, setSubmissions)}>
@@ -645,18 +951,16 @@ const AdminDashboard = () => {
             )}
           </TabsContent>
 
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* TAB 3: EMPLOYER REQUESTS                                       */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
+          {/* ═══ TAB 3: EMPLOYER REQUESTS ═══ */}
           <TabsContent value="employers">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <h2 className="text-xl font-heading font-bold text-foreground">Employer Requests</h2>
+              <h2 className="text-xl font-heading font-bold text-foreground">{at.employerRequests}</h2>
               <StatusFilters filter={employerFilter} setFilter={setEmployerFilter} data={employerRequests} />
             </div>
             {filterByStatus(employerRequests, employerFilter).length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">
                 <Building2 className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p className="font-heading font-bold text-lg">No employer requests {employerFilter !== "all" ? `with status "${employerFilter}"` : "yet"}</p>
+                <p className="font-heading font-bold text-lg">{at.noEmployerRequests} {employerFilter !== "all" ? `${at.withStatus} "${employerFilter}"` : at.yet}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -678,7 +982,7 @@ const AdminDashboard = () => {
                           {req.industry && <Badge variant="secondary" className="text-xs">{req.industry}</Badge>}
                           {req.job_title && <Badge variant="outline" className="text-xs">{req.job_title}</Badge>}
                           {req.urgency && req.urgency !== "normal" && <Badge variant="destructive" className="text-xs">{req.urgency}</Badge>}
-                          {req.employees_needed && <span>👥 {req.employees_needed} employees</span>}
+                          {req.employees_needed && <span>👥 {req.employees_needed} {at.employees}</span>}
                         </div>
                         {req.job_description && <p className="text-xs text-muted-foreground line-clamp-2 mt-1">"{req.job_description}"</p>}
                         {req.comments && <p className="text-xs text-muted-foreground line-clamp-1 mt-1 italic">Notes: {req.comments}</p>}
@@ -710,10 +1014,10 @@ const AdminDashboard = () => {
                         <Select value={req.status || "new"} onValueChange={(v) => updateStatus("employer_requests", req.id, v, setEmployerRequests)}>
                           <SelectTrigger className="h-9 w-32 text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="new">New</SelectItem>
-                            <SelectItem value="reviewed">Reviewed</SelectItem>
-                            <SelectItem value="interview">Interview</SelectItem>
-                            <SelectItem value="rejected">Rejected</SelectItem>
+                            <SelectItem value="new">{at.new}</SelectItem>
+                            <SelectItem value="reviewed">{at.reviewed}</SelectItem>
+                            <SelectItem value="interview">{at.interview}</SelectItem>
+                            <SelectItem value="rejected">{at.rejected}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button variant="ghost" size="sm" onClick={() => deleteRecord("employer_requests", req.id, setEmployerRequests)}>
@@ -727,18 +1031,16 @@ const AdminDashboard = () => {
             )}
           </TabsContent>
 
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* TAB 4: CANDIDATE REGISTRATIONS                                 */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
+          {/* ═══ TAB 4: CANDIDATE REGISTRATIONS ═══ */}
           <TabsContent value="candidates">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-              <h2 className="text-xl font-heading font-bold text-foreground">Candidate Registrations</h2>
+              <h2 className="text-xl font-heading font-bold text-foreground">{at.candidateRegistrations}</h2>
               <StatusFilters filter={candidateFilter} setFilter={setCandidateFilter} data={candidateApps} />
             </div>
             {filterByStatus(candidateApps, candidateFilter).length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">
                 <Users className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                <p className="font-heading font-bold text-lg">No candidate registrations {candidateFilter !== "all" ? `with status "${candidateFilter}"` : "yet"}</p>
+                <p className="font-heading font-bold text-lg">{at.noCandidateRegistrations} {candidateFilter !== "all" ? `${at.withStatus} "${candidateFilter}"` : at.yet}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -760,7 +1062,7 @@ const AdminDashboard = () => {
                           {app.work_location && <Badge variant="outline" className="text-xs">📍 {app.work_location}</Badge>}
                           {app.availability && <Badge variant="outline" className="text-xs">⏰ {app.availability}</Badge>}
                           {app.license_class && <Badge variant="outline" className="text-xs">🚗 {app.license_class}</Badge>}
-                          {app.legal_right_to_work && <Badge className="text-xs bg-green-100 text-green-700">✓ Legal right to work</Badge>}
+                          {app.legal_right_to_work && <Badge className="text-xs bg-green-100 text-green-700">✓ {at.legalRightToWork}</Badge>}
                         </div>
                         {app.comments && <p className="text-xs text-muted-foreground line-clamp-2 mt-1 italic">"{app.comments}"</p>}
                       </div>
@@ -790,10 +1092,10 @@ const AdminDashboard = () => {
                         <Select value={app.status || "new"} onValueChange={(v) => updateStatus("candidate_applications", app.id, v, setCandidateApps)}>
                           <SelectTrigger className="h-9 w-32 text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="new">New</SelectItem>
-                            <SelectItem value="reviewed">Reviewed</SelectItem>
-                            <SelectItem value="interview">Interview</SelectItem>
-                            <SelectItem value="rejected">Rejected</SelectItem>
+                            <SelectItem value="new">{at.new}</SelectItem>
+                            <SelectItem value="reviewed">{at.reviewed}</SelectItem>
+                            <SelectItem value="interview">{at.interview}</SelectItem>
+                            <SelectItem value="rejected">{at.rejected}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button variant="ghost" size="sm" onClick={() => deleteRecord("candidate_applications", app.id, setCandidateApps)}>

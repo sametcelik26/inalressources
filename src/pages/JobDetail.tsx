@@ -9,6 +9,7 @@ import { useState } from "react";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import type { Database } from "@/integrations/supabase/types";
 import JobApplicationOverlay from "@/components/JobApplicationOverlay";
+import { getJobTitle, getJobDescription, getBilingualField } from "@/lib/bilingual";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
@@ -78,7 +79,7 @@ const JobDetail = () => {
 
         {/* Job Details Card */}
         <div className="bg-card border border-border rounded-xl p-8 mb-8">
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">{job.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">{getJobTitle(job, language)}</h1>
           {(job as any).company_name && (
             <p className="text-lg text-muted-foreground mb-4 flex items-center gap-1.5">
               <Briefcase className="w-4 h-4" /> {(job as any).company_name}
@@ -109,34 +110,34 @@ const JobDetail = () => {
 
           <div className="prose max-w-none">
             <h3 className="font-heading font-bold text-foreground">{t("jobs.description")}</h3>
-            <p className="text-foreground/80 whitespace-pre-wrap">{job.description}</p>
+            <p className="text-foreground/80 whitespace-pre-wrap">{getJobDescription(job, language)}</p>
           </div>
 
-          {(job as any).responsibilities && (
+          {getBilingualField(job, "responsibilities", "responsibilities_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.responsibilities")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).responsibilities}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "responsibilities", "responsibilities_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).skills_required && (
+          {getBilingualField(job, "skills_required", "skills_required_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.skillsRequired")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).skills_required}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "skills_required", "skills_required_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).conditions && (
+          {getBilingualField(job, "conditions", "conditions_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.conditions")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).conditions}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "conditions", "conditions_fr", language)}</p>
             </div>
           )}
 
-          {(job as any).benefits && (
+          {getBilingualField(job, "benefits", "benefits_fr", language) && (
             <div className="prose max-w-none mt-6">
               <h3 className="font-heading font-bold text-foreground">{t("jobs.benefits")}</h3>
-              <p className="text-foreground/80 whitespace-pre-wrap">{(job as any).benefits}</p>
+              <p className="text-foreground/80 whitespace-pre-wrap">{getBilingualField(job, "benefits", "benefits_fr", language)}</p>
             </div>
           )}
 
