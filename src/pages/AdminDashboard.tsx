@@ -656,7 +656,7 @@ const AdminDashboard = () => {
   const handleCvDownload = async (path: string) => {
     const url = await getCvDownloadUrl(path);
     if (url) window.open(url, "_blank");
-    else toast({ title: at.error, description: "Could not generate download link.", variant: "destructive" });
+    else toast({ title: at.error, description: at.cvDownloadError, variant: "destructive" });
   };
 
   const showEnFields = form.language_option === "en" || form.language_option === "both";
