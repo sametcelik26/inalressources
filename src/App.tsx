@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import EmployerForm from "./pages/EmployerForm";
 import CandidateForm from "./pages/CandidateForm";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
