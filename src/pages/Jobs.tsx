@@ -12,6 +12,7 @@ import Layout from "@/components/Layout";
 import { jobTypeLabels, experienceLabels } from "@/lib/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Database } from "@/integrations/supabase/types";
+import JobApplicationOverlay from "@/components/JobApplicationOverlay";
 
 type JobPosting = Database["public"]["Tables"]["job_postings"]["Row"];
 
