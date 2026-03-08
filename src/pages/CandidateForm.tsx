@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/Layout";
 import { industries, licenseClasses, workLocations } from "@/lib/constants";
-import { User, Phone, Mail, Clock, Car, Factory, MapPin, Shield, Upload, MessageSquare, CheckCircle, Send } from "lucide-react";
+import { User, Phone, Mail, Clock, Car, Factory, MapPin, Shield, Upload, MessageSquare, CheckCircle, Send, X, Plus, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
