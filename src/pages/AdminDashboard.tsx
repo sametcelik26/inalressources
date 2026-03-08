@@ -598,7 +598,6 @@ const AdminDashboard = () => {
             <TabsTrigger value="messages" className="text-xs sm:text-sm">
               <Mail className="w-4 h-4 mr-1 hidden sm:inline" /> {at.contactMessages}
             </TabsTrigger>
-            </TabsTrigger>
           </TabsList>
 
           {/* ═══ TAB 1: JOB POSTINGS ═══ */}
