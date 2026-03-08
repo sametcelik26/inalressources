@@ -108,6 +108,10 @@ const JobDetail = () => {
       setSubmitted(true);
       reset();
       setCvFile(null);
+      // Send notification email (fire-and-forget)
+      supabase.functions.invoke("notify-submission", {
+        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: cvUrl, job_title: job?.title } },
+      }).catch(() => {});
     }
   };
 
