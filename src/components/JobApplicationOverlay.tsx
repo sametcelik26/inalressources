@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building } from "lucide-react";
+import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building, Plus } from "lucide-react";
 import { z } from "zod";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
+import { validateCVFile, FILE_VALIDATION_MESSAGES, getTotalSize, formatFileSize, CV_MAX_TOTAL } from "@/lib/fileValidation";
 
 interface JobApplicationOverlayProps {
   isOpen: boolean;
