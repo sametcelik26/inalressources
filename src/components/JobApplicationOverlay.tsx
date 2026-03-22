@@ -311,69 +311,83 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                     <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                     {labels.cv}
                   </Label>
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onDrop={(e) => {
-                      e.preventDefault(); e.stopPropagation();
-                      const file = e.dataTransfer.files?.[0];
-                      if (file) {
-                        const result = validateCVFile(file);
-                        if (!result.valid) {
-                          const msgs = FILE_VALIDATION_MESSAGES[language];
-                          toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                          return;
-                        }
-                        setCvFile(file);
-                      }
-                    }}
-                    className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const result = validateCVFile(file);
-                          if (!result.valid) {
-                            const msgs = FILE_VALIDATION_MESSAGES[language];
-                            toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                            e.target.value = "";
-                            return;
-                          }
-                          setCvFile(file);
-                        }
-                      }}
-                    />
-                    {cvFile ? (
-                      <div className="flex items-center justify-center gap-2 text-accent">
-                        <CheckCircle className="w-4 h-4" />
-                        <span className="font-medium text-sm">{cvFile.name}</span>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setCvFile(null); }} className="text-muted-foreground hover:text-destructive ml-1 text-xs underline">✕</button>
-                      </div>
-                    ) : (
-                      <>
-                        <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
-                        <p className="text-sm">
-                          <span className="text-accent font-medium">{labels.browseFiles}</span>{" "}
-                          <span className="text-muted-foreground">{labels.dragDrop}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{labels.cvHelper}</p>
-                      </>
-                    )}
-                  </div>
-                </div>
 
-                {/* Cover Letter */}
-                <div className="space-y-1">
-                  <Label htmlFor="overlay_cover" className="flex items-center gap-1.5 text-sm">
-                    <FileText className="w-3.5 h-3.5 text-muted-foreground" />
-                    {labels.coverLetter}
-                  </Label>
-                  <Textarea id="overlay_cover" placeholder={labels.coverLetterHelper} rows={3} maxLength={2000} {...register("cover_letter")} />
+                  {/* File list */}
+                  {cvFiles.length > 0 && (
+                    <div className="space-y-2 mb-2">
+                      {cvFiles.map((file, index) => (
+                        <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-secondary rounded-lg px-3 py-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText className="w-4 h-4 text-accent shrink-0" />
+                            <span className="text-sm font-medium truncate">{file.name}</span>
+                            <span className="text-xs text-muted-foreground shrink-0">({formatFileSize(file.size)})</span>
+                          </div>
+                          <button type="button" onClick={() => removeFile(index)} className="text-muted-foreground hover:text-destructive ml-2 shrink-0">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <p className="text-xs text-muted-foreground">
+                        Total: {formatFileSize(totalSize)} / 5 MB
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Drop zone - show when no files */}
+                  {cvFiles.length === 0 && (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) addFile(file);
+                      }}
+                      className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
+                    >
+                      <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
+                      <p className="text-sm">
+                        <span className="text-accent font-medium">{labels.browseFiles}</span>{" "}
+                        <span className="text-muted-foreground">{labels.dragDrop}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{labels.cvHelper}</p>
+                    </div>
+                  )}
+
+                  {/* Add more button */}
+                  {cvFiles.length > 0 && canAddMore && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mt-2 gap-1"
+                    >
+                      <Plus className="w-4 h-4" />
+                      {language === 'fr' ? 'Ajouter un autre fichier' : 'Add another file'}
+                    </Button>
+                  )}
+
+                  {/* Total size warning */}
+                  {cvFiles.length > 0 && !canAddMore && (
+                    <p className="text-xs text-destructive mt-2">
+                      {language === 'fr' ? 'La taille totale des fichiers est au maximum de 5 Mo.' : 'Total file size must not exceed 5 MB.'}
+                    </p>
+                  )}
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        addFile(file);
+                      }
+                      e.target.value = "";
+                    }}
+                  />
                 </div>
 
                 {/* Submit */}
