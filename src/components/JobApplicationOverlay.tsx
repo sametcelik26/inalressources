@@ -24,9 +24,27 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFiles, setCvFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const totalSize = getTotalSize(cvFiles);
+  const canAddMore = totalSize < CV_MAX_TOTAL;
+
+  const addFile = (file: File) => {
+    const result = validateCVFile(file, totalSize);
+    if (!result.valid) {
+      const msgs = FILE_VALIDATION_MESSAGES[language];
+      toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+      return false;
+    }
+    setCvFiles(prev => [...prev, file]);
+    return true;
+  };
+
+  const removeFile = (index: number) => {
+    setCvFiles(prev => prev.filter((_, i) => i !== index));
+  };
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
