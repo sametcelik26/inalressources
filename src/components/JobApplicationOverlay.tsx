@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building } from "lucide-react";
+import { X, Send, CheckCircle, Upload, User, Mail, Phone, FileText, Linkedin, Building, Plus } from "lucide-react";
 import { z } from "zod";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validateCVFile, FILE_VALIDATION_MESSAGES } from "@/lib/fileValidation";
+import { validateCVFile, FILE_VALIDATION_MESSAGES, getTotalSize, formatFileSize, CV_MAX_TOTAL } from "@/lib/fileValidation";
 
 interface JobApplicationOverlayProps {
   isOpen: boolean;
@@ -24,9 +24,27 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
-  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFiles, setCvFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const totalSize = getTotalSize(cvFiles);
+  const canAddMore = totalSize < CV_MAX_TOTAL;
+
+  const addFile = (file: File) => {
+    const result = validateCVFile(file, totalSize);
+    if (!result.valid) {
+      const msgs = FILE_VALIDATION_MESSAGES[language];
+      toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
+      return false;
+    }
+    setCvFiles(prev => [...prev, file]);
+    return true;
+  };
+
+  const removeFile = (index: number) => {
+    setCvFiles(prev => prev.filter((_, i) => i !== index));
+  };
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
@@ -90,14 +108,20 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       return;
     }
     setUploading(true);
-    let cvUrl: string | null = null;
-    if (cvFile) {
-      cvUrl = await uploadCV(cvFile);
-      if (!cvUrl) {
-        toast({ title: t("contact.errorTitle"), description: "CV upload failed", variant: "destructive" });
-        setUploading(false);
-        return;
+    let resumeUrl: string | null = null;
+
+    if (cvFiles.length > 0) {
+      const uploadedPaths: string[] = [];
+      for (const file of cvFiles) {
+        const url = await uploadCV(file);
+        if (!url) {
+          toast({ title: t("contact.errorTitle"), description: "CV upload failed", variant: "destructive" });
+          setUploading(false);
+          return;
+        }
+        uploadedPaths.push(url);
       }
+      resumeUrl = uploadedPaths.join(",");
     }
 
     const { error } = await supabase.from("job_submissions").insert({
@@ -110,7 +134,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       city: data.city || null,
       linkedin_url: data.linkedin_url || null,
       cover_letter: data.cover_letter || null,
-      resume_url: cvUrl,
+      resume_url: resumeUrl,
     });
 
     setUploading(false);
@@ -121,9 +145,9 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       recordSubmission();
       setSubmitted(true);
       reset();
-      setCvFile(null);
+      setCvFiles([]);
       supabase.functions.invoke("notify-submission", {
-        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: cvUrl, job_title: jobTitle } },
+        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: resumeUrl, job_title: jobTitle } },
       }).catch(() => {});
     }
   };
@@ -131,7 +155,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const handleClose = () => {
     setSubmitted(false);
     reset();
-    setCvFile(null);
+    setCvFiles([]);
     onClose();
   };
 
@@ -287,60 +311,83 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                     <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                     {labels.cv}
                   </Label>
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                    onDrop={(e) => {
-                      e.preventDefault(); e.stopPropagation();
-                      const file = e.dataTransfer.files?.[0];
-                      if (file) {
-                        const result = validateCVFile(file);
-                        if (!result.valid) {
-                          const msgs = FILE_VALIDATION_MESSAGES[language];
-                          toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                          return;
-                        }
-                        setCvFile(file);
-                      }
-                    }}
-                    className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const result = validateCVFile(file);
-                          if (!result.valid) {
-                            const msgs = FILE_VALIDATION_MESSAGES[language];
-                            toast({ title: t("contact.errorTitle"), description: msgs[result.errorKey!], variant: "destructive" });
-                            e.target.value = "";
-                            return;
-                          }
-                          setCvFile(file);
-                        }
+
+                  {/* File list */}
+                  {cvFiles.length > 0 && (
+                    <div className="space-y-2 mb-2">
+                      {cvFiles.map((file, index) => (
+                        <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-secondary rounded-lg px-3 py-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText className="w-4 h-4 text-accent shrink-0" />
+                            <span className="text-sm font-medium truncate">{file.name}</span>
+                            <span className="text-xs text-muted-foreground shrink-0">({formatFileSize(file.size)})</span>
+                          </div>
+                          <button type="button" onClick={() => removeFile(index)} className="text-muted-foreground hover:text-destructive ml-2 shrink-0">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <p className="text-xs text-muted-foreground">
+                        Total: {formatFileSize(totalSize)} / 5 MB
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Drop zone - show when no files */}
+                  {cvFiles.length === 0 && (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) addFile(file);
                       }}
-                    />
-                    {cvFile ? (
-                      <div className="flex items-center justify-center gap-2 text-accent">
-                        <CheckCircle className="w-4 h-4" />
-                        <span className="font-medium text-sm">{cvFile.name}</span>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setCvFile(null); }} className="text-muted-foreground hover:text-destructive ml-1 text-xs underline">✕</button>
-                      </div>
-                    ) : (
-                      <>
-                        <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
-                        <p className="text-sm">
-                          <span className="text-accent font-medium">{labels.browseFiles}</span>{" "}
-                          <span className="text-muted-foreground">{labels.dragDrop}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{labels.cvHelper}</p>
-                      </>
-                    )}
-                  </div>
+                      className="border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors"
+                    >
+                      <Upload className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
+                      <p className="text-sm">
+                        <span className="text-accent font-medium">{labels.browseFiles}</span>{" "}
+                        <span className="text-muted-foreground">{labels.dragDrop}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{labels.cvHelper}</p>
+                    </div>
+                  )}
+
+                  {/* Add more button */}
+                  {cvFiles.length > 0 && canAddMore && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mt-2 gap-1"
+                    >
+                      <Plus className="w-4 h-4" />
+                      {language === 'fr' ? 'Ajouter un autre fichier' : 'Add another file'}
+                    </Button>
+                  )}
+
+                  {/* Total size warning */}
+                  {cvFiles.length > 0 && !canAddMore && (
+                    <p className="text-xs text-destructive mt-2">
+                      {language === 'fr' ? 'La taille totale des fichiers est au maximum de 5 Mo.' : 'Total file size must not exceed 5 MB.'}
+                    </p>
+                  )}
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        addFile(file);
+                      }
+                      e.target.value = "";
+                    }}
+                  />
                 </div>
 
                 {/* Cover Letter */}
