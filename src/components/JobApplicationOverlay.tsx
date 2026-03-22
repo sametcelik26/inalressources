@@ -155,7 +155,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
   const handleClose = () => {
     setSubmitted(false);
     reset();
-    setCvFile(null);
+    setCvFiles([]);
     onClose();
   };
 
