@@ -390,6 +390,15 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
                   />
                 </div>
 
+                {/* Cover Letter */}
+                <div className="space-y-1">
+                  <Label htmlFor="overlay_cover" className="flex items-center gap-1.5 text-sm">
+                    <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                    {labels.coverLetter}
+                  </Label>
+                  <Textarea id="overlay_cover" placeholder={labels.coverLetterHelper} rows={3} maxLength={2000} {...register("cover_letter")} />
+                </div>
+
                 {/* Submit */}
                 <Button
                   type="submit"
