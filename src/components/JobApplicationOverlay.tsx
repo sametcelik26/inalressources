@@ -108,14 +108,20 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       return;
     }
     setUploading(true);
-    let cvUrl: string | null = null;
-    if (cvFile) {
-      cvUrl = await uploadCV(cvFile);
-      if (!cvUrl) {
-        toast({ title: t("contact.errorTitle"), description: "CV upload failed", variant: "destructive" });
-        setUploading(false);
-        return;
+    let resumeUrl: string | null = null;
+
+    if (cvFiles.length > 0) {
+      const uploadedPaths: string[] = [];
+      for (const file of cvFiles) {
+        const url = await uploadCV(file);
+        if (!url) {
+          toast({ title: t("contact.errorTitle"), description: "CV upload failed", variant: "destructive" });
+          setUploading(false);
+          return;
+        }
+        uploadedPaths.push(url);
       }
+      resumeUrl = uploadedPaths.join(",");
     }
 
     const { error } = await supabase.from("job_submissions").insert({
@@ -128,7 +134,7 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       city: data.city || null,
       linkedin_url: data.linkedin_url || null,
       cover_letter: data.cover_letter || null,
-      resume_url: cvUrl,
+      resume_url: resumeUrl,
     });
 
     setUploading(false);
@@ -139,9 +145,9 @@ const JobApplicationOverlay = ({ isOpen, onClose, jobId, jobTitle }: JobApplicat
       recordSubmission();
       setSubmitted(true);
       reset();
-      setCvFile(null);
+      setCvFiles([]);
       supabase.functions.invoke("notify-submission", {
-        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: cvUrl, job_title: jobTitle } },
+        body: { type: "job_application", data: { full_name: `${data.first_name} ${data.last_name}`, email: data.email, phone: data.phone, city: data.city, cover_letter: data.cover_letter, resume_url: resumeUrl, job_title: jobTitle } },
       }).catch(() => {});
     }
   };
